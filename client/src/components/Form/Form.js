@@ -82,7 +82,7 @@ const Form = ({ currentId, setCurrentId }) => {
                     <FileBase
                         type="file"
                         multiple={false}
-                        accept=".jpg,.jpeg,.png"
+                        accept=".jpg,.jpeg,.png" //this is useless at my side
                         onDone={handleFileUpload}
                     />
                 </div>
