@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Avatar, Button, Paper, Grid, Typography, Container } from '@material-ui/core';
-import { GoogleLogin } from '@react-oauth/google';
+import { GoogleLogin } from '@react-oauth/google'; // googleLogout
+import jwt_decode from 'jwt-decode';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import Icon from './icon';
@@ -41,8 +42,13 @@ const Auth = () => {
     };
 
     const googleSuccess = async (res) => {
+        /*
         const result = res?.profileObj;
         const token = res?.tokenId;
+        */ //ans from the comment
+        const token = res?.credential;
+        const result = jwt_decode(token);
+       
 
         try {
             dispatch({ type: 'AUTH', data: { result, token } });
@@ -84,7 +90,7 @@ const Auth = () => {
                             <Button className={classes.googleButton} color="primary" fullWidth onClick={renderProps.onClick} disabled={renderProps.disabled} startIcon={<Icon /> } variant="contained">Google Log In</Button>
                         )}
                         onSuccess={googleSuccess}
-                        onFailure={googleFailure}
+                        onError={googleFailure}
                         cookiePolicy="single_host_origin"
                     />
                     <Grid container justifyContent="flex-end">

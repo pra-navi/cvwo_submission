@@ -8,7 +8,7 @@ import Navbar from './components/Navbar/Navbar';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
 const App = () => (
-    <GoogleOAuthProvider clientId="457345493846-m9hl5mt4p47tt5us3na6tdelv1vbcm2m.apps.googleusercontent.com">
+    <GoogleOAuthProvider clientId="90323655673-7fthm7q6hkk9v1fk6m3o4sfn2esl0ms1.apps.googleusercontent.com">
         <BrowserRouter>
             <Container maxwidth="lg">
                 <Navbar />
