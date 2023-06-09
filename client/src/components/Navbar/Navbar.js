@@ -4,7 +4,9 @@ import { AppBar, Toolbar, Typography, Avatar, Button } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
 import decode from 'jwt-decode';
 import useStyles from './styles';
-import hobbies from '../../images/hobbies.png';
+import LEARNersLogo from '../../images/LEARNersLogo.png';
+import LEARNersText from '../../images/LEARNersText.png';
+import * as actionType from '../../constants/actionTypes';
 
 
 const Navbar = () => {
@@ -16,8 +18,8 @@ const Navbar = () => {
     const location = useLocation();
 
     const logout = () => {
-        dispatch({ type: 'LOGOUT' });
-        history.push('/');
+        dispatch({ type: actionType.LOGOUT });
+        history.push('/auth');
         setUser(null);
     };
 
@@ -33,10 +35,10 @@ const Navbar = () => {
 
     return (
         <AppBar className={classes.appBar} position="static" color="inherit">
-            <div className={classes.brandContainer}>
-                <Typography component={Link} to="/" className={classes.heading} variant="h2" align="center">LEARNers</Typography>
-                <img className={classes.image} src={hobbies} alt="hobbies" height="50" />
-            </div>
+            <Link to="/" className={classes.brandContainer}>
+                <img className={classes.image} src={LEARNersLogo} alt="logo" height="50px" />
+                <img src={LEARNersText} alt="icon" height="45px" />
+            </Link>
             <Toolbar className={classes.toolbar}>
                 { user ? (
                     <div className={classes.profile}>
