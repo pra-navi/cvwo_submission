@@ -68,9 +68,12 @@ const Home = () => {
                                 <Button onClick={searchPost} className={classes.searchButton} variant="contained" color="primary">SEARCH</Button>
                             </AppBar>
                             <Form currentId={currentId} setCurrentId={setCurrentId} />
-                            <Paper elevation={6}>
-                                <Pagination page={page} />
-                            </Paper>
+                            {(!searchQuery && !tags.length) && (
+                                <Paper elevation={6} className={classes.pagination}>
+                                    <Pagination page={page} />
+                                </Paper>
+                            )// won't have pagination when searching (can modify)
+                            }
                         </Grid>
                     </Grid>
                 </Container>
