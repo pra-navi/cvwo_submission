@@ -26,11 +26,6 @@ const Home = () => {
     const [search, setSearch] = useState('');
     const [tags, setTags] = useState([]);
 
-
-    useEffect(() => {
-        dispatch(getPosts());
-    }, [currentId, dispatch]);
-
     const searchPost = () => {
         if(search.trim() || tags) {
             //cannot pass array through url parameter
@@ -61,7 +56,7 @@ const Home = () => {
                         </Grid>
                         <Grid item xs={12} sm={6} md={3}>
                             <AppBar className={classes.appBarSearch} position="static" color="inherit">
-                                <TextField name="search" variant="outlined" label="Search Post" onKeyPress={handleKeyPress} fullwidth="true" value={search} onChange={(e) => setSearch(e.target.value)} />
+                                <TextField name="search" variant="outlined" label="Search Post" onKeyPress={handleKeyPress} fullWidth value={search} onChange={(e) => setSearch(e.target.value)} />
                                 <ChipInput 
                                 style={{margin: '10px 0'}} 
                                 value={tags} 
@@ -74,7 +69,7 @@ const Home = () => {
                             </AppBar>
                             <Form currentId={currentId} setCurrentId={setCurrentId} />
                             <Paper elevation={6}>
-                                <Pagination />
+                                <Pagination page={page} />
                             </Paper>
                         </Grid>
                     </Grid>
