@@ -22,5 +22,9 @@ export default makeStyles((theme) => ({
     marginTop: 15,
     marginBottom: 10,
   },
-  
+  tagsInput: {
+    '& .MuiOutlinedInput-root': {
+      fontSize: '5px',
+    },
+  },
 }));

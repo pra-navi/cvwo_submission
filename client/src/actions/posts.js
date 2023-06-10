@@ -1,4 +1,4 @@
-import { FETCH_ALL, FETCH_BY_SEARCH, FETCH_POST, START_LOADING, END_LOADING, CREATE, UPDATE, DELETE, LIKE, DISLIKE } from '../constants/actionTypes';
+import { FETCH_ALL, FETCH_BY_SEARCH, FETCH_POST, START_LOADING, END_LOADING, CREATE, UPDATE, DELETE, LIKE, DISLIKE, COMMENT } from '../constants/actionTypes';
 import * as api from '../api';
 
 // Action Creators- functions that return actions
@@ -38,12 +38,13 @@ export const getPostBySearch = (searchQuery) => async (dispatch) => {
     }
 }
 
-export const createPost = (post) => async (dispatch) => {
+export const createPost = (post, history) => async (dispatch) => {
     try {
         dispatch({ type: START_LOADING });
         const { data } = await api.createPost(post);
         dispatch({ type: CREATE, payload: data });
-        dispatch({ type: END_LOADING }); // he didn't type this
+        history.push(`/posts/${data._id}`);
+        // dispatch({ type: END_LOADING }); // he didn't type this //i didnt need this but you can put it back in if need
     } catch (error) {
         console.log(error.message);
     }
@@ -80,6 +81,16 @@ export const dislikePost = (id) => async (dispatch) => {
     try {
         const { data } = await api.dislikePost(id);
         dispatch({ type: DISLIKE, payload: data });
+    } catch (error) {
+        console.log(error.message);
+    }
+};
+
+export const commentPost = (value, id) => async (dispatch) => {
+    try {
+        const { data } = await api.commentPost(value, id);
+        dispatch({ type: COMMENT, payload: data });
+        return data.comments;
     } catch (error) {
         console.log(error.message);
     }
