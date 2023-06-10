@@ -16,7 +16,7 @@ const Form = ({ currentId, setCurrentId }) => {
         title: '', message: '', tags: '', selectedFile: defaultImage
     });
     const [fileMessage, setFileMessage] = useState('[Using default image as cover]');
-    const post = useSelector((state) => currentId ? state.posts.find((p) => p._id === currentId) : null);
+    const post = useSelector((state) => currentId ? state.posts.posts.find((p) => p._id === currentId) : null);
 
     const allowedFileTypes = ['image/jpg', 'image/jpeg', 'image/png'];
     function handleFileUpload({ base64, file }) {
