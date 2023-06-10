@@ -25,4 +25,5 @@ mongoose.connect(process.env.CONNECTION_URL, { useNewUrlParser: true, useUnified
 
 // mongoose.set('useFindAndModify', false); //make sure don't get any warning in the console
 
+export default app;
     
