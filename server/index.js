@@ -12,7 +12,8 @@ dotenv.config();
 
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
-app.use(cors({ origin: 'https://learners-react.vercel.app' }));
+//app.use(cors({ origin: 'https://learners-react.vercel.app' })); // cy local
+app.use(cors());
 
 app.use('/posts', postRoutes);
 //specify routes after app.use(cors()); else will have network error
