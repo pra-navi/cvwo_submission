@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API = axios.create({ baseURL: 'http://learners-liart.vercel.app' });
+const API = axios.create({ baseURL: 'https://learners-liart.vercel.app' });
 
 API.interceptors.request.use((req) => {
     if(localStorage.getItem('profile')) {
