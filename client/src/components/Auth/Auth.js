@@ -19,19 +19,29 @@ const Auth = () => {
     const [formData, setFormData] = useState(initialState);
     const dispatch = useDispatch();
     const history = useHistory();
+    const [error, setError] = useState('');
 
     const handleShowPassword = () => setShowPassword((prevShowPassword) => !prevShowPassword);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if(isSignUp) {
-            dispatch(signup(formData, history));
-        } else {
-            dispatch(login(formData, history));
+        try{
+            if(isSignUp) {
+                await dispatch(signup(formData, history));
+            } else {
+                await dispatch(login(formData, history));
+            }
+            setFormData(initialState);
+            setError('');
+            history.push('/');
+        } catch (error) {
+            setError(error.message);
         }
+        
     };
 
+    
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
@@ -39,6 +49,7 @@ const Auth = () => {
     const switchMode = () => {
         setIsSignUp((prevIsSignUp) => !prevIsSignUp);
         setShowPassword(false);
+        setError('');
     };
 
     const googleSuccess = async (res) => {
@@ -82,6 +93,7 @@ const Auth = () => {
                         <Input name="password" label="Password" handleChange={handleChange} type={showPassword ? "text" : "password"} handleShowPassword={handleShowPassword} />
                         { isSignUp && <Input name="confirmPassword" label="Repeat Password" handleChange={handleChange} type="password" /> }
                     </Grid>
+                    { error && <Typography variant="body2" className={classes.error} color="error"> {error} </Typography> }
                     <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
                         { isSignUp ? 'Sign Up' : 'Log In' }
                     </Button>
