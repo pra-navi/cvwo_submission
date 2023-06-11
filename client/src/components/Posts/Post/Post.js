@@ -20,6 +20,7 @@ const Post = ({ post, setCurrentId }) => {
     const [dislikes, setDislikes] = useState(post?.dislikes);
 
     const userId = user?.result?.googleId || user?.result?._id;
+    const userEmail = user?.result?.email;
     const hasLikedPost = likes.find((like) => like === (userId));
     const hasDislikedPost = dislikes.find((dislike) => dislike === (userId));
 
@@ -95,7 +96,14 @@ const Post = ({ post, setCurrentId }) => {
                             <MoreHorizIcon fontSize="medium" />
                         </Button>
                     </div>
-                )} 
+            )} 
+            {(userEmail === 'admin@gmail.com') && ( // Compare the user's email with the specific email account
+                <div className={classes.overlay2}>
+                    <Button style={{ color: 'white' }} size="small" onClick={() => setCurrentId(post._id)}>
+                        <MoreHorizIcon fontSize="medium" />
+                    </Button>
+                </div>
+            )}
             <CardActions className={classes.cardActions}>
                 <Button size="small" color="primary" disabled={!user?.result} onClick={handleLikeClick}>
                     <Likes />
@@ -104,6 +112,12 @@ const Post = ({ post, setCurrentId }) => {
                     <Dislikes />
                 </Button>
                 {(user?.result?.googleId === post?.creator || user?.result?._id === post?.creator) && (
+                    <Button size="small" color="primary" onClick={() => dispatch(deletePost(post._id))}>
+                        <DeleteIcon fontSize="small" />
+                        &nbsp; Delete 
+                    </Button>
+                )}
+                {(userEmail === 'admin@gmail.com') && ( // Compare the user's email with the specific email account
                     <Button size="small" color="primary" onClick={() => dispatch(deletePost(post._id))}>
                         <DeleteIcon fontSize="small" />
                         &nbsp; Delete
