@@ -5,9 +5,9 @@ import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import PostDetails from './components/PostDetails/PostDetails';
 import Home from './components/Home/Home';
 import Auth from './components/Auth/Auth';
+import CreatorOrTag from './components/CreatorOrTag/CreatorOrTag';
 import Navbar from './components/Navbar/Navbar';
 import { GoogleOAuthProvider } from '@react-oauth/google';
-import CreatorOrTag from './components/CreatorOrTag/CreatorOrTag';
 
 const App = () => {
     const user = JSON.parse(localStorage.getItem('profile'));

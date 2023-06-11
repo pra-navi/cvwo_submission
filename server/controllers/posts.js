@@ -42,7 +42,7 @@ export const getPostsByCreator = async (req, res) => {
         const posts = await PostMessage.find({ name });
 
         res.json({ data: posts });
-    } catch (error) {
+    } catch (error) {    
         res.status(404).json({ message: error.message });
     }
 }

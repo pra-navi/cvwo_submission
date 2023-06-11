@@ -75,15 +75,15 @@ const PostDetails = () => {
                     <Typography variant="h3" component="h2">{post.title}</Typography>
                     <Typography gutterBottom variant="h6" color="textSecondary" component="h2">{post.tags.map((tag) => (
                         <Link to={`/tags/${tag}`} style={{ textDecoration: 'none', color: '#3f51b5' }}>
-                            {` #${tag} `}
+                        {` #${tag} `}
                         </Link>
                     ))}
-                    </Typography>                    
+                    </Typography>
                     <Typography gutterBottom variant="body1" component="p">{post.message}</Typography>
                     <Typography variant="h6">
                         Created by:
                         <Link to={`/creators/${post.name}`} style={{ textDecoration: 'none', color: '#3f51b5' }}>
-                            {` ${post.name}`}
+                        {` ${post.name}`}
                         </Link>
                     </Typography>
                     <Typography variant="body1">{moment(post.createdAt).fromNow()}</Typography>
