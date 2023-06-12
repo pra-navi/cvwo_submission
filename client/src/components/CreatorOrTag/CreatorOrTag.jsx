@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import { Link, useParams, useLocation } from 'react-router-dom';
 import { Typography, CircularProgress, Grid, Divider } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -16,21 +16,37 @@ const CreatorOrTag = () => {
 
     const location = useLocation();
 
+    const typeIsTag = location.pathname.startsWith('/tags');
+
     useEffect(() => {
-        if (location.pathname.startsWith('/tags')) {
+        if (typeIsTag) {
             dispatch(getPostBySearch({ tags: name }));
         } else {
             dispatch(getPostsByCreator(name));
         }
     }, []);
 
+    const DisplayTagName = () => {
+        return (
+            <Typography variant="h2" style={{ color: 'white' }}>{name}</Typography>
+        );
+    };
+
+    const DisplayCreatorName = () => {
+        var displayName = name;
+        if (posts) { displayName = posts[0]?.name; }
+        return (
+            <Link to={`/user/profile/${name}`}>
+                <Typography variant="h2" style={{ color: 'white' }}>{displayName}</Typography>
+            </Link>
+        );
+    };
+
     //if (!posts.length && !isLoading) return 'No posts';
-    var displayName = name; // adjust creator name
-    if (!location.pathname.startsWith('/tags') && posts) { displayName = posts[0]?.name; }
 
     return (
         <div>
-            <Typography variant="h2" style={{ color: 'white' }}>{displayName}</Typography>
+            {typeIsTag ? <DisplayTagName /> : <DisplayCreatorName />}
             <Divider style={{ margin: '20px 0 50px 0' }} />
             {isLoading ? <CircularProgress /> : (
                 <Grid container alignItems="stretch" spacing={3}>

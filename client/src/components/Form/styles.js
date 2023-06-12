@@ -26,5 +26,5 @@ export default makeStyles((theme) => ({
     '& .MuiOutlinedInput-root': {
       fontSize: '5px',
     },
-  },
+  }, 
 }));
