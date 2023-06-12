@@ -57,7 +57,7 @@ export const createPost = (post, history) => async (dispatch) => {
         const { data } = await api.createPost(post);
         dispatch({ type: CREATE, payload: data });
         history.push(`/posts/${data._id}`);
-        // dispatch({ type: END_LOADING }); // he didn't type this //i didnt need this but you can put it back in if need
+        // dispatch({ type: END_LOADING }); // no need but not sure
     } catch (error) {
         console.log(error.message);
     }
