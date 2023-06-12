@@ -36,10 +36,10 @@ export const getPostsBySearch = async (req, res) => {
 }
 
 export const getPostsByCreator = async (req, res) => {
-    const { name } = req.query;
+    const { creator } = req.query;
 
     try {
-        const posts = await PostMessage.find({ name });
+        const posts = await PostMessage.find({ creator });
 
         res.json({ data: posts });
     } catch (error) {    
