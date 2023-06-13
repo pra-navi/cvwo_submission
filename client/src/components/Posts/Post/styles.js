@@ -49,8 +49,19 @@ export default makeStyles({
     display: 'flex',
     justifyContent: 'space-between',
   },
+  cardActions2: {
+    padding: '0 16px 8px 16px',
+    display: 'flex',
+    alignItems: 'center',
+  },
   cardAction: {
     display: 'block',
     textAlign: 'initial',
   },
+  atRight: {
+    marginLeft: 'auto', 
+  }, 
+  atLeft: {
+    marginRight: 'auto', 
+  }, 
 });

@@ -33,3 +33,5 @@ export const commentPost = (value, id) => API.post(`/posts/${id}/commentPost`, {
 export const logIn = (formData) => API.post('/user/login', formData);
 export const signUp = (formData) => API.post('/user/signup', formData);
 export const fetchUser = (id) => API.get(`/user/profile/${id}`);
+
+export const savePost = (postId) => API.patch(`/user/savePost/${postId}`);

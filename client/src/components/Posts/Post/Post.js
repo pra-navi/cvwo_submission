@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
 import { Card, CardActions, CardContent, CardMedia, Button, Typography, ButtonBase } from '@material-ui/core';
 import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
+import ThumbUpAltOutlined from '@material-ui/icons/ThumbUpAltOutlined';
 import ThumbDownAltIcon from '@material-ui/icons/ThumbDownAlt';
+import ThumbDownAltOutlined from '@material-ui/icons/ThumbDownAltOutlined';
 import DeleteIcon from '@material-ui/icons/Delete';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder';
+import BookmarkIcon from '@material-ui/icons/Bookmark';
+
 import moment from 'moment';
 import { useDispatch } from 'react-redux';
 import { deletePost, likePost, dislikePost } from '../../../actions/posts';
+import { savePost } from '../../../actions/auth';
 import { useHistory } from 'react-router-dom';
 
 import useStyles from './styles';
@@ -14,10 +20,13 @@ import useStyles from './styles';
 const Post = ({ post, setCurrentId }) => {
     const classes = useStyles();
     const dispatch = useDispatch();
-    const user = JSON.parse(localStorage.getItem('profile'));
+    const user = JSON.parse(localStorage.getItem('profile')); // need to explicitly update this
     const history = useHistory();
     const [likes, setLikes] = useState(post?.likes);
     const [dislikes, setDislikes] = useState(post?.dislikes);
+
+    const userLearningList = user?.result?.learningList;
+    const [hasSaved, setHasSaved] = useState(userLearningList?.includes(post._id) || false); // OR for non-login user
 
     const userId = user?.result?.googleId || user?.result?._id;
     const userEmail = user?.result?.email;
@@ -44,17 +53,23 @@ const Post = ({ post, setCurrentId }) => {
         }
     }
 
+    const handleSaveClick = () => {
+        dispatch(savePost(post._id));
+
+        setHasSaved(!hasSaved);
+    }
+
     const Likes = () => {
         if(likes.length > 0) {
             return likes.find((like) => like === (userId))
             ? (
                 <><ThumbUpAltIcon fontSize="small" />&nbsp;{likes.length > 2 ? `You and ${likes.length - 1} others` : `${likes.length} like${likes.length > 1 ? 's' : ''}` }</>
             ) : (
-                <><ThumbUpAltIcon fontSize="small" />&nbsp;{likes.length} {likes.length === 1 ? 'Like' : 'Likes'}</>
+                <><ThumbUpAltOutlined fontSize="small" />&nbsp;{likes.length} {likes.length === 1 ? 'Like' : 'Likes'}</>
             );
         }
 
-        return <><ThumbUpAltIcon fontSize="small" />&nbsp;Like</>;
+        return <><ThumbUpAltOutlined fontSize="small" />&nbsp;Like</>;
     }
 
     const Dislikes = () => {
@@ -63,11 +78,22 @@ const Post = ({ post, setCurrentId }) => {
             ? (
                 <><ThumbDownAltIcon fontSize="small" />&nbsp;{dislikes.length > 2 ? `You and ${dislikes.length - 1} others` : `${dislikes.length} dislike${dislikes.length > 1 ? 's' : ''}` }</>
             ) : (
-                <><ThumbDownAltIcon fontSize="small" />&nbsp;{dislikes.length} {dislikes.length === 1 ? 'Dislike' : 'Dislikes'}</>
+                <><ThumbDownAltOutlined fontSize="small" />&nbsp;{dislikes.length} {dislikes.length === 1 ? 'Dislike' : 'Dislikes'}</>
             );
         }
 
-        return <><ThumbDownAltIcon fontSize="small" />&nbsp;Dislike</>;
+        return <><ThumbDownAltOutlined fontSize="small" />&nbsp;Dislike</>;
+    }
+
+    const Save = () => {
+        if (hasSaved) {
+            return (
+                <><BookmarkIcon /> &nbsp;{"Saved"}</>
+            );
+        }
+        return (
+            <><BookmarkBorderIcon /> &nbsp;{"Save"}</>
+        );
     }
 
     const openPost = () => {
@@ -104,6 +130,14 @@ const Post = ({ post, setCurrentId }) => {
                     </Button>
                 </div>
             )}
+            <CardActions className={classes.cardActions2}>
+                <Button className={classes.atLeft} size="small" color="primary" disabled={!user?.result} onClick={() => {}}>
+                    {"Rating"}
+                </Button>
+                <Button className={classes.atRight} size="small" color="primary" disabled={!user?.result} onClick={handleSaveClick}>
+                    <Save />
+                </Button>
+            </CardActions>
             <CardActions className={classes.cardActions}>
                 <Button size="small" color="primary" disabled={!user?.result} onClick={handleLikeClick}>
                     <Likes />

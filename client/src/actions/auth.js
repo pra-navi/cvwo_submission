@@ -1,5 +1,14 @@
-import { AUTH, FETCH_USER, START_LOADING, END_LOADING } from '../constants/actionTypes';
+import { AUTH, FETCH_USER, START_LOADING, END_LOADING, SAVE_POST } from '../constants/actionTypes';
 import * as api from '../api';
+
+export const savePost = (postId) => async (dispatch) => {
+    try {
+        const { data } = await api.savePost(postId); //now data changed to learning list
+        dispatch({ type: SAVE_POST, data });
+    } catch (error) {
+        console.log(error.message);
+    }
+};
 
 export const getUser = (id) => async (dispatch) => {
     try {

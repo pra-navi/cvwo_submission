@@ -1,4 +1,4 @@
-import { AUTH, LOGOUT, FETCH_USER, START_LOADING, END_LOADING } from '../constants/actionTypes';
+import { SAVE_POST, AUTH, LOGOUT, FETCH_USER, START_LOADING, END_LOADING } from '../constants/actionTypes';
 
 const authReducer = (state = { authData: null, isLoading: true, user: null }, action) => {
     switch (action.type) {
@@ -14,6 +14,11 @@ const authReducer = (state = { authData: null, isLoading: true, user: null }, ac
             return { ...state, authData: null };
         case FETCH_USER: 
             return { ...state, user: action.payload };
+        case SAVE_POST:
+            let profile = JSON.parse(localStorage.getItem('profile'));
+            if(profile?.result?.learningList) {profile.result.learningList = action?.data;};
+            localStorage.setItem('profile', JSON.stringify({ ...profile }));
+            return { ...state, authData: profile };
         default:
             return state;
     }

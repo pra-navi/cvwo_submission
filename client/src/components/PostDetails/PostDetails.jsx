@@ -12,7 +12,6 @@ import CommentSection from './CommentSection';
 
 const PostDetails = () => {
 
-
     const { post, posts, isLoading } = useSelector((state) => state.posts);
     const dispatch = useDispatch();
     const history = useHistory();
@@ -26,8 +25,6 @@ const PostDetails = () => {
     }, [id]);
 
     if (!post) return null;
-
-    // const openPost = (_id) => history.push(`/posts/${_id}`);
 
     if (isLoading) {
         return (

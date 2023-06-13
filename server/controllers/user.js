@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import mongoose from 'mongoose';
 
 import User from '../models/user.js';
 
@@ -55,4 +56,23 @@ export const getUser = async (req, res) => {
     } catch (error) {
         res.status(404).json({ message: error.message });
     }
+}
+
+export const savePost = async (req, res) => {
+    const { postId } = req.params;
+
+    if (!req.userId) return res.json({ message: 'Unauthenticated' });
+
+    const userId = req.userId;
+
+    if (!mongoose.Types.ObjectId.isValid(postId)) return res.status(404).send('No post with that postId');
+    const user = await User.findById(userId);
+    const index = user.learningList.findIndex((id) => id === String(postId));
+    if (index === -1) {
+        user.learningList.push(postId);
+    } else {
+        user.learningList = user.learningList.filter((id) => id !== String(postId));
+    }
+    const updatedUser = await User.findByIdAndUpdate(userId, user, { new: true });
+    res.json(user.learningList);
 }
