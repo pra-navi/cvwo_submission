@@ -68,11 +68,36 @@ export const savePost = async (req, res) => {
     if (!mongoose.Types.ObjectId.isValid(postId)) return res.status(404).send('No post with that postId');
     const user = await User.findById(userId);
     const index = user.learningList.findIndex((id) => id === String(postId));
-    if (index === -1) {
+    const indexTwo = user.doneList.findIndex((id) => id === String(postId)); //check
+    if (index === -1 && indexTwo === -1) {
         user.learningList.push(postId);
-    } else {
+    } else if (index === -1) { //post alr in doneList, but not in learningList
+        //do nothing (bcs a post cannot in both list)
+    } else { // unsave
         user.learningList = user.learningList.filter((id) => id !== String(postId));
     }
     const updatedUser = await User.findByIdAndUpdate(userId, user, { new: true });
     res.json(user.learningList);
+}
+
+export const donePost = async (req, res) => {
+    const { postId } = req.params;
+
+    if (!req.userId) return res.json({ message: 'Unauthenticated' });
+
+    const userId = req.userId;
+
+    if (!mongoose.Types.ObjectId.isValid(postId)) return res.status(404).send('No post with that postId');
+    const user = await User.findById(userId);
+    const index = user.doneList.findIndex((id) => id === String(postId));
+    const indexTwo = user.learningList.findIndex((id) => id === String(postId)); //check
+    if (index === -1 && indexTwo === -1) {
+        user.doneList.push(postId);
+    } else if (index === -1) { //post alr in doneList, but not in learningList
+        // do nothing (bcs a post cannot in both list)
+    } else { // undone
+        user.doneList = user.doneList.filter((id) => id !== String(postId));
+    }
+    const updatedUser = await User.findByIdAndUpdate(userId, user, { new: true });
+    res.json(user.doneList);
 }

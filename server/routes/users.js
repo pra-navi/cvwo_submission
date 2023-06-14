@@ -1,5 +1,5 @@
 import express from 'express';
-import { login, signup, getUser, savePost } from '../controllers/user.js';
+import { login, signup, getUser, savePost, donePost } from '../controllers/user.js';
 import auth from '../middleware/auth.js';
 
 const router = express.Router();
@@ -9,5 +9,6 @@ router.post('/signup', signup);
 router.get('/profile/:id', getUser);
 
 router.patch('/savePost/:postId', auth, savePost);
+router.patch('/donePost/:postId', auth, donePost);
 
 export default router;

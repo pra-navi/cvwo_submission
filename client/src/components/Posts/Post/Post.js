@@ -26,6 +26,7 @@ const Post = ({ post, setCurrentId }) => {
     const [dislikes, setDislikes] = useState(post?.dislikes);
 
     const userLearningList = user?.result?.learningList;
+    const userDoneList = user?.result?.doneList;
     const [hasSaved, setHasSaved] = useState(userLearningList?.includes(post._id) || false); // OR for non-login user
 
     const userId = user?.result?.googleId || user?.result?._id;
@@ -54,9 +55,13 @@ const Post = ({ post, setCurrentId }) => {
     }
 
     const handleSaveClick = () => {
-        dispatch(savePost(post._id));
-
-        setHasSaved(!hasSaved);
+        if (userDoneList?.includes(post._id)) {
+            // console.log("error");
+            alert('This post is in your Done List.');
+        } else {
+            dispatch(savePost(post._id));
+            setHasSaved(!hasSaved);
+        }
     }
 
     const Likes = () => {

@@ -1,4 +1,4 @@
-import { SAVE_POST, AUTH, LOGOUT, FETCH_USER, START_LOADING, END_LOADING } from '../constants/actionTypes';
+import { SAVE_POST, AUTH, LOGOUT, FETCH_USER, START_LOADING, END_LOADING, DONE_POST } from '../constants/actionTypes';
 
 const authReducer = (state = { authData: null, isLoading: true, user: null }, action) => {
     switch (action.type) {
@@ -19,6 +19,11 @@ const authReducer = (state = { authData: null, isLoading: true, user: null }, ac
             if(profile?.result?.learningList) {profile.result.learningList = action?.data;};
             localStorage.setItem('profile', JSON.stringify({ ...profile }));
             return { ...state, authData: profile };
+        case DONE_POST:
+            let dprofile = JSON.parse(localStorage.getItem('profile'));
+            if(dprofile?.result?.learningList) {dprofile.result.doneList = action?.data;};
+            localStorage.setItem('profile', JSON.stringify({ ...dprofile }));
+            return { ...state, authData: dprofile };
         default:
             return state;
     }

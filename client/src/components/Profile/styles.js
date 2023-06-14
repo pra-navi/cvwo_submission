@@ -7,6 +7,10 @@ export default makeStyles((theme) => ({
         borderRadius: '15px', 
         backgroundColor: '#E8DBE9', 
     },
+    lists: {
+        padding: '20px', 
+        borderRadius: '5px', 
+    },
     myPostsButton: {
         size: "large",  
         variant: "contained", 
