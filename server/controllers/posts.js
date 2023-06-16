@@ -131,3 +131,16 @@ export const commentPost = async (req, res) => {
     const updatedPost = await PostMessage.findByIdAndUpdate(id, post, { new: true });
     res.json(updatedPost);
 }
+
+export const getPostTitle = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const post = await PostMessage.findById(id);
+        console.log(post.title);
+
+        res.status(200).json(post.title);
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+}

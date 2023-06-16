@@ -1,6 +1,6 @@
-import { FETCH_ALL, FETCH_BY_SEARCH, FETCH_BY_CREATOR, FETCH_POST, CREATE, UPDATE, DELETE, LIKE, DISLIKE, START_LOADING, END_LOADING, COMMENT } from '../constants/actionTypes';
+import { FETCH_POST_TITLE, FETCH_ALL, FETCH_BY_SEARCH, FETCH_BY_CREATOR, FETCH_POST, CREATE, UPDATE, DELETE, LIKE, DISLIKE, START_LOADING, END_LOADING, COMMENT } from '../constants/actionTypes';
 
-const postReducer = (state = { isLoading: true, posts: [] }, action) => {
+const postReducer = (state = { isLoading: true, posts: [], title: 'loading title...' }, action) => {
     switch (action.type) {
         case START_LOADING:
             return { ...state, isLoading: true };
@@ -31,6 +31,12 @@ const postReducer = (state = { isLoading: true, posts: [] }, action) => {
             return { ...state, posts: action.payload.data };
         case FETCH_POST:
             return { ...state, post: action.payload };
+        case FETCH_POST_TITLE:
+            var titleArray = JSON.parse(localStorage.getItem('title'));
+            if (titleArray === null) {titleArray = [];}
+            titleArray.push([action.payload.id, action.payload.data]);
+            localStorage.setItem('title', JSON.stringify(titleArray));
+            return { ...state, title: action.data};
         default:
             return state;
     }

@@ -6,20 +6,22 @@ import useStyles from './styles';
 import { getUser } from '../../actions/auth'; 
 
 import List from './List/List';
+import { getPostTitle } from '../../actions/posts';
 
 const Profile = () => {
     const classes = useStyles();
     const history = useHistory();
     const dispatch = useDispatch();
-    // console.log("profile"); // not sure why it will render 4 times
+    console.log("profile"); // not sure why it will render 4 times // line 23 is the problem!
 
     const { id } = useParams();
-
+    
     useEffect(() => {
         dispatch(getUser(id));
-    }, [id, dispatch]);
+    }, [id]);
 
-    const { user, isLoading } = useSelector((state) => state.auth); //auth.js in reducer
+    const { user } = useSelector((state) => state.auth); //auth.js in reducer
+    console.log(user?.name);
     //later handle isLoading
 
     const viewer = JSON.parse(localStorage.getItem('profile'));
@@ -27,44 +29,35 @@ const Profile = () => {
     const isOwnProfile = (id === viewerId);
 
     //initialise the array, logic for normal viewer
-    /*
-    const viewLearningList = user?.learningList;
-    const viewDoneList = user?.doneList; //this is undefined
-    */
     const [viewLearningList, setLearningList] = useState(user?.learningList);
     const [viewDoneList, setDoneList] = useState(user?.doneList);
     const [count, setCount] = useState(0);
+
+    useEffect(() => {
+        setLearningList(user?.learningList);
+        setDoneList(user?.doneList);
+        viewLearningList?.map((id) => dispatch(getPostTitle(id)));
+        viewDoneList?.map((id) => dispatch(getPostTitle(id)));
+    }, [user]);
 
     const handleClick = () => {
         const newCount = count + 1;
         setCount(newCount);
     };
 
-   useEffect(() => {
-    if (isOwnProfile) {
-        const me = JSON.parse(localStorage.getItem('profile'));
-        setLearningList(me?.result?.learningList);
-        setDoneList(me?.result?.doneList);
-    }
-}, [count, isOwnProfile]);
-
+    useEffect(() => {
+        if (isOwnProfile) {
+            const me = JSON.parse(localStorage.getItem('profile'));
+            setLearningList(me?.result?.learningList);
+            setDoneList(me?.result?.doneList);
+        }
+    }, [count]);
     const userName = user?.name;
     const userListsArePrivate = user?.listArePrivate;
-    /*
-    if(!viewer) {
-        return (
-            <Paper className={classes.personal}>
-                <Typography variant="h6" align="center"> Please Sign In. </Typography>
-            </Paper>
-        );
-    };
-    */
+
     const seeMyPosts = () => {
         history.push(`/creators/${id}`);
     };
-    //later handle lists are private
-
-    //use the key of Grid to re-render the component
 
     return (
         <>
@@ -88,7 +81,29 @@ const Profile = () => {
                     </Grid>
                 </Grid>
             }
+            
         </>
     )
 };
 export default Profile;
+//later handle lists are private
+
+//use the key of Grid to re-render the component
+    /*
+    if(!viewer) {
+        return (
+            <Paper className={classes.personal}>
+                <Typography variant="h6" align="center"> Please Sign In. </Typography>
+            </Paper>
+        );
+    };
+    */
+/*
+   useEffect(() => {
+        if (isOwnProfile) {
+            const me = JSON.parse(localStorage.getItem('profile'));
+            setLearningList(me?.result?.learningList);
+            setDoneList(me?.result?.doneList);
+        }
+    }, [count]);
+*/

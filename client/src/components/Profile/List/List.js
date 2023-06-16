@@ -1,8 +1,9 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { Typography, Divider, Paper } from '@material-ui/core';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import useStyles from './styles';
 import { savePost, donePost } from '../../../actions/auth';
+import { getPostTitle } from '../../../actions/posts';
 
 import ListRow from './ListRow/ListRow'
 
@@ -11,6 +12,7 @@ const List = ({ isOwnProfile, isLearningList, postIds, handleClick }) => {
 
     const classes = useStyles();
     const dispatch = useDispatch();
+    console.log(isLearningList);
 
     const done = (postId) => {
         dispatch(savePost(postId))

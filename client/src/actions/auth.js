@@ -21,11 +21,11 @@ export const donePost = (postId) => async (dispatch) => {
 
 export const getUser = (id) => async (dispatch) => {
     try {
-        dispatch({ type: START_LOADING });
+        // dispatch({ type: START_LOADING });
         const { data } = await api.fetchUser(id);
         
         dispatch({ type: FETCH_USER, payload: data });
-        dispatch({ type: END_LOADING });
+        // dispatch({ type: END_LOADING });
     } catch (error) {
         console.log(error.message);
     }
