@@ -30,4 +30,11 @@ export default makeStyles((theme) => ({
         display: 'flex', 
         alignItems: 'center'
     },
+    privacyButton: {
+        size: "large",  
+        variant: "contained", 
+        color: "white", 
+        backgroundColor: '#5E545E', 
+        marginLeft: 10, 
+    },
 }));

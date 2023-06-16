@@ -34,7 +34,9 @@ const postReducer = (state = { isLoading: true, posts: [], title: 'loading title
         case FETCH_POST_TITLE:
             var titleArray = JSON.parse(localStorage.getItem('title'));
             if (titleArray === null) {titleArray = [];}
-            titleArray.push([action.payload.id, action.payload.data]);
+            if ((titleArray.filter(arr => arr[0] === action.payload.id)).length === 0){
+                titleArray.push([action.payload.id, action.payload.data]); //only one
+            }
             localStorage.setItem('title', JSON.stringify(titleArray));
             return { ...state, title: action.data};
         default:

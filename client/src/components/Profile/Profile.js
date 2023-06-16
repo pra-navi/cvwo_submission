@@ -12,7 +12,6 @@ const Profile = () => {
     const classes = useStyles();
     const history = useHistory();
     const dispatch = useDispatch();
-    console.log("profile"); // not sure why it will render 4 times // line 23 is the problem!
 
     const { id } = useParams();
     
@@ -21,8 +20,6 @@ const Profile = () => {
     }, [id]);
 
     const { user } = useSelector((state) => state.auth); //auth.js in reducer
-    console.log(user?.name);
-    //later handle isLoading
 
     const viewer = JSON.parse(localStorage.getItem('profile'));
     const viewerId = viewer?.result?._id;
@@ -32,6 +29,7 @@ const Profile = () => {
     const [viewLearningList, setLearningList] = useState(user?.learningList);
     const [viewDoneList, setDoneList] = useState(user?.doneList);
     const [count, setCount] = useState(0);
+    const [arePrivate, setArePrivate] = useState(viewer?.result?.listArePrivate);
 
     useEffect(() => {
         setLearningList(user?.learningList);
@@ -39,6 +37,11 @@ const Profile = () => {
         viewLearningList?.map((id) => dispatch(getPostTitle(id)));
         viewDoneList?.map((id) => dispatch(getPostTitle(id)));
     }, [user]);
+
+    const changePrivacy = () => {
+        //dispatch action
+        setArePrivate(!arePrivate);
+    }
 
     const handleClick = () => {
         const newCount = count + 1;
@@ -69,6 +72,14 @@ const Profile = () => {
                 <Button className={classes.myPostsButton} onClick={seeMyPosts}>
                     My Posts
                 </Button>
+                {isOwnProfile && 
+                    <div className={classes.leftRight}>
+                        <Typography variant="h5" component="h2">My lists are {arePrivate ? "private" : "public "} &nbsp;</Typography>
+                        <Button className={classes.privacyButton} onClick={changePrivacy}>
+                            {arePrivate ? "change to public" : "change to private"}
+                        </Button>
+                    </div>
+                }
             </Paper>
             <Divider style={{ margin: '20px 0 20px 0' }} />
             {(isOwnProfile || !userListsArePrivate) &&

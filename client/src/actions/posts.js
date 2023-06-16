@@ -17,7 +17,7 @@ export const getPost = (id) => async (dispatch) => {
 export const getPostTitle = (id) => async (dispatch) => {
     try {
         let { data } = await api.fetchPostTitle(id);
-        console.log(data);
+        //console.log(data); //check the title
         
         dispatch({ type: FETCH_POST_TITLE, payload: {id: id, data: data} });
     } catch (error) {

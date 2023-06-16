@@ -1,6 +1,6 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Typography, Button, ButtonBase, Card } from '@material-ui/core';
 import useStyles from './styles';
 import { getPostTitle } from '../../../../actions/posts';
@@ -11,14 +11,6 @@ const ListRow = ({ isOwnProfile, isLearningList, postId, funOne, funTwo }) => {
     const dispatch = useDispatch();
     const classes = useStyles();
     const history = useHistory();
-    /*
-    useEffect(() => {
-        dispatch(getPostTitle(postId));
-        console.log("here");
-    }, []);
-    const { title } = useSelector((state) => state.posts);
-    console.log(isOwnProfile + ": " + title);
-    */
 
     var title = null;
     const titleArray = JSON.parse(localStorage.getItem('title'));
@@ -55,3 +47,13 @@ const ListRow = ({ isOwnProfile, isLearningList, postId, funOne, funTwo }) => {
 }
 
 export default ListRow;
+
+   /*
+   //failed attempt
+    useEffect(() => {
+        dispatch(getPostTitle(postId));
+        console.log("here");
+    }, []);
+    const { title } = useSelector((state) => state.posts);
+    console.log(isOwnProfile + ": " + title);
+    */

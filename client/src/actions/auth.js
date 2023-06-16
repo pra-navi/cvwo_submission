@@ -1,4 +1,4 @@
-import { AUTH, FETCH_USER, START_LOADING, END_LOADING, SAVE_POST, DONE_POST } from '../constants/actionTypes';
+import { AUTH, FETCH_USER, SAVE_POST, DONE_POST } from '../constants/actionTypes';
 import * as api from '../api';
 
 export const savePost = (postId) => async (dispatch) => {
