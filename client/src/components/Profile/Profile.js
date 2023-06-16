@@ -24,12 +24,12 @@ const Profile = () => {
     const viewer = JSON.parse(localStorage.getItem('profile'));
     const viewerId = viewer?.result?._id;
     const isOwnProfile = (id === viewerId);
+    const arePrivate = viewer?.result?.listsArePrivate;
 
     //initialise the array, logic for normal viewer
     const [viewLearningList, setLearningList] = useState(user?.learningList);
     const [viewDoneList, setDoneList] = useState(user?.doneList);
     const [count, setCount] = useState(0);
-    const [arePrivate, setArePrivate] = useState(viewer?.result?.listArePrivate);
 
     useEffect(() => {
         setLearningList(user?.learningList);
@@ -38,9 +38,8 @@ const Profile = () => {
         viewDoneList?.map((id) => dispatch(getPostTitle(id)));
     }, [user]);
 
-    const changePrivacy = () => {
-        //dispatch action
-        setArePrivate(!arePrivate);
+    const changeSetting = () => {
+        history.push(`/user/profileSetting`);
     }
 
     const handleClick = () => {
@@ -56,7 +55,7 @@ const Profile = () => {
         }
     }, [count]);
     const userName = user?.name;
-    const userListsArePrivate = user?.listArePrivate;
+    const userListsArePrivate = user?.listsArePrivate;
 
     const seeMyPosts = () => {
         history.push(`/creators/${id}`);
@@ -75,8 +74,8 @@ const Profile = () => {
                 {isOwnProfile && 
                     <div className={classes.leftRight}>
                         <Typography variant="h5" component="h2">My lists are {arePrivate ? "private" : "public "} &nbsp;</Typography>
-                        <Button className={classes.privacyButton} onClick={changePrivacy}>
-                            {arePrivate ? "change to public" : "change to private"}
+                        <Button className={classes.privacyButton} onClick={changeSetting}>
+                            change setting
                         </Button>
                     </div>
                 }
@@ -91,6 +90,11 @@ const Profile = () => {
                         <List isOwnProfile={isOwnProfile} isLearningList={false} postIds={viewDoneList} handleClick={handleClick}/>
                     </Grid>
                 </Grid>
+            }
+            {((!isOwnProfile) && userListsArePrivate) &&
+                <Paper className={classes.information}>
+                    <Typography variant="h6" align="center"> This user's lists are private. </Typography>
+                </Paper>
             }
             
         </>

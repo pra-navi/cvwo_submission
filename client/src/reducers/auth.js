@@ -1,4 +1,4 @@
-import { SAVE_POST, AUTH, LOGOUT, FETCH_USER, START_LOADING, END_LOADING, DONE_POST } from '../constants/actionTypes';
+import { SAVE_POST, AUTH, LOGOUT, FETCH_USER, START_LOADING, END_LOADING, DONE_POST, CHANGE_PRIVACY } from '../constants/actionTypes';
 
 const authReducer = (state = { authData: null, isLoading: true, user: null }, action) => {
     switch (action.type) {
@@ -24,6 +24,11 @@ const authReducer = (state = { authData: null, isLoading: true, user: null }, ac
             if(dprofile?.result?.learningList) {dprofile.result.doneList = action?.data;};
             localStorage.setItem('profile', JSON.stringify({ ...dprofile }));
             return { ...state, authData: dprofile };
+        case CHANGE_PRIVACY:
+            let cprofile = JSON.parse(localStorage.getItem('profile'));
+            if(cprofile?.result) {cprofile.result.listsArePrivate = action?.data;};
+            localStorage.setItem('profile', JSON.stringify({ ...cprofile }));
+            return { ...state, authData: cprofile };
         default:
             return state;
     }

@@ -1,5 +1,15 @@
-import { AUTH, FETCH_USER, SAVE_POST, DONE_POST } from '../constants/actionTypes';
+import { AUTH, FETCH_USER, SAVE_POST, DONE_POST, CHANGE_PRIVACY } from '../constants/actionTypes';
 import * as api from '../api';
+
+export const changePrivacy = () => async (dispatch) => {
+    try {
+        const { data } = await api.changePrivacy(); //now data is listsArePrivacy
+        console.log(data);
+        dispatch({ type: CHANGE_PRIVACY, data });
+    } catch (error) {
+        console.log(error.message);
+    }
+};
 
 export const savePost = (postId) => async (dispatch) => {
     try {

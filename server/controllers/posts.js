@@ -137,7 +137,6 @@ export const getPostTitle = async (req, res) => {
 
     try {
         const post = await PostMessage.findById(id);
-        console.log(post.title);
 
         res.status(200).json(post.title);
     } catch (error) {

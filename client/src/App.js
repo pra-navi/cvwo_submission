@@ -9,6 +9,7 @@ import Auth from './components/Auth/Auth';
 import CreatorOrTag from './components/CreatorOrTag/CreatorOrTag';
 import Navbar from './components/Navbar/Navbar';
 import Profile from './components/Profile/Profile';
+import ProfileSetting from './components/Profile/ProfileSetting';
 
 const App = () => {
     //const user = JSON.parse(localStorage.getItem('profile'));
@@ -25,6 +26,7 @@ const App = () => {
                         <Route path={['/creators/:name', '/tags/:name']} component={CreatorOrTag} />
                         <Route path="/auth" exact component={() => (!JSON.parse(localStorage.getItem('profile')) ? <Auth /> : <Redirect to="/posts/" />)} />
                         <Route path="/user/profile/:id" exact component={() => (JSON.parse(localStorage.getItem('profile')) ? <Profile /> : <Redirect to="/auth/" />)} />
+                        <Route path="/user/profileSetting" exact component={() => (JSON.parse(localStorage.getItem('profile')) ? <ProfileSetting /> : <Redirect to="/auth/" />)} />
                     </Switch>
                 </Container>      
             </BrowserRouter>

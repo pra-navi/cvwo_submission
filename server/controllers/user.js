@@ -101,3 +101,17 @@ export const donePost = async (req, res) => {
     const updatedUser = await User.findByIdAndUpdate(userId, user, { new: true });
     res.json(user.doneList);
 }
+
+export const changePrivacy = async (req, res) => {
+    if (!req.userId) return res.json({ message: 'Unauthenticated' });
+
+    const userId = req.userId;
+
+    const user = await User.findById(userId);
+    const original = user.listsArePrivate;
+    console.log(original);
+    user.listsArePrivate = !original;
+    const updatedUser = await User.findByIdAndUpdate(userId, user, { new: true });
+    console.log("after change: " + user.listsArePrivate);
+    res.json(user.listsArePrivate);
+}

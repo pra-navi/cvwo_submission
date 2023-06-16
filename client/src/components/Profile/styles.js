@@ -7,6 +7,11 @@ export default makeStyles((theme) => ({
         borderRadius: '15px', 
         backgroundColor: '#E8DBE9', 
     },
+    information: {
+        padding: '20px', 
+        borderRadius: '5px', 
+        backgroundColor: 'white', 
+    },
     lists: {
         padding: '20px', 
         borderRadius: '5px', 

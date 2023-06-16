@@ -19,3 +19,4 @@ export const DONE_POST = 'DONE_POST';
 
 export const COMMENT = 'COMMENT';
 export const FETCH_POST_TITLE = 'FETCH_POST_TITLE';
+export const CHANGE_PRIVACY = 'CHANGE_PRIVACY';
