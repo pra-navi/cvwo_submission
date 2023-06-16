@@ -33,40 +33,7 @@ const PostDetails = () => {
             </Paper>
         );
     }
-    /* useEffect(() => {
-        if (post) {
-            dispatch(getPostBySearch({ search: 'none', tags: post?.tags.join(',') }));
-        }
-    }, [post]);
 
-    const recommendedPosts = posts.filter(({ _id }) => _id !== post._id);
-
-                        <Link to={`/creators/${post.name}`} style={{ textDecoration: 'none', color: '#3f51b5' }}>
-                            {` ${post.name} `}
-                        </Link>
-    {!!recommendedPosts.length && (
-                <div className={classes.section}>
-                    <Typography gutterBottom variant="h5">You might also like:</Typography>
-                    <Divider />
-                    <div className={classes.recommendedPosts}>
-                        {recommendedPosts.map(({ title, name, message, likes, selectedFile, _id }) => (
-                            <div style={{ margin: '20px', cursor: 'pointer' }} onClick={() => openPost(_id)} key={_id}>
-                                <Typography gutterBottom variant="h6">{title}</Typography>
-                                <Typography gutterBottom variant="subtitle2">{name}</Typography>
-                                <Typography gutterBottom variant="subtitle2">{message}</Typography>
-                                <Typography gutterBottom variant="subtitle1">Likes: {likes.length}</Typography>
-                                <img src={selectedFile} width="200px" />
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            )}
-            {post.tags.map((tag) => (
-                        <Link to={`/tags/${tag}`} style={{ textDecoration: 'none', color: '#3f51b5' }}>
-                            {` #${tag} `}
-                        </Link>
-                    ))}
-    */
     return (
         <Paper style={{ padding: '20px', borderRadius: '15px' }} elevation={6}>
             <div className={classes.card}>
@@ -88,8 +55,6 @@ const PostDetails = () => {
                         </Link>
                     </Typography>
                     <Typography variant="body1">{moment(post.createdAt).fromNow()}</Typography>
-                    <Divider style={{ margin: '20px 0' }} />
-                    <Typography variant="body1"><strong>Realtime Chat - coming soon!</strong></Typography>
                     <Divider style={{ margin: '20px 0' }} />
                     <CommentSection post={post} />
                     <Divider style={{ margin: '20px 0' }} />

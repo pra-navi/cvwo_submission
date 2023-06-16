@@ -16,6 +16,7 @@ const Form = ({ currentId, setCurrentId }) => {
         title: '', message: '', tags: '', selectedFile: defaultImage
     });
     const [fileMessage, setFileMessage] = useState('[Using default image as cover]');
+    const [errorMessage, setErrorMessage] = useState('');   
     const post = useSelector((state) => currentId ? state.posts.posts.find((p) => p._id === currentId) : null);
 
     const allowedFileTypes = ['image/jpg', 'image/jpeg', 'image/png'];
@@ -39,22 +40,34 @@ const Form = ({ currentId, setCurrentId }) => {
         if(post) setPostData(post);
     }, [post, fileMessage]);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if(currentId) {
-            dispatch(updatePost(currentId, { ...postData, name: user?.result?.name }, history));
-        } else {
-            dispatch(createPost({ ...postData, name: user?.result?.name }));
+        if (!postData.title || !postData.message || !postData.tags) {
+            setErrorMessage('Please fill in all fields.');
+            return;
         }
-        clear();
+
+        try {
+            if(currentId) {
+                await dispatch(updatePost(currentId, { ...postData, name: user?.result?.name }, history));
+                clear();
+            } else {
+                await dispatch(createPost({ ...postData, name: user?.result?.name }));
+                clear();
+            }
+            setErrorMessage('');
+        } catch (error) {
+            console.log(error);
+            setErrorMessage('Something went wrong. Please try again.');
+        }
     }
 
     if(!user?.result?.name) {
         return (
             <Paper className={classes.paper}>
                 <Typography variant="h6" align="center">
-                    Please Sign In to create your own posts and like other's posts.
+                    Please Sign In to create your own posts and interact with other's posts.
                 </Typography>
             </Paper>
         );
@@ -66,6 +79,7 @@ const Form = ({ currentId, setCurrentId }) => {
             title: '', message: '', tags: '', selectedFile: defaultImage
         });
         setFileMessage('[Using default image as cover]');
+        setErrorMessage('');
         history.push('/');
     }
 
@@ -88,6 +102,12 @@ const Form = ({ currentId, setCurrentId }) => {
                 </div>
 
                 <Typography variant="body2">{fileMessage}</Typography>
+
+                {errorMessage && (
+                    <Typography variant="body2" className={classes.errorMessage} color="error">
+                        {errorMessage}
+                    </Typography>
+                )}
 
                 <Button className={classes.buttonSubmit} variant="contained" color="primary" size="large" type="submit" fullWidth>Submit</Button>
                 <Button variant="contained" color="secondary" size="small" onClick={clear} fullWidth>Clear</Button>

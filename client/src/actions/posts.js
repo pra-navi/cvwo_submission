@@ -70,7 +70,11 @@ export const createPost = (post, history) => async (dispatch) => {
         history.push(`/posts/${data._id}`);
         // dispatch({ type: END_LOADING }); // no need but not sure
     } catch (error) {
-        console.log(error.message);
+        if (error.response && error.response.data && error.response.data.message) {
+            console.log(error.response.data.message); // Print the error message to the console
+          } else {
+            console.log('An error occurred. Please try again.');
+          } 
     }
 };
 

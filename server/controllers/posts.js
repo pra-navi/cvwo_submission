@@ -60,8 +60,15 @@ export const getPost = async (req, res) => {
 }
 
 export const createPost = async (req, res) => {
-    const post = req.body;
-    const newPost = new PostMessage({ ...post, creator: req.userId, createdAt: new Date().toISOString() });
+    const {title, message, tags} = req.body;
+
+    if (!title || !message || !tags) {
+        const errorMessage = 'Please fill in all fields.';
+        console.log(errorMessage);
+        return res.status(400).json({ message: errorMessage });
+    }
+
+    const newPost = new PostMessage({ ...req.body, creator: req.userId, createdAt: new Date().toISOString() });
     try {
         await newPost.save();
         res.status(201).json(newPost);
