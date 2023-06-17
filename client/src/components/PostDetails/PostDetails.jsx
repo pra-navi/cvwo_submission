@@ -9,6 +9,7 @@ import { getPost, getPostBySearch } from '../../actions/posts';
 
 import CommentSection from './CommentSection';
 
+import StarRating from './StarRating';
 
 
 const PostDetails = () => {
@@ -34,7 +35,8 @@ const PostDetails = () => {
         }
     
         const sum = post.comments.reduce((total, comment) => total + comment.rating, 0);
-        return sum / post.comments.length;
+        const average = sum / post.comments.length;
+        return Math.round(average * 100) / 100; // Rounded to 2 decimal places
     };
 
     if (isLoading) {
@@ -69,7 +71,7 @@ const PostDetails = () => {
                     </Typography>
                     <Typography variant="body1">{moment(post.createdAt).fromNow()}</Typography>
                     <Divider style={{ margin: '20px 0' }} />
-                    <Typography variant="h4" component="h2">Average Rating: {averageRating}</Typography>
+                    <Typography variant="h4" component="h2">Average Rating: {averageRating} <StarRating averageRating={averageRating} /> </Typography>
                     <Divider style={{ margin: '20px 0' }} />
                     <CommentSection post={post} />
                     <Divider style={{ margin: '20px 0' }} />
