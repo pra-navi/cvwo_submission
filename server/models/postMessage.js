@@ -28,10 +28,13 @@ const postSchema = mongoose.Schema({
         type: [String],
         default: []
     },
-    comments: {
-        type: [String],
-        default: []
-    },
+    comments: [
+        {
+            message: String,
+            rating: Number,
+            name: String,
+        },
+    ],
     createdAt: {
         type: Date, //type is date
         default: new Date() //default is current date

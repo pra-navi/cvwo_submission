@@ -18,5 +18,6 @@ export const SAVE_POST = 'SAVE_POST';
 export const DONE_POST = 'DONE_POST';
 
 export const COMMENT = 'COMMENT';
+export const UPDATEAVERAGE = 'UPDATEAVERAGE';
 export const FETCH_POST_TITLE = 'FETCH_POST_TITLE';
 export const CHANGE_PRIVACY = 'CHANGE_PRIVACY';

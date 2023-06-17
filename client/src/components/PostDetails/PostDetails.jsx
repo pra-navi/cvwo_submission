@@ -10,6 +10,7 @@ import { getPost, getPostBySearch } from '../../actions/posts';
 import CommentSection from './CommentSection';
 
 
+
 const PostDetails = () => {
 
     const { post, posts, isLoading } = useSelector((state) => state.posts);
@@ -24,7 +25,17 @@ const PostDetails = () => {
         dispatch(getPost(id));
     }, [id]);
 
+
     if (!post) return null;
+
+    const calculateAverageRating = () => {
+        if (!post.comments || post.comments.length === 0) {
+          return 0;
+        }
+    
+        const sum = post.comments.reduce((total, comment) => total + comment.rating, 0);
+        return sum / post.comments.length;
+    };
 
     if (isLoading) {
         return (
@@ -33,6 +44,8 @@ const PostDetails = () => {
             </Paper>
         );
     }
+
+    const averageRating = calculateAverageRating();
 
     return (
         <Paper style={{ padding: '20px', borderRadius: '15px' }} elevation={6}>
@@ -55,6 +68,8 @@ const PostDetails = () => {
                         </Link>
                     </Typography>
                     <Typography variant="body1">{moment(post.createdAt).fromNow()}</Typography>
+                    <Divider style={{ margin: '20px 0' }} />
+                    <Typography variant="h4" component="h2">Average Rating: {averageRating}</Typography>
                     <Divider style={{ margin: '20px 0' }} />
                     <CommentSection post={post} />
                     <Divider style={{ margin: '20px 0' }} />

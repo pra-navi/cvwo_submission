@@ -17,7 +17,7 @@ import { useHistory } from 'react-router-dom';
 
 import useStyles from './styles';
 
-const Post = ({ post, setCurrentId }) => {
+const Post = ({ post, setCurrentId, averageRating }) => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const user = JSON.parse(localStorage.getItem('profile')); // need to explicitly update this
@@ -119,6 +119,7 @@ const Post = ({ post, setCurrentId }) => {
                 <Typography className={classes.title} variant="h5" gutterBottom>{post.title}</Typography>
                 <CardContent>
                     <Typography variant="body2" color="textSecondary" component="p">{post.message}</Typography>
+                    <Typography variant="body2" color="textSecondary" component="p">Average Rating: {averageRating || 0}</Typography>
                 </CardContent>
             </ButtonBase>
             {(user?.result?.googleId === post?.creator || user?.result?._id === post?.creator) && (
@@ -136,9 +137,6 @@ const Post = ({ post, setCurrentId }) => {
                 </div>
             )}
             <CardActions className={classes.cardActions2}>
-                <Button className={classes.atLeft} size="small" color="primary" disabled={!user?.result} onClick={() => {}}>
-                    {"Rating"}
-                </Button>
                 <Button className={classes.atRight} size="small" color="primary" disabled={!user?.result} onClick={handleSaveClick}>
                     <Save />
                 </Button>

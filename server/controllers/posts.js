@@ -132,12 +132,28 @@ export const dislikePost = async (req, res) => {
 
 export const commentPost = async (req, res) => {
     const { id } = req.params;
-    const { value } = req.body;
-    const post = await PostMessage.findById(id);
-    post.comments.push(value);
-    const updatedPost = await PostMessage.findByIdAndUpdate(id, post, { new: true });
-    res.json(updatedPost);
+    const { value, rating, name } = req.body;
+
+    try {
+        const post = await PostMessage.findById(id);
+
+        const newComment = {
+            message: value,
+            rating: parseInt(rating),
+            name
+        };
+
+        post.comments.push(newComment);
+
+        const updatedPost = await PostMessage.findByIdAndUpdate(id, post, { new: true });
+
+        res.json(updatedPost);
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
 }
+
+
 
 export const getPostTitle = async (req, res) => {
     const { id } = req.params;

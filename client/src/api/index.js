@@ -27,7 +27,7 @@ export const deletePost = (id) => API.delete(`/posts/${id}`);
 export const likePost = (id) => API.patch(`/posts/${id}/likePost`);
 export const dislikePost = (id) => API.patch(`/posts/${id}/dislikePost`);
 
-export const commentPost = (value, id) => API.post(`/posts/${id}/commentPost`, { value });
+export const commentPost = (comment, id) => API.post(`/posts/${id}/commentPost`, { value: comment.message, rating: comment.rating, name: comment.name });
 export const fetchPostTitle = (id) => API.get(`/posts/${id}/getPostTitle`);
 
 
