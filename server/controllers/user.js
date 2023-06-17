@@ -28,9 +28,13 @@ export const signup = async (req, res) => {
     const { email, password, confirmPassword, firstName, lastName } = req.body;
 
     try {
-        const existingUser = await User.findOne({ email });
+        const existingUserEmail = await User.findOne({ email });
 
-        if(existingUser) return res.status(400).json({ message: "User already exists." });
+        const existingUserFullName = await User.findOne({ name: `${firstName} ${lastName}` });
+
+        if(existingUserFullName) return res.status(400).json({ message: "User with this full name already exists." });
+
+        if(existingUserEmail) return res.status(400).json({ message: "User with this email already exists." });
 
         if(password !== confirmPassword) return res.status(400).json({ message: "Passwords don't match." });
 
