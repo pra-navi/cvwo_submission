@@ -7,6 +7,8 @@ import Post from '../Posts/Post/Post';
 import Form from '../Form/Form';
 import { getPostsByCreator, getPostBySearch } from '../../actions/posts';
 
+
+
 const CreatorOrTag = () => {
     const { name } = useParams();
     const dispatch = useDispatch();

@@ -90,6 +90,15 @@ const Post = ({ post, setCurrentId, averageRating }) => {
         return <><ThumbDownAltOutlined fontSize="small" />&nbsp;Dislike</>;
     }
 
+    const Delete = () => {
+        return (
+            <>
+                <DeleteIcon fontSize="small" />
+                &nbsp;{'Delete'} 
+            </>
+        );
+    }
+
     const Save = () => {
         if (hasSaved) {
             return (
@@ -114,7 +123,7 @@ const Post = ({ post, setCurrentId, averageRating }) => {
                     <Typography variant="body2">{moment(post.createdAt).fromNow()}</Typography>
                 </div>
                 <div className={classes.details}>
-                    <Typography variant="body2" color="textSecondary">{post.tags.map((tag) => `#${tag} `)}</Typography>
+                    <Typography variant="body2" color="textSecondary">{post.tags.map((tag) => `#${tag.trim()} `)}</Typography>
                 </div>
                 <Typography className={classes.title} variant="h5" gutterBottom>{post.title}</Typography>
                 <CardContent>
@@ -150,8 +159,7 @@ const Post = ({ post, setCurrentId, averageRating }) => {
                 </Button>
                 {(user?.result?.googleId === post?.creator || user?.result?._id === post?.creator) && (
                     <Button size="small" color="primary" onClick={() => dispatch(deletePost(post._id))}>
-                        <DeleteIcon fontSize="small" />
-                        &nbsp; Delete 
+                        <Delete />
                     </Button>
                 )}
                 {(userEmail === 'admin@gmail.com') && ( // Compare the user's email with the specific email account

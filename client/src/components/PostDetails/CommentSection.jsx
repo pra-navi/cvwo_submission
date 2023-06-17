@@ -81,8 +81,12 @@ const CommentSection = ({ post }) => {
                 {user?.result?.name && (
                 <div style={{ width: '70%' }}>
                     <Typography gutterBottom variant="h6">Write a Comment</Typography>
-                    <TextField fullWidth minRows={4} variant="outlined" label="Comment" multiline value={comment.message} onChange={handleCommentChange} />
-                    <TextField fullWidth type="number" label="Rating" inputProps={{ min: 0, max: 5 }} value={comment.rating} onChange={handleRatingChange} />
+                    <div style={{ marginBottom: '10px' }}>
+                        <TextField fullWidth minRows={4} variant="outlined" label="Comment" multiline value={comment.message} onChange={handleCommentChange} />
+                    </div>
+                    <div style={{ marginBottom: '10px' }}>
+                        <TextField fullWidth type="number" label="Rating" inputProps={{ min: 0, max: 5 }} value={comment.rating} onChange={handleRatingChange} />
+                    </div>
                     <Button style={{ marginTop: '10px' }} fullWidth disabled={!comment.message} variant="contained" color="primary" onClick={handleSubmit}>Comment</Button>
                 </div>
                 )}

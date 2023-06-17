@@ -154,7 +154,6 @@ export const commentPost = async (req, res) => {
 }
 
 
-
 export const getPostTitle = async (req, res) => {
     const { id } = req.params;
 
