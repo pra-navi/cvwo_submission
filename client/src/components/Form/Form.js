@@ -53,7 +53,7 @@ const Form = ({ currentId, setCurrentId }) => {
                 await dispatch(updatePost(currentId, { ...postData, name: user?.result?.name }, history));
                 clear();
             } else {
-                await dispatch(createPost({ ...postData, name: user?.result?.name }));
+                await dispatch(createPost({ ...postData, name: user?.result?.name }, history));
                 clear();
             }
             setErrorMessage('');

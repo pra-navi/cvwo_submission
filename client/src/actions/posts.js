@@ -73,6 +73,7 @@ export const createPost = (post, history) => async (dispatch) => {
         if (error.response && error.response.data && error.response.data.message) {
             console.log(error.response.data.message); // Print the error message to the console
           } else {
+            console.log(error);
             console.log('An error occurred. Please try again.');
           } 
     }

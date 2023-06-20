@@ -67,8 +67,10 @@ export const createPost = async (req, res) => {
         console.log(errorMessage);
         return res.status(400).json({ message: errorMessage });
     }
+    // remove duplicate tags
+    const newTags = [...new Set(tags)];
 
-    const newPost = new PostMessage({ ...req.body, creator: req.userId, createdAt: new Date().toISOString() });
+    const newPost = new PostMessage({ ...req.body, tags: newTags, creator: req.userId, createdAt: new Date().toISOString() });
     try {
         await newPost.save();
         res.status(201).json(newPost);
