@@ -30,7 +30,7 @@ export const dislikePost = (id) => API.patch(`/posts/${id}/dislikePost`);
 export const commentPost = (comment, id) => API.post(`/posts/${id}/commentPost`, { value: comment.message, rating: comment.rating, name: comment.name });
 export const fetchPostTitle = (id) => API.get(`/posts/${id}/getPostTitle`);
 
-
+export const googleLogIn = (formData) => API.post('/user/googleLogin', formData);
 export const logIn = (formData) => API.post('/user/login', formData);
 export const signUp = (formData) => API.post('/user/signup', formData);
 export const fetchUser = (id) => API.get(`/user/profile/${id}`);

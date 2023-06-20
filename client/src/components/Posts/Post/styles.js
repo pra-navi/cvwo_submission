@@ -64,5 +64,4 @@ export default makeStyles({
   atLeft: {
     marginRight: 'auto', 
   }, 
-
 });

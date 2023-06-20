@@ -4,7 +4,6 @@ import * as api from '../api';
 export const changePrivacy = () => async (dispatch) => {
     try {
         const { data } = await api.changePrivacy(); //now data is listsArePrivacy
-        console.log(data);
         dispatch({ type: CHANGE_PRIVACY, data });
     } catch (error) {
         console.log(error.message);
@@ -40,6 +39,19 @@ export const getUser = (id) => async (dispatch) => {
         console.log(error.message);
     }
 };
+
+export const googleLogin = (gglForm, history) => async (dispatch) => {
+    try {
+        const { data } = await api.googleLogIn(gglForm);
+        console.log("google login, action");
+
+        dispatch({ type: AUTH, data });
+
+        history.push('/');
+    } catch (error) {
+        throw new Error(error.response.data.message);
+    }
+}
 
 export const login = (formData, history) => async (dispatch) => {
     try {

@@ -8,7 +8,7 @@ import Icon from './icon';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import useStyles from './styles';
 import Input from './Input';
-import { signup, login } from '../../actions/auth';
+import { signup, login, googleLogin } from '../../actions/auth';
 
 const initialState = { firstName: '', lastName: '', email: '', password: '', confirmPassword: '' };
 
@@ -53,20 +53,34 @@ const Auth = () => {
     };
 
     const googleSuccess = async (res) => {
+        //ans from the comment
+        const token = res?.credential;
+        const result = jwt_decode(token);
+        const gglForm = { 
+            firstName: result?.given_name, 
+            lastName: result?.family_name ? result?.family_name : '', 
+            email: result?.email, 
+            password: result?.sub, //sth like googleId
+            confirmPassword: '' 
+        };
+        try{
+            await dispatch(googleLogin(gglForm, history));
+            setError('');
+            history.push('/');
+        } catch (error) {
+            setError(error.message);
+        }
         /*
         const result = res?.profileObj;
         const token = res?.tokenId;
-        */ //ans from the comment
-        const token = res?.credential;
-        const result = jwt_decode(token);
-       
-
+        
         try {
             dispatch({ type: 'AUTH', data: { result, token } });
             history.push('/');
         } catch (error) {
             console.log(error);
         }
+        */
     };
 
     const googleFailure = (error) => {

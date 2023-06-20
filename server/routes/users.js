@@ -1,9 +1,10 @@
 import express from 'express';
-import { login, signup, getUser, savePost, donePost, changePrivacy } from '../controllers/user.js';
+import { login, signup, getUser, savePost, donePost, changePrivacy, googleLogin } from '../controllers/user.js';
 import auth from '../middleware/auth.js';
 
 const router = express.Router();
 
+router.post('/googleLogin', googleLogin);
 router.post('/login', login);
 router.post('/signup', signup);
 router.get('/profile/:id', getUser);

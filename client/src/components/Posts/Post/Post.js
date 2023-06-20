@@ -17,7 +17,7 @@ import { useHistory } from 'react-router-dom';
 
 import useStyles from './styles';
 
-const Post = ({ post, setCurrentId, averageRating }) => {
+const Post = ({ post, setCurrentId }) => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const user = JSON.parse(localStorage.getItem('profile')); // need to explicitly update this
@@ -114,6 +114,17 @@ const Post = ({ post, setCurrentId, averageRating }) => {
         history.push(`/posts/${post._id}`);
     }
 
+    const calculateAverageRating = () => {
+        if (!post.comments || post.comments.length === 0) {
+          return 0;
+        }
+    
+        const sum = post.comments.reduce((total, comment) => total + comment.rating, 0);
+        const average = sum / post.comments.length;
+        return Math.round(average * 100) / 100; // Rounded to 2 decimal places
+    };
+    const averageRating = calculateAverageRating();
+
     return (
         <Card className={classes.card} raised elevation={6}>
             <ButtonBase className={classes.cardAction} onClick={openPost}>
@@ -128,7 +139,6 @@ const Post = ({ post, setCurrentId, averageRating }) => {
                 <Typography className={classes.title} variant="h5" gutterBottom>{post.title}</Typography>
                 <CardContent>
                     <Typography variant="body2" color="textSecondary" component="p">{post.message}</Typography>
-                    <Typography variant="body2" color="textSecondary" component="p">Average Rating: {averageRating || 0}</Typography>
                 </CardContent>
             </ButtonBase>
             {(user?.result?.googleId === post?.creator || user?.result?._id === post?.creator) && (
@@ -146,6 +156,7 @@ const Post = ({ post, setCurrentId, averageRating }) => {
                 </div>
             )}
             <CardActions className={classes.cardActions2}>
+                <Typography className={classes.atLeft} variant="subtitle2" color="primary">Average Rating: {averageRating} / 5 </Typography>
                 <Button className={classes.atRight} size="small" color="primary" disabled={!user?.result} onClick={handleSaveClick}>
                     <Save />
                 </Button>
@@ -174,3 +185,4 @@ const Post = ({ post, setCurrentId, averageRating }) => {
 }
 
 export default Post;
+//<Typography variant="body2" color="textSecondary" component="p">Average Rating: {averageRating || 0}</Typography>

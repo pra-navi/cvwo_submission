@@ -21,6 +21,9 @@ export default makeStyles({
     elevation: '6',
     padding: '10px 16px 10px 16px',
   },
+  title: {
+    marginRight: '150px', 
+  },
   overlay2: {
     position: 'absolute',
     top: '10px', 

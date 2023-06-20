@@ -1,14 +1,10 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import { Typography, Button, ButtonBase, Card } from '@material-ui/core';
 import useStyles from './styles';
-import { getPostTitle } from '../../../../actions/posts';
 
 
 const ListRow = ({ isOwnProfile, isLearningList, postId, funOne, funTwo }) => {
-
-    const dispatch = useDispatch();
     const classes = useStyles();
     const history = useHistory();
 
@@ -16,7 +12,7 @@ const ListRow = ({ isOwnProfile, isLearningList, postId, funOne, funTwo }) => {
     const titleArray = JSON.parse(localStorage.getItem('title'));
     if(titleArray) {
         const filteredArray = titleArray.filter(arr => arr[0] === postId);
-        if (filteredArray.length != 0) {
+        if (filteredArray.length !== 0) {
             title = filteredArray[0][1];
         }
     }
@@ -30,7 +26,9 @@ const ListRow = ({ isOwnProfile, isLearningList, postId, funOne, funTwo }) => {
     return (
         <Card className={classes.card} raised elevation={6}>
             <ButtonBase className={classes.cardAction} onClick={openPost}>
-                <Typography variant="h6">{title}</Typography>
+                {isOwnProfile 
+                ? <Typography className={classes.title} variant="h6">{title}</Typography> 
+                : <Typography variant="h6">{title}</Typography>}
             </ButtonBase>
             {(isOwnProfile) && (
                     <div className={classes.overlay2}>
