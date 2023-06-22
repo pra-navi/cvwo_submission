@@ -25,7 +25,7 @@ const App = () => {
                         <Route path="/posts/:id" component={PostDetails} />
                         <Route path={['/creators/:name', '/tags/:name']} component={CreatorOrTag} />
                         <Route path="/auth" exact component={() => (!JSON.parse(localStorage.getItem('profile')) ? <Auth /> : <Redirect to="/posts/" />)} />
-                        <Route path="/user/profile/:id" exact component={() => (JSON.parse(localStorage.getItem('profile')) ? <Profile /> : <Redirect to="/auth/" />)} />
+                        <Route path="/user/profile/:id" exact component={Profile} />
                         <Route path="/user/profileSetting" exact component={() => (JSON.parse(localStorage.getItem('profile')) ? <ProfileSetting /> : <Redirect to="/auth/" />)} />
                     </Switch>
                 </Container>      
