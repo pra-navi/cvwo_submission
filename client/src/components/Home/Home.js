@@ -27,10 +27,14 @@ const Home = () => {
     const [tags, setTags] = useState([]);
 
     const searchPost = () => {
-        if(search.trim() || tags) {
+        if(search.trim() || tags.length > 0) {
+
+            const searchQueryValue = search || 'none';
+            const tagsValue = tags.join(',');
+
             //cannot pass array through url parameter
-            dispatch(getPostBySearch({ search, tags: tags.join(',') }));
-            history.push(`/posts/search?searchQuery=${search || 'none'}&tags=${tags.join(',')}`);
+            dispatch(getPostBySearch({ search: searchQueryValue, tags: tagsValue }));
+            history.push(`/posts/search?searchQuery=${searchQueryValue}&tags=${tagsValue}`);
         } else {
             history.push('/');
         }

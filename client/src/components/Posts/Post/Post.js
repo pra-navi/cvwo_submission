@@ -37,6 +37,11 @@ const Post = ({ post, setCurrentId }) => {
     const handleLikeClick = async () => {
         dispatch(likePost(post._id));
 
+        if(hasDislikedPost) {
+            // pressing the button does not do anything
+            return;
+        }
+
         if(hasLikedPost) {
             setLikes(likes.filter((id) => id !== (userId)));
         } else {
@@ -46,6 +51,11 @@ const Post = ({ post, setCurrentId }) => {
 
     const handleDislikeClick = async () => {
         dispatch(dislikePost(post._id));
+
+        if (hasLikedPost) {
+            // pressing the button does not do anything
+            return;
+        }
 
         if(hasDislikedPost) {
             setDislikes(dislikes.filter((id) => id !== (userId)));
