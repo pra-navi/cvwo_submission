@@ -27,12 +27,11 @@ export const getPostsBySearch = async (req, res) => {
     try {
         let posts;
 
-        if (searchQuery != 'none' && tags) {
+        if (searchQuery && tags) {
             const title = new RegExp(searchQuery, 'i');
             const tagsArray = tags.split(',');
             posts = await PostMessage.find({ $and: [{ $or: [{ title }] }, { tags: { $in: tagsArray } }] });
-        } else if (searchQuery == 'none' && tags) { // when there is only a tags parameter and no searchQuery parameter
-            // there is an issue but idk what it is; the other cases work fine
+        } else if (tags) { // the logic here: show post if any tag matches in the search (not matches all)
             const tagsArray = tags.split(',');
             posts = await PostMessage.find({ tags: { $in: tagsArray } });
         } else if (searchQuery) {
@@ -41,9 +40,6 @@ export const getPostsBySearch = async (req, res) => {
         } else {
             posts = await PostMessage.find();
         }
-
-        console.log(posts); // to debug when only tags parameter is passed
-        // posts is always '[]' and on frontend always shows 'No Posts'
       
         //res.status(200).json({ data: posts });
         res.json({ data: posts });

@@ -29,7 +29,7 @@ const Home = () => {
     const searchPost = () => {
         if(search.trim() || tags.length > 0) {
 
-            const searchQueryValue = search || 'none';
+            const searchQueryValue = search;
             const tagsValue = tags.join(',');
 
             //cannot pass array through url parameter
