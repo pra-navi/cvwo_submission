@@ -27,11 +27,11 @@ export const getPostsBySearch = async (req, res) => {
     try {
         let posts;
 
-        if (searchQuery && tags) {
+        if (searchQuery != 'none' && tags) {
             const title = new RegExp(searchQuery, 'i');
             const tagsArray = tags.split(',');
             posts = await PostMessage.find({ $and: [{ $or: [{ title }] }, { tags: { $in: tagsArray } }] });
-        } else if (tags) { // when there is only a tags parameter and no searchQuery parameter
+        } else if (searchQuery == 'none' && tags) { // when there is only a tags parameter and no searchQuery parameter
             // there is an issue but idk what it is; the other cases work fine
             const tagsArray = tags.split(',');
             posts = await PostMessage.find({ tags: { $in: tagsArray } });
