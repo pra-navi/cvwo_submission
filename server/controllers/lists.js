@@ -4,19 +4,34 @@ import List from '../models/list.js';
 import User from '../models/user.js';
 
 export const createList = async (req, res) => {
-    const { listName } = req.params;
-    const owner = req.userId;
-
-    if (!listName) {
-        const errorMessage = 'Please provide name of list.';
-        console.log(errorMessage);
-        return res.status(400).json({ message: errorMessage });
-    }
-
-    const newList = new List({ listName: listName, ownerId: owner });
+    const { listName, ownerName } = req.body;
+    if (!listName) return res.status(400).json({ message: 'Please provide name of list.' });
+    if (!req.userId) return res.json({ message: 'Unauthenticated' });
+    const ownerId = req.userId;
     try {
+        const newList = new List({ listName: listName, ownerId: ownerId, ownerName: ownerName });
         await newList.save();
-        res.status(201).json(newList);
+        const owner = await User.findById(ownerId);
+        owner.myLists.push({ listId: newList._id, listName:listName });
+        const updatedOwner = await User.findByIdAndUpdate(ownerId, owner, { new: true });
+        res.json(owner.myLists); // return myLists
+    } catch (error) {
+        res.status(409).json({ message: error.message });
+    }
+}
+
+export const deleteList = async (req, res) => {
+    const { listId } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(listId)) return res.status(404).send('No list with that id');
+    if (!req.userId) return res.json({ message: 'Unauthenticated' });
+    const ownerId = req.userId;
+    try {
+        await List.findByIdAndRemove(listId);
+
+        const owner = await User.findById(ownerId);
+        owner.myLists.filter((obj) => obj.listId !== String(listId));
+        const updatedOwner = await User.findByIdAndUpdate(ownerId, owner, { new: true });
+        res.status(201).json(updatedOwner); // return user
     } catch (error) {
         res.status(409).json({ message: error.message });
     }

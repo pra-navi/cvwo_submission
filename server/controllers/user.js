@@ -92,6 +92,7 @@ export const getUser = async (req, res) => {
         res.status(404).json({ message: error.message });
     }
 }
+// noticed here don't have try and catch
 /*
 export const savePost = async (req, res) => {
     const { postId } = req.params;

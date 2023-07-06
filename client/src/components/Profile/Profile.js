@@ -5,40 +5,79 @@ import { useDispatch, useSelector } from 'react-redux';
 import useStyles from './styles';
 import { getUser } from '../../actions/auth'; 
 
-import List from './List/List';
-import { getPostTitle } from '../../actions/posts';
+import MyLists from './MyLists/MyLists';
+import ListForm from './MyLists/ListForm';
+// import { getPostTitle } from '../../actions/posts';
 
 const Profile = () => {
     const classes = useStyles();
-    
-
-    return (
-        <>
-            <Paper className={classes.personal} elevation={6}>Profile</Paper>
-        </>
-    )
-};
-export default Profile;
-//later handle lists are private
-
-//use the key of Grid to re-render the component
-/*
-const history = useHistory();
+    const history = useHistory();
     const dispatch = useDispatch();
 
-    const { id } = useParams();
+    const { id } = useParams(); // the user id (not viewer)
     
     useEffect(() => {
         dispatch(getUser(id));
     }, [id]);
 
-    const { user } = useSelector((state) => state.auth); //auth.js in reducer
+    const { user } = useSelector((state) => state.auth); //auth.js in reducer, cause profile to re-render
+    const userName = user?.name;
+    const userListsArePrivate = user?.listsArePrivate;
 
     const viewer = JSON.parse(localStorage.getItem('profile'));
     const viewerId = viewer?.result?._id;
     const isOwnProfile = (id === viewerId);
+    // console.log("isOwnProfile" + isOwnProfile); //debug
     const arePrivate = viewer?.result?.listsArePrivate;
 
+    const seeMyPosts = () => {
+        history.push(`/creators/${id}`);
+    };
+    const changeSetting = () => {
+        history.push(`/user/profileSetting`);
+    }
+
+    //initialise the array, change if isOwnProfile & create/edit the lists
+    const [listsArr, setlistsArr] = useState(user?.myLists);
+    const [count, setCount] = useState(0);
+    const handleClick = () => { setCount(count + 1); };
+    useEffect(() => {
+        if (isOwnProfile) {
+            const me = JSON.parse(localStorage.getItem('profile'));
+            setlistsArr(me?.result?.myLists);
+        }
+    }, [count]);
+    
+
+    return (
+        <>
+            <Paper className={classes.personal} elevation={6}>
+                <div className={classes.leftRight}>
+                    <Avatar className={classes.purple} alt={userName} src={user?.imageUrl}>{userName?.charAt(0)}</Avatar>
+                    <Typography variant="h3" component="h2">{userName}</Typography>
+                </div>
+                <Button className={classes.myPostsButton} onClick={seeMyPosts}>
+                    My Posts
+                </Button>
+                {isOwnProfile && 
+                    <div className={classes.leftRight}>
+                        <Typography variant="h5" component="h2">My lists are {arePrivate ? "private" : "public "} &nbsp;</Typography>
+                        <Button className={classes.privacyButton} onClick={changeSetting}>
+                            change setting
+                        </Button>
+                    </div>
+                }
+            </Paper>
+            <Divider style={{ margin: '20px 0 20px 0' }} />
+            { isOwnProfile && <ListForm handleClick={handleClick} /> }
+            <Paper className={classes.personal} elevation={6}>In Progress</Paper>
+        </>
+    )
+};
+export default Profile;
+// {isOwnProfile && }
+// use the key of Grid to re-render the component
+/*
     //initialise the array, logic for normal viewer
     const [viewLearningList, setLearningList] = useState(user?.learningList);
     const [viewDoneList, setDoneList] = useState(user?.doneList);
@@ -67,12 +106,8 @@ const history = useHistory();
             setDoneList(me?.result?.doneList);
         }
     }, [count]);
-    const userName = user?.name;
-    const userListsArePrivate = user?.listsArePrivate;
-
-    const seeMyPosts = () => {
-        history.push(`/creators/${id}`);
-    };
+*/
+/*
 <Paper className={classes.personal} elevation={6}>
                 <div className={classes.leftRight}>
                     <Avatar className={classes.purple} alt={userName} src={user?.imageUrl}>{userName?.charAt(0)}</Avatar>

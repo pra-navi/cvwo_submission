@@ -21,3 +21,6 @@ export const COMMENT = 'COMMENT';
 export const UPDATEAVERAGE = 'UPDATEAVERAGE';
 export const FETCH_POST_TITLE = 'FETCH_POST_TITLE';
 export const CHANGE_PRIVACY = 'CHANGE_PRIVACY';
+
+export const CREATE_LIST = 'CREATE_LIST';
+export const DELETE_LIST = 'DELETE_LIST';

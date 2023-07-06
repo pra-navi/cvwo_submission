@@ -5,6 +5,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import postRoutes from './routes/posts.js';
 import userRoutes from './routes/users.js';
+import listRoutes from './routes/lists.js'
 
 const app = express();
 dotenv.config();
@@ -18,6 +19,7 @@ app.use(cors()); // cy local
 app.use('/posts', postRoutes);
 //specify routes after app.use(cors()); else will have network error
 app.use('/user', userRoutes);
+app.use('/list', listRoutes);
 
 const PORT = process.env.PORT || 5000;
 
