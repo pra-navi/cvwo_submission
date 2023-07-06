@@ -12,7 +12,7 @@ import BookmarkIcon from '@material-ui/icons/Bookmark';
 import moment from 'moment';
 import { useDispatch } from 'react-redux';
 import { deletePost, likePost, dislikePost } from '../../../actions/posts';
-import { savePost } from '../../../actions/auth';
+// import { savePost } from '../../../actions/auth';
 import { useHistory } from 'react-router-dom';
 
 import useStyles from './styles';
@@ -25,9 +25,10 @@ const Post = ({ post, setCurrentId }) => {
     const [likes, setLikes] = useState(post?.likes);
     const [dislikes, setDislikes] = useState(post?.dislikes);
 
-    const userLearningList = user?.result?.learningList;
-    const userDoneList = user?.result?.doneList;
-    const [hasSaved, setHasSaved] = useState(userLearningList?.includes(post._id) || false); // OR for non-login user
+    // const userLearningList = user?.result?.learningList;
+    // const userDoneList = user?.result?.doneList;
+    // const [hasSaved, setHasSaved] = useState(userLearningList?.includes(post._id) || false); // OR for non-login user
+    const hasSaved = false;
 
     const userId = user?.result?.googleId || user?.result?._id;
     const userEmail = user?.result?.email;
@@ -65,6 +66,7 @@ const Post = ({ post, setCurrentId }) => {
     }
 
     const handleSaveClick = () => {
+        /*
         if (userDoneList?.includes(post._id)) {
             // console.log("error");
             alert('This post is in your Done List.');
@@ -72,6 +74,7 @@ const Post = ({ post, setCurrentId }) => {
             dispatch(savePost(post._id));
             setHasSaved(!hasSaved);
         }
+        */
     }
 
     const Likes = () => {

@@ -92,7 +92,7 @@ export const getUser = async (req, res) => {
         res.status(404).json({ message: error.message });
     }
 }
-
+/*
 export const savePost = async (req, res) => {
     const { postId } = req.params;
 
@@ -136,7 +136,7 @@ export const donePost = async (req, res) => {
     const updatedUser = await User.findByIdAndUpdate(userId, user, { new: true });
     res.json(user.doneList);
 }
-
+*/
 export const changePrivacy = async (req, res) => {
     if (!req.userId) return res.json({ message: 'Unauthenticated' });
 

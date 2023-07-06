@@ -19,7 +19,12 @@ const postSchema = mongoose.Schema({
         type: [String],
         required: true
     }, //array of strings
+    timeTaken: { type: Number, default: 0 },
     selectedFile: String,
+    listIds: {
+        type: [String],
+        default: []
+    },
     likes: {
         type: [String],
         default: []
@@ -35,6 +40,7 @@ const postSchema = mongoose.Schema({
             name: String,
         },
     ],
+    averageRating: { type: Number, default: 0},
     createdAt: {
         type: Date, //type is date
         default: new Date() //default is current date

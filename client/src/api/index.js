@@ -35,8 +35,8 @@ export const googleLogIn = (formData) => API.post('/user/googleLogin', formData)
 export const logIn = (formData) => API.post('/user/login', formData);
 export const signUp = (formData) => API.post('/user/signup', formData);
 export const fetchUser = (id) => API.get(`/user/profile/${id}`);
-
+/*
 export const savePost = (postId) => API.patch(`/user/savePost/${postId}`);
 export const donePost = (postId) => API.patch(`/user/donePost/${postId}`);
-
+*/
 export const changePrivacy = (postId) => API.patch(`/user/changePrivacy`);

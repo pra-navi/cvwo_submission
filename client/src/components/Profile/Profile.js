@@ -10,7 +10,20 @@ import { getPostTitle } from '../../actions/posts';
 
 const Profile = () => {
     const classes = useStyles();
-    const history = useHistory();
+    
+
+    return (
+        <>
+            <Paper className={classes.personal} elevation={6}>Profile</Paper>
+        </>
+    )
+};
+export default Profile;
+//later handle lists are private
+
+//use the key of Grid to re-render the component
+/*
+const history = useHistory();
     const dispatch = useDispatch();
 
     const { id } = useParams();
@@ -60,10 +73,7 @@ const Profile = () => {
     const seeMyPosts = () => {
         history.push(`/creators/${id}`);
     };
-
-    return (
-        <>
-            <Paper className={classes.personal} elevation={6}>
+<Paper className={classes.personal} elevation={6}>
                 <div className={classes.leftRight}>
                     <Avatar className={classes.purple} alt={userName} src={user?.imageUrl}>{userName?.charAt(0)}</Avatar>
                     <Typography variant="h3" component="h2">{userName}</Typography>
@@ -96,29 +106,4 @@ const Profile = () => {
                     <Typography variant="h6" align="center"> This user's lists are private. </Typography>
                 </Paper>
             }
-            
-        </>
-    )
-};
-export default Profile;
-//later handle lists are private
-
-//use the key of Grid to re-render the component
-    /*
-    if(!viewer) {
-        return (
-            <Paper className={classes.personal}>
-                <Typography variant="h6" align="center"> Please Sign In. </Typography>
-            </Paper>
-        );
-    };
-    */
-/*
-   useEffect(() => {
-        if (isOwnProfile) {
-            const me = JSON.parse(localStorage.getItem('profile'));
-            setLearningList(me?.result?.learningList);
-            setDoneList(me?.result?.doneList);
-        }
-    }, [count]);
 */
