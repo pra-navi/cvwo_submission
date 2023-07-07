@@ -4,10 +4,9 @@ import { TextField, Button, Typography, Paper } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
 
 import useStyles from './styles';
-import { createList } from '../../../actions/lists';
+import { createList, editList } from '../../../actions/lists';
 
-const ListForm = ({ handleClick }) => {
-    const currentId = '';
+const ListForm = ({ currentId, setCurrentId, currentName, handleClick }) => {
     // const history = useHistory();
     const classes = useStyles();
     const dispatch = useDispatch();
@@ -17,6 +16,9 @@ const ListForm = ({ handleClick }) => {
     const [name, setName] = useState(''); // handle logic here if is edit
     const [errorMessage, setErrorMessage] = useState('');
 
+    // console.log(currentId); // will be automatically rerender
+    // console.log(currentName); // will be automatically rerender
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!name) {
@@ -25,8 +27,13 @@ const ListForm = ({ handleClick }) => {
         }
 
         try {
-            await dispatch(createList({ listName: name, ownerName: userName }));
+            if(currentId) {
+                await dispatch(editList({ listId: currentId, listName: name }));
+            } else {
+                await dispatch(createList({ listName: name, ownerName: userName }));
+            }
             clear();
+            handleClick();
         } catch (error) {
             console.log(error);
             setErrorMessage('Something went wrong. Please try again.');
@@ -35,7 +42,7 @@ const ListForm = ({ handleClick }) => {
     }
 
     const clear = () => {
-        // setCurrentId(null);
+        setCurrentId(null);
         setName('');
         setErrorMessage('');
     }
@@ -44,7 +51,8 @@ const ListForm = ({ handleClick }) => {
         <Paper className={classes.paper} elevation={6}>
             <form autoComplete="off" noValidate className={`${classes.root} ${classes.form}`} onSubmit={handleSubmit}>
                 <div className={classes.atLeft}>
-                    <Typography variant="h6">{ currentId ? 'Editing' : 'Creating' } a List</Typography>
+                    <Typography className={classes.marBottom} variant="h4">{ currentId ? 'Editing' : 'Creating' } a List</Typography>
+                    <Typography className={classes.marBottom} variant="h6">{ currentId && 'Original List Name: ' + currentName}</Typography>
                     <TextField 
                         InputLabelProps={{ shrink: true }} 
                         name="listname" 

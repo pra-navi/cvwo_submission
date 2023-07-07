@@ -37,8 +37,13 @@ const Profile = () => {
         history.push(`/user/profileSetting`);
     }
 
+    // for edit list name
+    const[currentId, setCurrentId] = useState(null);
+    const[currentName, setCurrentName] = useState(null); 
+
     //initialise the array, change if isOwnProfile & create/edit the lists
     const [listsArr, setlistsArr] = useState(user?.myLists);
+    // console.log(listsArr);
     const [count, setCount] = useState(0);
     const handleClick = () => { setCount(count + 1); };
     useEffect(() => {
@@ -69,8 +74,17 @@ const Profile = () => {
                 }
             </Paper>
             <Divider style={{ margin: '20px 0 20px 0' }} />
-            { isOwnProfile && <ListForm handleClick={handleClick} /> }
-            <Paper className={classes.personal} elevation={6}>In Progress</Paper>
+            { isOwnProfile && <ListForm currentId={currentId} setCurrentId={setCurrentId} currentName={currentName} handleClick={handleClick} /> }
+            <Divider style={{ margin: '10px 0 10px 0' }} />
+            {(isOwnProfile || !userListsArePrivate) ?
+                <Paper className={classes.information}>
+                    <MyLists isOwnProfile={isOwnProfile} listsArr={listsArr} setCurrentId={setCurrentId} setCurrentName={setCurrentName}/>
+                </Paper>
+                :
+                <Paper className={classes.information}>
+                    <Typography variant="h6" align="center"> This user's lists are private. </Typography>
+                </Paper>
+            }
         </>
     )
 };

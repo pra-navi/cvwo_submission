@@ -1,4 +1,4 @@
-import { CREATE_LIST } from '../constants/actionTypes';
+import { CREATE_LIST, DELETE_LIST, EDIT_LIST } from '../constants/actionTypes';
 import * as api from '../api';
 
 export const createList = (newList) => async (dispatch) => {
@@ -13,4 +13,18 @@ export const createList = (newList) => async (dispatch) => {
             console.log('An error occurred. Please try again.');
           } 
     }
+};
+
+export const editList = (updateList) => async (dispatch) => {
+  try {
+      const { data } = await api.editList(updateList);
+      dispatch({ type: EDIT_LIST, data });
+  } catch (error) {
+      if (error.response && error.response.data && error.response.data.message) {
+          console.log(error.response.data.message); // Print the error message to the console
+        } else {
+          console.log(error);
+          console.log('An error occurred. Please try again.');
+        } 
+  }
 };

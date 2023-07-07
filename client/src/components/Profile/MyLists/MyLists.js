@@ -1,18 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import { Avatar, Paper, Typography, Button, Grid, Divider } from '@material-ui/core';
-import useStyles from '../styles';
+import React from 'react';
+import { Typography, Grid, Divider } from '@material-ui/core';
 
-// import List from './List/List';
-// import { getPostTitle } from '../../actions/posts';
+import ListComponent from './ListComponent/ListComponent';
 
-const MyLists = () => {
-    // { listIdNameArray }
-    const classes = useStyles();
+const MyLists = ({ isOwnProfile, listsArr, setCurrentId, setCurrentName}) => {
+    // console.log(listsArr);
     
     return (
         <>
-            <Paper className={classes.personal} elevation={6}>In Progress</Paper>
+            <Typography variant="h4" align="center"> My Lists </Typography>
+            <Divider style={{ margin: '10px 0 20px 0' }} />
+            <Grid container alignItems="stretch" spacing={3}>
+                { listsArr?.map((idNamePair) => 
+                    <Grid key={idNamePair._id} item xs={12} sm={12} md={4} lg={4}>
+                        <ListComponent isOwnProfile={isOwnProfile} idNamePair={idNamePair} setCurrentId={setCurrentId} setCurrentName={setCurrentName}/>
+                    </Grid>
+                ) }
+            </Grid>
         </>
     )
 };

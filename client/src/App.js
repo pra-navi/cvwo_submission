@@ -10,6 +10,7 @@ import CreatorOrTag from './components/CreatorOrTag/CreatorOrTag';
 import Navbar from './components/Navbar/Navbar';
 import Profile from './components/Profile/Profile';
 import ProfileSetting from './components/Profile/ProfileSetting';
+import ListDetails from './components/ListDetails/ListDetails';
 
 const App = () => {
     //const user = JSON.parse(localStorage.getItem('profile'));
@@ -27,6 +28,7 @@ const App = () => {
                         <Route path="/auth" exact component={() => (!JSON.parse(localStorage.getItem('profile')) ? <Auth /> : <Redirect to="/posts/" />)} />
                         <Route path="/user/profile/:id" exact component={Profile} />
                         <Route path="/user/profileSetting" exact component={() => (JSON.parse(localStorage.getItem('profile')) ? <ProfileSetting /> : <Redirect to="/auth/" />)} />
+                        <Route path="/list/:id" exact component={ListDetails} />
                     </Switch>
                 </Container>      
             </BrowserRouter>

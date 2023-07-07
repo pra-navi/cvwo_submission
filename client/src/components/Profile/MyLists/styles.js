@@ -40,4 +40,7 @@ export default makeStyles((theme) => ({
     marginRight: 'auto', 
     width: '70%', 
   }, 
+  marBottom: {
+    marginBottom: '15px', 
+  }, 
 }));
