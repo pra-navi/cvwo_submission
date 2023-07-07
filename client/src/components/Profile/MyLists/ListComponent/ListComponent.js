@@ -1,13 +1,18 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { Typography, Button, ButtonBase, Card } from '@material-ui/core';
 import useStyles from './styles';
 
 const ListComponent = ({ isOwnProfile, idNamePair, setCurrentId, setCurrentName}) => {
     const classes = useStyles();
+    const history = useHistory();
+    
     const listName = idNamePair.listName;
     const listId = idNamePair.listId;
 
-    const openList = () =>{};
+    const openList = () =>{
+        history.push(`/list/${listId}`);
+    };
     // console.log("listcom");
     
     return (

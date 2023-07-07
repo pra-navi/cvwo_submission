@@ -28,7 +28,7 @@ const App = () => {
                         <Route path="/auth" exact component={() => (!JSON.parse(localStorage.getItem('profile')) ? <Auth /> : <Redirect to="/posts/" />)} />
                         <Route path="/user/profile/:id" exact component={Profile} />
                         <Route path="/user/profileSetting" exact component={() => (JSON.parse(localStorage.getItem('profile')) ? <ProfileSetting /> : <Redirect to="/auth/" />)} />
-                        <Route path="/list/:id" exact component={ListDetails} />
+                        <Route path="/list/:listId" exact component={ListDetails} />
                     </Switch>
                 </Container>      
             </BrowserRouter>

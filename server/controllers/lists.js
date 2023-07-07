@@ -54,10 +54,21 @@ export const deleteList = async (req, res) => {
         await List.findByIdAndRemove(listId);
 
         const owner = await User.findById(ownerId);
-        owner.myLists.filter((obj) => obj.listId !== String(listId));
-        const updatedOwner = await User.findByIdAndUpdate(ownerId, owner, { new: true });
-        res.status(201).json(updatedOwner); // return user
+        owner.myLists = owner.myLists.filter((obj) => obj.listId !== String(listId));
+        await User.findByIdAndUpdate(ownerId, owner, { new: true });
+        res.status(201).json(owner.myLists); // return user
     } catch (error) {
         res.status(409).json({ message: error.message });
+    }
+}
+
+export const getList = async (req, res) => {
+    const { listId } = req.params;
+
+    try {
+        const post = await List.findById(listId);
+        res.status(200).json(post);
+    } catch (error) {
+        res.status(404).json({ message: error.message });
     }
 }
