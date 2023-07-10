@@ -88,9 +88,43 @@ const Form = ({ currentId, setCurrentId }) => {
             <form autoComplete="off" noValidate className={`${classes.root} ${classes.form}`} onSubmit={handleSubmit}>
                 <Typography variant="h6">{ currentId ? 'Editing' : 'Creating' } a Post</Typography>
                 
-                <TextField InputLabelProps={{ shrink: true }} name="title" variant="outlined" label="Title" fullWidth value={postData.title} onChange={(e) => setPostData({ ...postData, title: e.target.value })} />
-                <TextField InputLabelProps={{ shrink: true }} name="message" variant="outlined" label="Message" fullWidth value={postData.message} onChange={(e) => setPostData({ ...postData, message: e.target.value })} />
-                <TextField InputLabelProps={{ shrink: true }} name="tags" variant="outlined" label="Beginner/Medium/Advanced,<HoursTaken>" fullWidth value={postData.tags} onChange={(e) => setPostData({ ...postData, tags: e.target.value.split(',') })} InputProps={{className: classes.tagsInput}} />
+                <TextField
+                    InputLabelProps={{ shrink: true }}
+                    name="hobby"
+                    variant="outlined"
+                    label="Hobby"
+                    fullWidth
+                    value={postData.title.split(': ')[0]}
+                    onChange={(e) => setPostData({ ...postData, title: `${e.target.value}: ${postData.title.split(': ')[1]}` })}
+                />
+                <TextField
+                    InputLabelProps={{ shrink: true }}
+                    name="title"
+                    variant="outlined"
+                    label="Title"
+                    fullWidth
+                    value={postData.title.split(': ')[1]}
+                    onChange={(e) => setPostData({ ...postData, title: `${postData.title.split(': ')[0]}: ${e.target.value}` })}
+                />
+                <TextField
+                    InputLabelProps={{ shrink: true }}
+                    name="message"
+                    variant="outlined"
+                    label="Message"
+                    fullWidth
+                    value={postData.message}
+                    onChange={(e) => setPostData({ ...postData, message: e.target.value })}
+                />
+                <TextField 
+                    InputLabelProps={{ shrink: true }} 
+                    name="tags" 
+                    variant="outlined" 
+                    label="Beginner/Medium/Advanced,<HoursTaken>" 
+                    fullWidth 
+                    value={postData.tags} 
+                    onChange={(e) => setPostData({ ...postData, tags: e.target.value.split(',') })} 
+                    InputProps={{className: classes.tagsInput}} 
+                />
                 
                 <div className={classes.fileInput}>
                     <FileBase

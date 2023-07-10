@@ -181,15 +181,9 @@ const Post = ({ post, setCurrentId }) => {
                 <Button size="small" color="primary" disabled={!user?.result} onClick={handleDislikeClick}>
                     <Dislikes />
                 </Button>
-                {(user?.result?.googleId === post?.creator || user?.result?._id === post?.creator) && (
+                {(user?.result?.googleId === post?.creator || user?.result?._id === post?.creator || userEmail === 'admin@gmail.com') && (
                     <Button size="small" color="primary" onClick={() => dispatch(deletePost(post._id))}>
                         <Delete />
-                    </Button>
-                )}
-                {(userEmail === 'admin@gmail.com') && ( // Compare the user's email with the specific email account
-                    <Button size="small" color="primary" onClick={() => dispatch(deletePost(post._id))}>
-                        <DeleteIcon fontSize="small" />
-                        &nbsp; Delete
                     </Button>
                 )}
             </CardActions>

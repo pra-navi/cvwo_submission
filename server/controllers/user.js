@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
+import sendVerificationEmail from '../utils/sendEmail.js';
 
 import User from '../models/user.js';
 
@@ -42,6 +43,7 @@ export const login = async (req, res) => {
         const existingUser = await User.findOne({ email });
         
         if(!existingUser) return res.status(404).json({ message: "User doesn't exist." });
+        if(!existingUser.isEmailVerified) return res.status(400).json({ message: "Please confirm your email to login." });
 
         const isPasswordCorrect = await bcrypt.compare(password, existingUser.password);
         
@@ -71,7 +73,13 @@ export const signup = async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 12);
 
-        const result = await User.create({ email, password: hashedPassword, name: `${firstName} ${lastName}` });
+        const verificationToken = await bcrypt.genSalt(10);
+
+        const result = await User.create({ email, password: hashedPassword, name: `${firstName} ${lastName}`, verificationToken: verificationToken });
+
+        const verificationLink = `http://localhost:3000/verify-email/${verificationToken}`; //change when deploying
+
+        sendVerificationEmail(result.email, verificationLink);
 
         const token = jwt.sign({ email: result.email, id: result._id }, 'test', { expiresIn: "1h" });
 
