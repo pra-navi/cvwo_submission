@@ -13,7 +13,7 @@ const Form = ({ currentId, setCurrentId }) => {
     const history = useHistory();
 
     const [postData, setPostData] = useState({
-        title: '', message: '', tags: '', selectedFile: defaultImage
+        title: '', message: '', tags: '', timeTaken: '', selectedFile: defaultImage
     });
     const [fileMessage, setFileMessage] = useState('[Using default image as cover]');
     const [errorMessage, setErrorMessage] = useState('');   
@@ -43,8 +43,13 @@ const Form = ({ currentId, setCurrentId }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!postData.title || !postData.message || !postData.tags) {
+        if (!postData.title || !postData.message || !postData.tags ||!postData.timeTaken) {
             setErrorMessage('Please fill in all fields.');
+            return;
+        }
+
+        if (postData.timeTaken < 0 || postData.timeTaken > 100) {
+            alert('Hours Taken must be between 0 and 100');
             return;
         }
 
@@ -119,13 +124,25 @@ const Form = ({ currentId, setCurrentId }) => {
                     InputLabelProps={{ shrink: true }} 
                     name="tags" 
                     variant="outlined" 
-                    label="Beginner/Medium/Advanced,<HoursTaken>" 
+                    label="Beginner/Medium/Advanced" 
                     fullWidth 
                     value={postData.tags} 
                     onChange={(e) => setPostData({ ...postData, tags: e.target.value.split(',') })} 
                     InputProps={{className: classes.tagsInput}} 
                 />
-                
+                { !currentId && 
+                <TextField
+                InputLabelProps={{ shrink: true }}
+                name="timeTaken"
+                type="number" 
+                variant="outlined"
+                label="Hours Taken"
+                fullWidth
+                value={postData.timeTaken}
+                onChange={(e) => setPostData({ ...postData, timeTaken: e.target.value })}
+                /> 
+                }
+                <Typography variant="body2">*Hours Taken cannot be modified after creating a post</Typography>
                 <div className={classes.fileInput}>
                     <FileBase
                         type="file"

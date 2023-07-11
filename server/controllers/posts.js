@@ -13,7 +13,7 @@ export const getPosts = async (req, res) => {
 
         const posts = await PostMessage.find().sort({ _id: -1 }).limit(LIMIT).skip(startIndex);
 
-        //console.log(postMessages);
+        // console.log(posts);
         res.status(200).json({ data: posts, currentPage: Number(page), numberOfPages: Math.ceil(total / LIMIT) });
     } catch (error) {
         res.status(404).json({ message: error.message });
@@ -73,9 +73,9 @@ export const getPost = async (req, res) => {
 }
 
 export const createPost = async (req, res) => {
-    const {title, message, tags} = req.body;
+    const {title, message, tags, timeTaken} = req.body;
 
-    if (!title || !message || !tags) {
+    if (!title || !message || !tags || !timeTaken) {
         const errorMessage = 'Please fill in all fields.';
         console.log(errorMessage);
         return res.status(400).json({ message: errorMessage });

@@ -44,4 +44,6 @@ export const deleteList = (listId) => API.delete(`/list/deleteList/${listId}`);
 export const editList = (updateList) => API.patch(`/list/editList`, updateList);
 export const fetchList = (listId) => API.get(`/list/${listId}`);
 
+export const savePost = (postId, listObj) => API.patch(`/list/savePost/${postId}`, listObj);
+
 export const changePrivacy = (postId) => API.patch(`/user/changePrivacy`);

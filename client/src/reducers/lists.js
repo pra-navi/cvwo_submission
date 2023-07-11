@@ -1,4 +1,4 @@
-import { CREATE_LIST, DELETE_LIST, EDIT_LIST, FETCH_LIST } from '../constants/actionTypes';
+import { CREATE_LIST, DELETE_LIST, EDIT_LIST, FETCH_LIST, SAVE_POST } from '../constants/actionTypes';
 
 const listReducer = (state = { list: null, titles: [] }, action) => {
     let profile = JSON.parse(localStorage.getItem('profile'));
@@ -11,6 +11,7 @@ const listReducer = (state = { list: null, titles: [] }, action) => {
             return state;
         case FETCH_LIST:
             return { ...state, list: action.payload };
+        case SAVE_POST:
         default:
             return state;
     }

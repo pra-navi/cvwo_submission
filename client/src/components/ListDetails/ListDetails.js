@@ -38,6 +38,8 @@ const ListDetails = () => {
         history.goBack();
     };
 
+    console.log(list?.learningList);
+
     return (
         <>
             <Paper className={classes.listInfo} elevation={6}>

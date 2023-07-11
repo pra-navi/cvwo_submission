@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 
 import List from '../models/list.js';
 import User from '../models/user.js';
+import PostMessage from '../models/postMessage.js';
 
 export const createList = async (req, res) => {
     const { listName, ownerName } = req.body;
@@ -70,5 +71,37 @@ export const getList = async (req, res) => {
         res.status(200).json(post);
     } catch (error) {
         res.status(404).json({ message: error.message });
+    }
+}
+
+export const savePost = async (req, res) => {
+    const { postId } = req.params;
+    const { listId } = req.body;
+    console.log(listId);
+    console.log(postId);
+    if (!mongoose.Types.ObjectId.isValid(listId)) return res.status(404).send('No list with that id');
+    if (!mongoose.Types.ObjectId.isValid(postId)) return res.status(404).send('No post with that id');
+    if (!req.userId) return res.json({ message: 'Unauthenticated' });
+    const ownerId = req.userId;
+
+    try {
+        const list = await List.findById(listId);
+        const index = list.learningList.findIndex((id) => id === String(postId));
+        if (index === -1) {
+            list.learningList.push(postId);
+            await List.findByIdAndUpdate(listId, list, { new: true });
+        }
+
+        const post = await PostMessage.findById(postId);
+        const index2 = post.listIds.findIndex((id) => id === String(listId));
+        if (index2 === -1) {
+            post.listIds.push(listId);
+            await PostMessage.findByIdAndUpdate(postId, post, { new: true });
+        }
+        console.log("controller");
+        res.status(201).json(listId); // return listId first
+    } catch (error) {
+        console.log(error);
+        res.status(409).json({ message: error.message });
     }
 }

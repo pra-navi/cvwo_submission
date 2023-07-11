@@ -1,4 +1,4 @@
-import { CREATE_LIST, DELETE_LIST, EDIT_LIST, FETCH_LIST } from '../constants/actionTypes';
+import { CREATE_LIST, DELETE_LIST, EDIT_LIST, FETCH_LIST, SAVE_POST } from '../constants/actionTypes';
 import * as api from '../api';
 
 export const createList = (newList) => async (dispatch) => {
@@ -39,5 +39,15 @@ export const getList = (listId) => async (dispatch) => {
         dispatch({ type: FETCH_LIST, payload: data });
     } catch (error) {
         console.log(error.message);
+    }
+};
+
+export const savePost = (postId, listObj) => async (dispatch) => {
+    try {
+        const { data } = await api.savePost(postId, listObj);
+        dispatch({ type: SAVE_POST, data });
+        console.log("action2");
+    } catch (error) {
+        console.log(error);
     }
 };

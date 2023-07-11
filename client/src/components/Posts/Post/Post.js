@@ -6,16 +6,15 @@ import ThumbDownAltIcon from '@material-ui/icons/ThumbDownAlt';
 import ThumbDownAltOutlined from '@material-ui/icons/ThumbDownAltOutlined';
 import DeleteIcon from '@material-ui/icons/Delete';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
-import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder';
-import BookmarkIcon from '@material-ui/icons/Bookmark';
 
 import moment from 'moment';
 import { useDispatch } from 'react-redux';
 import { deletePost, likePost, dislikePost } from '../../../actions/posts';
-// import { savePost } from '../../../actions/auth';
 import { useHistory } from 'react-router-dom';
 
+
 import useStyles from './styles';
+import AddButton from './AddButton/AddButton';
 
 const Post = ({ post, setCurrentId }) => {
     const classes = useStyles();
@@ -25,10 +24,7 @@ const Post = ({ post, setCurrentId }) => {
     const [likes, setLikes] = useState(post?.likes);
     const [dislikes, setDislikes] = useState(post?.dislikes);
 
-    // const userLearningList = user?.result?.learningList;
-    // const userDoneList = user?.result?.doneList;
-    // const [hasSaved, setHasSaved] = useState(userLearningList?.includes(post._id) || false); // OR for non-login user
-    const hasSaved = false;
+    if(!post) return null;
 
     const userId = user?.result?.googleId || user?.result?._id;
     const userEmail = user?.result?.email;
@@ -65,18 +61,6 @@ const Post = ({ post, setCurrentId }) => {
         }
     }
 
-    const handleSaveClick = () => {
-        /*
-        if (userDoneList?.includes(post._id)) {
-            // console.log("error");
-            alert('This post is in your Done List.');
-        } else {
-            dispatch(savePost(post._id));
-            setHasSaved(!hasSaved);
-        }
-        */
-    }
-
     const Likes = () => {
         if(likes.length > 0) {
             return likes.find((like) => like === (userId))
@@ -109,17 +93,6 @@ const Post = ({ post, setCurrentId }) => {
                 <DeleteIcon fontSize="small" />
                 &nbsp;{'Delete'} 
             </>
-        );
-    }
-
-    const Save = () => {
-        if (hasSaved) {
-            return (
-                <><BookmarkIcon /> &nbsp;{"Saved"}</>
-            );
-        }
-        return (
-            <><BookmarkBorderIcon /> &nbsp;{"Save"}</>
         );
     }
 
@@ -170,9 +143,9 @@ const Post = ({ post, setCurrentId }) => {
             )}
             <CardActions className={classes.cardActions2}>
                 <Typography className={classes.atLeft} variant="subtitle2" color="primary">Average Rating: {averageRating} / 5 </Typography>
-                <Button className={classes.atRight} size="small" color="primary" disabled={!user?.result} onClick={handleSaveClick}>
-                    <Save />
-                </Button>
+                <div className={classes.atRight}> 
+                    <AddButton post={post}/>
+                </div>
             </CardActions>
             <CardActions className={classes.cardActions}>
                 <Button size="small" color="primary" disabled={!user?.result} onClick={handleLikeClick}>
