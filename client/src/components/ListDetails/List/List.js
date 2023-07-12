@@ -1,48 +1,23 @@
-/*
 import React from 'react';
 import { Typography, Divider, Paper } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
 import useStyles from './styles';
-import { savePost, donePost } from '../../../actions/auth';
+import { savePost, donePost, removePost } from '../../../actions/lists';
 
 import ListRow from './ListRow/ListRow'
 
 
-const List = ({ isOwnProfile, isLearningList, postIds, handleClick }) => {
+const List = ({ isOwnProfile, isLearningList, postIds, handleClick, listId, titles }) => {
 
     const classes = useStyles();
     const dispatch = useDispatch();
 
+    const remove = (postId) => {
+        dispatch(removePost(postId, {listId: listId}));
+    };
+
     const done = (postId) => {
-        dispatch(savePost(postId))
-        .then(() => {
-            dispatch(donePost(postId))
-            .then(() => {
-                handleClick();
-            });
-        }).catch((error) => {
-            console.log(error);
-        });
-    };
-
-    const unSave = (postId) => { // no problem(update instantly)
-        dispatch(savePost(postId)).then(() => {handleClick();})
-    };
-
-    const unDone = (postId) => {
-        dispatch(donePost(postId))
-        .then(() => {
-            dispatch(savePost(postId))
-            .then(() => {
-                handleClick();
-            });
-        }).catch((error) => {
-          console.log(error);
-        });
-    };
-
-    const deleteFromDone = (postId) => { // no problem(update instantly)
-        dispatch(donePost(postId)).then(() => {handleClick();})
+        dispatch(donePost(postId, {listId: listId}));
     };
 
     return (
@@ -54,10 +29,10 @@ const List = ({ isOwnProfile, isLearningList, postIds, handleClick }) => {
             {postIds?.map((postId) => {
                 if (isLearningList) {
                     return (<ListRow key={postId} isOwnProfile={isOwnProfile} isLearningList={isLearningList} postId={postId}  
-                    funOne={done} funTwo={unSave} />);
+                    funOne={done} funTwo={remove} titles={titles}/>);
                 } else {
                     return (<ListRow key={postId} isOwnProfile={isOwnProfile} isLearningList={isLearningList} postId={postId}  
-                        funOne={unDone} funTwo={deleteFromDone} />);
+                        funOne={done} funTwo={remove} titles={titles}/>);
                 }
             })}
         </Paper>
@@ -99,3 +74,16 @@ export default List;
     }, [history]);
 
      */
+/*
+    const done = (postId) => {
+        dispatch(savePost(postId))
+        .then(() => {
+            dispatch(donePost(postId))
+            .then(() => {
+                handleClick();
+            });
+        }).catch((error) => {
+            console.log(error);
+        });
+    };
+*/

@@ -4,7 +4,6 @@ import { Typography, Grid, Divider } from '@material-ui/core';
 import ListComponent from './ListComponent/ListComponent';
 
 const MyLists = ({ isOwnProfile, listsArr, setCurrentId, setCurrentName}) => {
-    // console.log(listsArr);
     
     return (
         <>

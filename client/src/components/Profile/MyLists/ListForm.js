@@ -1,4 +1,3 @@
-// import { useHistory } from 'react-router-dom';
 import React, { useState } from 'react';
 import { TextField, Button, Typography, Paper } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
@@ -7,7 +6,6 @@ import useStyles from './styles';
 import { createList, editList } from '../../../actions/lists';
 
 const ListForm = ({ currentId, setCurrentId, currentName, handleClick }) => {
-    // const history = useHistory();
     const classes = useStyles();
     const dispatch = useDispatch();
     const user = JSON.parse(localStorage.getItem('profile'));

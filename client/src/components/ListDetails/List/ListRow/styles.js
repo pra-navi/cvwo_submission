@@ -18,6 +18,7 @@ export default makeStyles({
     backgroundColor: '#E8DBE9', 
     borderRadius: '3px',
     width: '100%', 
+    // height: '100px',
     elevation: '6',
     padding: '10px 16px 10px 16px',
   },
