@@ -10,7 +10,6 @@ const Posts = ({ setCurrentId }) => {
     const classes = useStyles();
 
     if(!posts.length && !isLoading) return 'No posts';
-    console.log("posts");
 
     //console.log(posts);
 

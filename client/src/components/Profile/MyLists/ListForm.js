@@ -16,9 +16,6 @@ const ListForm = ({ currentId, setCurrentId, currentName, handleClick }) => {
     const [name, setName] = useState(''); // handle logic here if is edit
     const [errorMessage, setErrorMessage] = useState('');
 
-    // console.log(currentId); // will be automatically rerender
-    // console.log(currentName); // will be automatically rerender
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!name) {

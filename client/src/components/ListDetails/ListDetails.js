@@ -4,12 +4,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useHistory, Link } from 'react-router-dom';
 
 import useStyles from './styles';
-import { deleteList, getList } from '../../actions/lists';
+import { deleteList, getList, getTitles } from '../../actions/lists';
 
 
 const ListDetails = () => {
     const history = useHistory();
-    const { list } = useSelector((state) => state.lists);
+    const { list, titles } = useSelector((state) => state.lists);
     const dispatch = useDispatch();
     // const history = useHistory();
     const classes = useStyles();
@@ -19,7 +19,12 @@ const ListDetails = () => {
         dispatch(getList(listId));
     }, [listId]);
 
-    // console.log(list); // debug
+    console.log(titles);
+    console.log(list);
+
+    useEffect(() => {
+        dispatch(getTitles(listId));
+    }, []);
 
     if (!list) return null;
 
@@ -37,8 +42,6 @@ const ListDetails = () => {
         await dispatch(deleteList(listId));
         history.goBack();
     };
-
-    console.log(list?.learningList);
 
     return (
         <>

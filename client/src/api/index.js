@@ -45,5 +45,9 @@ export const editList = (updateList) => API.patch(`/list/editList`, updateList);
 export const fetchList = (listId) => API.get(`/list/${listId}`);
 
 export const savePost = (postId, listObj) => API.patch(`/list/savePost/${postId}`, listObj);
+export const removePost = (postId, listObj) => API.patch(`/list/removePost/${postId}`, listObj);
+export const donePost = (postId, listObj) => API.patch(`/list/donePost/${postId}`, listObj);
 
-export const changePrivacy = (postId) => API.patch(`/user/changePrivacy`);
+export const fetchTitles = (listId) => API.get(`/list/getTitles/${listId}`);
+
+export const changePrivacy = () => API.patch(`/user/changePrivacy`);

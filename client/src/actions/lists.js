@@ -1,4 +1,4 @@
-import { CREATE_LIST, DELETE_LIST, EDIT_LIST, FETCH_LIST, SAVE_POST } from '../constants/actionTypes';
+import { CREATE_LIST, DELETE_LIST, EDIT_LIST, FETCH_LIST, SAVE_POST, REMOVE_POST, DONE_POST, FETCH_TITLES } from '../constants/actionTypes';
 import * as api from '../api';
 
 export const createList = (newList) => async (dispatch) => {
@@ -46,7 +46,33 @@ export const savePost = (postId, listObj) => async (dispatch) => {
     try {
         const { data } = await api.savePost(postId, listObj);
         dispatch({ type: SAVE_POST, data });
-        console.log("action2");
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const removePost = (postId, listObj) => async (dispatch) => {
+    try {
+        const { data } = await api.removePost(postId, listObj);
+        dispatch({ type: REMOVE_POST, payload: data });
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const donePost = (postId, listObj) => async (dispatch) => {
+    try {
+        const { data } = await api.donePost(postId, listObj);
+        dispatch({ type: DONE_POST, payload: data });
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const getTitles = (listId) => async (dispatch) => {
+    try {
+        const { data } = await api.fetchTitles(listId);
+        dispatch({ type: FETCH_TITLES, payload: data });
     } catch (error) {
         console.log(error);
     }

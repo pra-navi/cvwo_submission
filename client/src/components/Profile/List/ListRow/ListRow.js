@@ -51,7 +51,6 @@ export default ListRow;
    //failed attempt
     useEffect(() => {
         dispatch(getPostTitle(postId));
-        console.log("here");
     }, []);
     const { title } = useSelector((state) => state.posts);
     console.log(isOwnProfile + ": " + title);

@@ -1,8 +1,10 @@
-import { CREATE_LIST, DELETE_LIST, EDIT_LIST, FETCH_LIST, SAVE_POST } from '../constants/actionTypes';
+import { CREATE_LIST, DELETE_LIST, EDIT_LIST, FETCH_LIST, REMOVE_POST, SAVE_POST, DONE_POST, FETCH_TITLES } from '../constants/actionTypes';
 
-const listReducer = (state = { list: null, titles: [] }, action) => {
+const listReducer = (state = { list: null, titles: null }, action) => {
     let profile = JSON.parse(localStorage.getItem('profile'));
     switch (action.type) {
+        case FETCH_TITLES:
+            return {...state, titles: action.payload};
         case CREATE_LIST:
         case DELETE_LIST:
         case EDIT_LIST: 
@@ -10,6 +12,8 @@ const listReducer = (state = { list: null, titles: [] }, action) => {
             localStorage.setItem('profile', JSON.stringify({ ...profile }));
             return state;
         case FETCH_LIST:
+        case DONE_POST:
+        case REMOVE_POST:
             return { ...state, list: action.payload };
         case SAVE_POST:
         default:

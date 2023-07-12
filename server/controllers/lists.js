@@ -77,12 +77,9 @@ export const getList = async (req, res) => {
 export const savePost = async (req, res) => {
     const { postId } = req.params;
     const { listId } = req.body;
-    console.log(listId);
-    console.log(postId);
     if (!mongoose.Types.ObjectId.isValid(listId)) return res.status(404).send('No list with that id');
     if (!mongoose.Types.ObjectId.isValid(postId)) return res.status(404).send('No post with that id');
     if (!req.userId) return res.json({ message: 'Unauthenticated' });
-    const ownerId = req.userId;
 
     try {
         const list = await List.findById(listId);
@@ -98,10 +95,97 @@ export const savePost = async (req, res) => {
             post.listIds.push(listId);
             await PostMessage.findByIdAndUpdate(postId, post, { new: true });
         }
-        console.log("controller");
         res.status(201).json(listId); // return listId first
     } catch (error) {
-        console.log(error);
+        res.status(409).json({ message: error.message });
+    }
+}
+
+export const removePost = async (req, res) => {
+    const { postId } = req.params;
+    const { listId } = req.body;
+    if (!mongoose.Types.ObjectId.isValid(listId)) return res.status(404).send('No list with that id');
+    if (!mongoose.Types.ObjectId.isValid(postId)) return res.status(404).send('No post with that id');
+    if (!req.userId) return res.json({ message: 'Unauthenticated' });
+
+    try {
+        const list = await List.findById(listId);
+        const post = await PostMessage.findById(postId);
+
+        const index1 = list.learningList.findIndex((id) => id === String(postId));
+        const index2 = list.doneList.findIndex((id) => id === String(postId));
+        if (index1 !== -1) list.learningList = list.learningList.filter((id) => id !== String(postId));
+        if (index2 !== -1) {
+            list.doneList = list.doneList.filter((id) => id !== String(postId));
+            list.totalTime -= post.timeTaken;
+        }
+        await List.findByIdAndUpdate(listId, list, { new: true });
+
+        
+        const index3 = post.listIds.findIndex((id) => id === String(listId));
+        if (index3 !== -1) {
+            post.listIds = post.listIds.filter((id) => id !== String(listId));
+            await PostMessage.findByIdAndUpdate(postId, post, { new: true });
+        }
+        res.status(201).json(list); // return list
+    } catch (error) {
+        res.status(409).json({ message: error.message });
+    }
+}
+
+export const donePost = async (req, res) => {
+    const { postId } = req.params;
+    const { listId } = req.body;
+    if (!mongoose.Types.ObjectId.isValid(listId)) return res.status(404).send('No list with that id');
+    if (!mongoose.Types.ObjectId.isValid(postId)) return res.status(404).send('No post with that id');
+    if (!req.userId) return res.json({ message: 'Unauthenticated' });
+
+    try {
+        const list = await List.findById(listId);
+        const post = await PostMessage.findById(postId);
+        const timeTaken = post.timeTaken;
+
+        const index1 = list.learningList.findIndex((id) => id === String(postId));
+        const index2 = list.doneList.findIndex((id) => id === String(postId));
+        if (index1 !== -1 && index2 !== -1) {
+            // a post in both lists > remove from learningList
+            list.learningList = list.learningList.filter((id) => id !== String(postId));
+        } else if (index1 !== -1) { //inside learningList only (done function)
+            list.learningList = list.learningList.filter((id) => id !== String(postId));
+            list.doneList.push(postId);
+            list.totalTime += timeTaken;
+        } else if (index2 !== -1) { // inside doneList only > move to learningList (undone function)
+            list.doneList = list.doneList.filter((id) => id !== String(postId));
+            list.learningList.push(postId);
+            list.totalTime -= post.timeTaken;
+        }
+        await List.findByIdAndUpdate(listId, list, { new: true });
+
+        res.status(201).json(list); // return list
+    } catch (error) {
+        res.status(409).json({ message: error.message });
+    }
+}
+
+export const getTitles = async (req, res) => {
+    const { listId } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(listId)) return res.status(404).send('No list with that id');
+    
+    try {
+        const list = await List.findById(listId);
+        let result = {};
+        const learningList = list.learningList;
+        for (const postId of learningList) {
+            const post = await PostMessage.findById(postId);
+            result = {...result, [postId]: post.title};
+        }
+        const doneList = list.doneList;
+        for (const postId of doneList) {
+            const post = await PostMessage.findById(postId);
+            result = {...result, [postId]: post.title};
+        }
+        res.status(201).json(result); // return the object
+    } catch (error) {
         res.status(409).json({ message: error.message });
     }
 }

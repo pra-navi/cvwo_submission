@@ -11,7 +11,7 @@ import {
 } from '@material-ui/core';
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux';
-import { savePost } from '../../../../actions/lists';
+import { removePost, savePost } from '../../../../actions/lists';
 // import useStyles from '../styles';
   
 const AddButton = ({ post }) => {
@@ -23,7 +23,6 @@ const AddButton = ({ post }) => {
 
     const [curListId, setListId] = useState('');
     const [commonList, setCommonList] = useState(null); // for remove list
-    // const [curListName, setListName] = useState('');
 
     //initial status of icon
     const userLists = user?.result?.myLists;
@@ -46,12 +45,6 @@ const AddButton = ({ post }) => {
             setHasAdded(checkAdded(postListIds, userLists));
         }
 	}, [])
-    /*
-    useEffect(() => {        
-        // Check if the post is already added when the component mounts
-        setHasAdded(checkAdded(postListIds, userLists));
-    }, [postListIds, userLists]);
-    */
 
     if(!post) return null;
 
@@ -60,15 +53,17 @@ const AddButton = ({ post }) => {
     const addPost = async (e) => {
         e.preventDefault();
         //dispatch save post
-        console.log(curListId);
-        console.log(post._id);
         await dispatch(savePost(post._id, {listId: curListId}));
         setHasAdded(true);
         setOpenOne(false);
     };
 
-    const removePost = () => {
+    const rPost = async (e) => {
+        e.preventDefault();
+        console.log(commonList?.listId);
+        console.log(post._id);
         //dispatch remove post
+        await dispatch(removePost(post._id, {listId: commonList?.listId}));
         setHasAdded(false);
         setOpenTwo(false);
     };
@@ -126,7 +121,7 @@ const AddButton = ({ post }) => {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => setOpenTwo(false)}>Cancel</Button>
-                    <Button onClick={removePost} autoFocus>
+                    <Button onClick={rPost} autoFocus>
                         Remove
                     </Button>
                 </DialogActions>
@@ -136,3 +131,9 @@ const AddButton = ({ post }) => {
 }
 
 export default AddButton;
+    /*
+    useEffect(() => {        
+        // Check if the post is already added when the component mounts
+        setHasAdded(checkAdded(postListIds, userLists));
+    }, [postListIds, userLists]);
+    */
