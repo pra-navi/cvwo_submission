@@ -60,8 +60,6 @@ const AddButton = ({ post }) => {
 
     const rPost = async (e) => {
         e.preventDefault();
-        console.log(commonList?.listId);
-        console.log(post._id);
         //dispatch remove post
         await dispatch(removePost(post._id, {listId: commonList?.listId}));
         setHasAdded(false);

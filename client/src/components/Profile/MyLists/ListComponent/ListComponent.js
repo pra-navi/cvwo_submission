@@ -13,7 +13,6 @@ const ListComponent = ({ isOwnProfile, idNamePair, setCurrentId, setCurrentName}
     const openList = () =>{
         history.push(`/list/${listId}`);
     };
-    // console.log("listcom");
     
     return (
         <Card className={classes.card} raised elevation={6}>

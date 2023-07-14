@@ -1,5 +1,5 @@
 import express from 'express';
-import { createList, deleteList, editList, getList, savePost, removePost, donePost, getTitles } from '../controllers/lists.js';
+import { createList, deleteList, editList, getList, savePost, removePost, donePost, getTitles, getPoint } from '../controllers/lists.js';
 import auth from '../middleware/auth.js';
 
 
@@ -16,5 +16,6 @@ router.patch('/removePost/:postId', auth, removePost);
 router.patch('/donePost/:postId', auth, donePost);
 
 router.get('/getTitles/:listId', getTitles)
+router.get('/getPoint/:userId', getPoint);
 
 export default router;

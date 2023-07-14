@@ -2,6 +2,7 @@
 import mongoose from 'mongoose';
 
 import PostMessage from '../models/postMessage.js';
+import User from '../models/user.js';
 
 export const getPosts = async (req, res) => {
     const { page } = req.query;
@@ -74,6 +75,7 @@ export const getPost = async (req, res) => {
 
 export const createPost = async (req, res) => {
     const {title, message, tags, timeTaken} = req.body;
+    if (!req.userId) return res.json({ message: 'Unauthenticated' });
 
     if (!title || !message || !tags || !timeTaken) {
         const errorMessage = 'Please fill in all fields.';
@@ -86,6 +88,7 @@ export const createPost = async (req, res) => {
     const newPost = new PostMessage({ ...req.body, tags: newTags, creator: req.userId, createdAt: new Date().toISOString() });
     try {
         await newPost.save();
+        await User.findByIdAndUpdate(req.userId, { $inc: { postCreated: 1 } }, { new: true });
         res.status(201).json(newPost);
     } catch (error) {
         res.status(409).json({ message: error.message });
@@ -105,9 +108,11 @@ export const updatePost = async (req, res) => {
 
 export const deletePost = async (req, res) => {
     const { id } = req.params;
+    if (!req.userId) return res.json({ message: 'Unauthenticated' });
 
     if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send('No post with that id');
     await PostMessage.findByIdAndRemove(id);
+    await User.findByIdAndUpdate(req.userId, { $inc: { postCreated: -1 } }, { new: true });
     res.json({ message: 'Post deleted successfully' });
 }
 

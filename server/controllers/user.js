@@ -100,6 +100,20 @@ export const getUser = async (req, res) => {
         res.status(404).json({ message: error.message });
     }
 }
+
+export const changePrivacy = async (req, res) => {
+    if (!req.userId) return res.json({ message: 'Unauthenticated' });
+
+    const userId = req.userId;
+
+    const user = await User.findById(userId);
+    const original = user.listsArePrivate;
+ 
+    user.listsArePrivate = !original;
+    const updatedUser = await User.findByIdAndUpdate(userId, user, { new: true });
+ 
+    res.json(user.listsArePrivate);
+}
 // noticed here don't have try and catch
 /*
 export const savePost = async (req, res) => {
@@ -146,16 +160,3 @@ export const donePost = async (req, res) => {
     res.json(user.doneList);
 }
 */
-export const changePrivacy = async (req, res) => {
-    if (!req.userId) return res.json({ message: 'Unauthenticated' });
-
-    const userId = req.userId;
-
-    const user = await User.findById(userId);
-    const original = user.listsArePrivate;
- 
-    user.listsArePrivate = !original;
-    const updatedUser = await User.findByIdAndUpdate(userId, user, { new: true });
- 
-    res.json(user.listsArePrivate);
-}

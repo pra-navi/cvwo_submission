@@ -1,4 +1,4 @@
-import { CREATE_LIST, DELETE_LIST, EDIT_LIST, FETCH_LIST, SAVE_POST, REMOVE_POST, DONE_POST, FETCH_TITLES } from '../constants/actionTypes';
+import { CREATE_LIST, DELETE_LIST, EDIT_LIST, FETCH_LIST, SAVE_POST, REMOVE_POST, DONE_POST, FETCH_TITLES, FETCH_POINT } from '../constants/actionTypes';
 import * as api from '../api';
 
 export const createList = (newList) => async (dispatch) => {
@@ -73,6 +73,15 @@ export const getTitles = (listId) => async (dispatch) => {
     try {
         const { data } = await api.fetchTitles(listId);
         dispatch({ type: FETCH_TITLES, payload: data });
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const getPoint = (userId) => async (dispatch) => {
+    try {
+        const { data } = await api.fetchPoint(userId);
+        dispatch({ type: FETCH_POINT, payload: data });
     } catch (error) {
         console.log(error);
     }

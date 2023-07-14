@@ -30,3 +30,5 @@ export const DONE_POST = 'DONE_POST';
 export const REMOVE_POST = 'REMOVE_POST';
 
 export const FETCH_TITLES = 'FETCH_TITLES';
+
+export const FETCH_POINT = 'FETCH_POINT';

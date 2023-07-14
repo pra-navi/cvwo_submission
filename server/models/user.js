@@ -16,7 +16,8 @@ const userSchema = mongoose.Schema({
         ], 
         default: []
     }, 
-    listsArePrivate: { type: Boolean, default: false }
+    listsArePrivate: { type: Boolean, default: false }, 
+    postCreated: { type: Number, default: 0 }
 });
 
 export default mongoose.model("User", userSchema);

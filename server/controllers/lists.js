@@ -67,8 +67,8 @@ export const getList = async (req, res) => {
     const { listId } = req.params;
 
     try {
-        const post = await List.findById(listId);
-        res.status(200).json(post);
+        const list = await List.findById(listId);
+        res.status(200).json(list);
     } catch (error) {
         res.status(404).json({ message: error.message });
     }
@@ -187,5 +187,25 @@ export const getTitles = async (req, res) => {
         res.status(201).json(result); // return the object
     } catch (error) {
         res.status(409).json({ message: error.message });
+    }
+}
+
+export const getPoint = async (req, res) => {
+    const { userId } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(userId)) return res.status(404).send('No user with that id');
+
+    try {
+        const user = await User.findById(userId);
+        const userLists = user.myLists;
+        let hrs = 0;
+        for (const listObj of userLists) {
+            const list = await List.findById(listObj.listId);
+            hrs += list.totalTime;
+        }
+        const totalPoint = user.postCreated * 100 + Math.ceil(hrs * 50);
+        
+        res.status(200).json(totalPoint);
+    } catch (error) {
+        res.status(404).json({ message: error.message });
     }
 }

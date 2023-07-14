@@ -42,6 +42,11 @@ const ListDetails = () => {
     const deleteL = async (e) => {
         e.preventDefault();
 
+        if (lList.length !== 0 || dList.length !== 0) {
+            alert('Please remove all the post before delete the list.');
+            return;
+        }
+
         await dispatch(deleteList(listId));
         history.goBack();
     };

@@ -4,9 +4,11 @@ import { Avatar, Paper, Typography, Button, Grid, Divider } from '@material-ui/c
 import { useDispatch, useSelector } from 'react-redux';
 import useStyles from './styles';
 import { getUser } from '../../actions/auth'; 
+import { getPoint } from '../../actions/lists'; 
 
 import MyLists from './MyLists/MyLists';
 import ListForm from './MyLists/ListForm';
+import trophy from '../../images/trophy.png';
 // import { getPostTitle } from '../../actions/posts';
 
 const Profile = () => {
@@ -19,8 +21,12 @@ const Profile = () => {
     useEffect(() => {
         dispatch(getUser(id));
     }, [id]);
+    useEffect(() => {
+        dispatch(getPoint(id));
+    }, []);
 
     const { user } = useSelector((state) => state.auth); //auth.js in reducer, cause profile to re-render
+    const { point } = useSelector((state) => state.lists);
     const userName = user?.name;
     const userListsArePrivate = user?.listsArePrivate;
 
@@ -58,20 +64,31 @@ const Profile = () => {
         <>
             <Paper className={classes.personal} elevation={6}>
                 <div className={classes.leftRight}>
-                    <Avatar className={classes.purple} alt={userName} src={user?.imageUrl}>{userName?.charAt(0)}</Avatar>
-                    <Typography variant="h3" component="h2">{userName}</Typography>
-                </div>
-                <Button className={classes.myPostsButton} onClick={seeMyPosts}>
-                    My Posts
-                </Button>
-                {isOwnProfile && 
-                    <div className={classes.leftRight}>
-                        <Typography variant="h5" component="h2">My lists are {arePrivate ? "private" : "public "} &nbsp;</Typography>
-                        <Button className={classes.privacyButton} onClick={changeSetting}>
-                            change setting
+                    <div>
+                        <div className={classes.leftRight}>
+                            <Avatar className={classes.purple} alt={userName} src={user?.imageUrl}>{userName?.charAt(0)}</Avatar>
+                            <Typography variant="h3" component="h2">{userName}</Typography>
+                        </div>
+                        <Button className={classes.myPostsButton} onClick={seeMyPosts}>
+                            My Posts
                         </Button>
+                        {isOwnProfile && 
+                            <div className={classes.leftRight}>
+                                <Typography variant="h5" component="h2">My lists are {arePrivate ? "private" : "public "} &nbsp;</Typography>
+                                <Button className={classes.privacyButton} onClick={changeSetting}>
+                                    change setting
+                                </Button>
+                            </div>
+                        }
                     </div>
-                }
+                    <Paper className={classes.point}>
+                        <div className={classes.leftRight}>
+                            <img className={classes.image} src={trophy} alt="trophy" height="50px" />
+                        </div>
+                        <Typography variant="h4" align="center"> {"Point(s):"} </Typography>
+                        <Typography variant="h3" align="center"> {point} </Typography>
+                    </Paper>
+                </div>
             </Paper>
             <Divider style={{ margin: '20px 0 20px 0' }} />
             { isOwnProfile && <ListForm currentId={currentId} setCurrentId={setCurrentId} currentName={currentName} handleClick={handleClick} /> }

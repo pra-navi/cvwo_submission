@@ -16,6 +16,12 @@ export default makeStyles((theme) => ({
         padding: '20px', 
         borderRadius: '5px', 
     },
+    point: {
+        padding: '20px', 
+        borderRadius: '5px', 
+        marginLeft: 'auto', 
+        justifyContent: "center", 
+    },
     myPostsButton: {
         size: "large",  
         variant: "contained", 
@@ -42,4 +48,7 @@ export default makeStyles((theme) => ({
         backgroundColor: '#5E545E', 
         marginLeft: 10, 
     },
+    image: {
+        margin: 'auto', 
+    }, 
 }));
