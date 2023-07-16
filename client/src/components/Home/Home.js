@@ -77,6 +77,19 @@ const Home = () => {
         }
 
         setSort(newSort);
+
+        // await new Promise((resolve) => setTimeout(resolve, 0));
+        if(search.trim() || tags.length > 0) {
+
+            const searchQueryValue = search;
+            const tagsValue = tags.join(',');
+
+            //cannot pass array through url parameter
+            dispatch(getPostBySearch({ search: searchQueryValue, tags: tagsValue, sort: newSort }));
+            history.push(`/posts/search?searchQuery=${searchQueryValue}&tags=${tagsValue}&sort=${newSort}`);
+        } else {
+            history.push('/');
+        }
     }
 
     return (
@@ -116,9 +129,9 @@ const Home = () => {
                                     </Select>
                                     <div><h3></h3></div>
                                 </div>
+                                <Button onClick={searchPost} className={classes.searchButton} variant="contained" color="primary">SEARCH</Button>   
+                                <div><h3></h3></div>                             
                                 <Button onClick={changeOrder} className={classes.orderButton} variant="contained" color="tertiary">CHANGE ORDER</Button>
-                                <div><h3></h3></div>
-                                <Button onClick={searchPost} className={classes.searchButton} variant="contained" color="primary">SEARCH</Button>                                
                             </AppBar>
                             <Form currentId={currentId} setCurrentId={setCurrentId} />
                             {(!searchQuery && !tags.length) && (
