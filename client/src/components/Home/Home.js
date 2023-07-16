@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { Container, Grow, Grid, Paper, AppBar, TextField, Button } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
+import { Container, Grow, Grid, Paper, AppBar, TextField, Button, Select, MenuItem } from '@material-ui/core';
+import SortIcon from '@material-ui/icons/Sort';
 import { useDispatch } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
 import ChipInput from 'material-ui-chip-input';
@@ -25,6 +26,7 @@ const Home = () => {
     const classes = useStyles();
     const [search, setSearch] = useState('');
     const [tags, setTags] = useState([]);
+    const [sort, setSort] = useState('new'); 
 
     const searchPost = () => {
         if(search.trim() || tags.length > 0) {
@@ -33,8 +35,8 @@ const Home = () => {
             const tagsValue = tags.join(',');
 
             //cannot pass array through url parameter
-            dispatch(getPostBySearch({ search: searchQueryValue, tags: tagsValue }));
-            history.push(`/posts/search?searchQuery=${searchQueryValue}&tags=${tagsValue}`);
+            dispatch(getPostBySearch({ search: searchQueryValue, tags: tagsValue, sort: sort }));
+            history.push(`/posts/search?searchQuery=${searchQueryValue}&tags=${tagsValue}&sort=${sort}`);
         } else {
             history.push('/');
         }
@@ -70,7 +72,26 @@ const Home = () => {
                                 label="Search Difficulty Level / Hours Taken"
                                 variant="outlined"
                                 />
+                                <div className="sorting">
+                                    <Select
+                                        value={sort}
+                                        onChange={(e) => setSort(e.target.value)}
+                                        className="dropdown_btn"
+                                        IconComponent={SortIcon}
+                                    >
+                                        <MenuItem value="new">Newest</MenuItem>
+                                        <MenuItem value="old">Oldest</MenuItem>
+                                        <MenuItem value="mostliked">Most Liked</MenuItem>
+                                        <MenuItem value="leastliked">Least liked</MenuItem>
+                                        <MenuItem value="mostdisliked">Most Disliked</MenuItem>
+                                        <MenuItem value="leastdisliked">Least Disliked</MenuItem>
+                                        <MenuItem value="highestrating">Highest Rating</MenuItem>
+                                        <MenuItem value="lowestrating">Lowest Rating</MenuItem>
+                                    </Select>
+                                    <div><h3></h3></div>
+                                </div>
                                 <Button onClick={searchPost} className={classes.searchButton} variant="contained" color="primary">SEARCH</Button>
+                                
                             </AppBar>
                             <Form currentId={currentId} setCurrentId={setCurrentId} />
                             {(!searchQuery && !tags.length) && (

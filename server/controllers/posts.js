@@ -22,8 +22,9 @@ export const getPosts = async (req, res) => {
 }
 
 export const getPostsBySearch = async (req, res) => {
-    const { searchQuery, tags } = req.query;
+    const { searchQuery, tags, sort } = req.query;
 
+    const sortValue = req.query.sort || '';
 
     try {
         let posts;
@@ -31,15 +32,69 @@ export const getPostsBySearch = async (req, res) => {
         if (searchQuery && tags) {
             const title = new RegExp(searchQuery, 'i');
             const tagsArray = tags.split(',');
-            posts = await PostMessage.find({ $and: [{ $or: [{ title }] }, { tags: { $in: tagsArray } }] });
+            if (sortValue === 'new' || sortValue === 'old') {
+                posts = await PostMessage.find({ $and: [{ $or: [{ title }] }, { tags: { $in: tagsArray } }] }).sort({createdAt:sortValue == "new" ? -1 : 1});
+            } else if (sortValue === 'mostliked' || sortValue === 'leastliked') {
+                const sortDirection = sortValue === 'mostliked' ? -1 : 1;
+                posts = await PostMessage.aggregate([
+                    { $match: { $and: [{ $or: [{ title }] }, { tags: { $in: tagsArray } }] } },
+                    { $addFields: { likesCount: { $size: '$likes' } } },
+                    { $sort: { likesCount: sortDirection } },
+                ]);
+            } else if (sortValue === 'mostdisliked' || sortValue === 'leastdisliked') {
+                const sortDirection = sortValue === 'mostdisliked' ? -1 : 1;
+                posts = await PostMessage.aggregate([
+                    { $match: { $and: [{ $or: [{ title }] }, { tags: { $in: tagsArray } }] } },
+                    { $addFields: { dislikesCount: { $size: '$dislikes' } } },
+                    { $sort: { dislikesCount: sortDirection } },
+                ]);
+            } else if (sortValue == 'highestrating' || 'lowestrating' ) {
+                posts = await PostMessage.find({ $and: [{ $or: [{ title }] }, { tags: { $in: tagsArray } }] }).sort({averageRating:sortValue == "lowestrating" ? -1 : 1});
+            }
         } else if (tags) { // the logic here: show post if any tag matches in the search (not matches all)
             const tagsArray = tags.split(',');
-            posts = await PostMessage.find({ tags: { $in: tagsArray } });
+            if (sortValue === 'new' || sortValue === 'old') {
+                posts = await PostMessage.find({ tags: { $in: tagsArray } }).sort({createdAt:sortValue == "new" ? -1 : 1});
+            } else if (sortValue === 'mostliked' || sortValue === 'leastliked') {
+                const sortDirection = sortValue === 'mostliked' ? -1 : 1;
+                posts = await PostMessage.aggregate([
+                    { $match: { tags: { $in: tagsArray } } },
+                    { $addFields: { likesCount: { $size: '$likes' } } },
+                    { $sort: { likesCount: sortDirection } },
+                ]);
+            } else if (sortValue === 'mostdisliked' || sortValue === 'leastdisliked') {
+                const sortDirection = sortValue === 'mostdisliked' ? -1 : 1;
+                posts = await PostMessage.aggregate([
+                    { $match: { tags: { $in: tagsArray } } },
+                    { $addFields: { dislikesCount: { $size: '$dislikes' } } },
+                    { $sort: { dislikesCount: sortDirection } },
+                ]);            
+            } else if (sortValue == 'highestrating' || 'lowestrating' ) {
+                posts = await PostMessage.find({ tags: { $in: tagsArray } }).sort({averageRating:sortValue == "lowestrating" ? -1 : 1});
+            }
         } else if (searchQuery) {
             const title = new RegExp(searchQuery, 'i');
-            posts = await PostMessage.find({ title });
+            if (sortValue === 'new' || sortValue === 'old') {
+                posts = await PostMessage.find({ title }).sort({createdAt:sortValue == "new" ? -1 : 1});
+            } else if (sortValue === 'mostliked' || sortValue === 'leastliked') {
+                const sortDirection = sortValue === 'mostliked' ? -1 : 1;
+                posts = await PostMessage.aggregate([
+                    { $match: { title } },
+                    { $addFields: { likesCount: { $size: '$likes' } } },
+                    { $sort: { likesCount: sortDirection } },
+                ]);
+            } else if (sortValue === 'mostdisliked' || sortValue === 'leastdisliked') {
+                const sortDirection = sortValue === 'mostdisliked' ? -1 : 1;
+                posts = await PostMessage.aggregate([
+                    { $match: { title } },
+                    { $addFields: { dislikesCount: { $size: '$dislikes' } } },
+                    { $sort: { dislikesCount: sortDirection } },
+                ]);            
+            } else if (sortValue == 'highestrating' || 'lowestrating' ) {
+                posts = await PostMessage.find({ title }).sort({averageRating:sortValue == "lowestrating" ? -1 : 1});
+            }
         } else {
-            posts = await PostMessage.find();
+            first = await PostMessage.find();
         }
       
         //res.status(200).json({ data: posts });
