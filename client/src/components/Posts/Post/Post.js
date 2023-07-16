@@ -121,6 +121,8 @@ const Post = ({ post, setCurrentId }) => {
                 </div>
                 <div className={classes.details}>
                     <Typography variant="body2" color="textSecondary">{post.tags.map((tag) => `#${tag.trim()} `)}</Typography>
+                    <Typography variant="body2" color="textSecondary">Hours Taken: {post.timeTaken}</Typography>
+
                 </div>
                 <Typography className={classes.title} variant="h5" gutterBottom>{post.title}</Typography>
                 <CardContent>

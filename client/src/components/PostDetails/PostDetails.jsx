@@ -60,6 +60,7 @@ const PostDetails = () => {
                         </Link>
                     ))}
                     </Typography>
+                    <Typography gutterBottom variant="body2" component="p">Hours Taken: {post.timeTaken}</Typography>
                     <Typography gutterBottom variant="body1" component="p">{post.message}</Typography>
                     <Typography variant="h6">
                         Created by:

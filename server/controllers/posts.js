@@ -20,7 +20,7 @@ export const getPosts = async (req, res) => {
         res.status(404).json({ message: error.message });
     }
 }
-
+/* The old one, not as clean as the new one below
 export const getPostsBySearch = async (req, res) => {
     const { searchQuery, tags, sort } = req.query;
 
@@ -103,6 +103,59 @@ export const getPostsBySearch = async (req, res) => {
         res.status(404).json({ message: error.message });
     }
 }
+*/
+export const getPostsBySearch = async (req, res) => {
+    const { searchQuery, tags, sort } = req.query;
+    const sortValue = req.query.sort || '';
+  
+    try {
+        let posts;
+    
+        const matchQuery = { $or: [] };
+        const sortQuery = {};
+    
+        if (searchQuery) {
+            const title = new RegExp(searchQuery, 'i');
+            matchQuery.$or.push({ title });
+        }
+    
+        if (tags) {
+            const tagsArray = tags.split(',');
+            matchQuery.$or.push({ tags: { $in: tagsArray } });
+        }
+    
+        if (sortValue === 'new' || sortValue === 'old') {
+            sortQuery.createdAt = sortValue === 'new' ? -1 : 1;
+        } else if (sortValue === 'mostliked' || sortValue === 'leastliked') {
+            const sortDirection = sortValue === 'mostliked' ? -1 : 1;
+            sortQuery.likesCount = sortDirection;
+        } else if (sortValue === 'mostdisliked' || sortValue === 'leastdisliked') {
+            const sortDirection = sortValue === 'mostdisliked' ? -1 : 1;
+            sortQuery.dislikesCount = sortDirection;
+        } else if (sortValue === 'highestrating' || sortValue === 'lowestrating') {
+            sortQuery.averageRating = sortValue === 'lowestrating' ? -1 : 1;
+        }
+    
+        if (matchQuery.$or.length > 0) {
+            if (sortQuery.likesCount || sortQuery.dislikesCount) {
+                posts = await PostMessage.aggregate([
+                    { $match: matchQuery },
+                    { $addFields: { likesCount: { $size: '$likes' }, dislikesCount: { $size: '$dislikes' } } },
+                    { $sort: sortQuery },
+                ]);
+            } else {
+                posts = await PostMessage.find(matchQuery).sort(sortQuery);
+            }
+        } else {
+            posts = await PostMessage.find();
+        }
+    
+        res.json({ data: posts });
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+};
+  
 
 export const getPostsByCreator = async (req, res) => {
     const { creator } = req.query;
