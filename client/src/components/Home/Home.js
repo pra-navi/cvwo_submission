@@ -53,6 +53,32 @@ const Home = () => {
 
     const handleDelete = (tagToDelete) => setTags(tags.filter((tag) => tag !== tagToDelete));
 
+    const changeOrder = async () => {
+        let newSort;
+
+        if (sort === 'new') {
+            newSort = 'old';
+        } else if (sort === 'old') {
+            newSort = 'new';
+        } else if (sort === 'mostliked') {
+            newSort = 'leastliked';
+        } else if (sort === 'leastliked') {
+            newSort = 'mostliked';
+        } else if (sort === 'mostdisliked') {
+            newSort = 'leastdisliked';
+        } else if (sort === 'leastdisliked') {
+            newSort = 'mostdisliked';
+        } else if (sort === 'highestrating') {
+            newSort = 'lowestrating';
+        } else if (sort === 'lowestrating') {
+            newSort = 'highestrating';
+        } else {
+            newSort = 'new';
+        }
+
+        setSort(newSort);
+    }
+
     return (
             <Grow in>
                 <Container maxWidth="xl">
@@ -90,8 +116,9 @@ const Home = () => {
                                     </Select>
                                     <div><h3></h3></div>
                                 </div>
-                                <Button onClick={searchPost} className={classes.searchButton} variant="contained" color="primary">SEARCH</Button>
-                                
+                                <Button onClick={changeOrder} className={classes.orderButton} variant="contained" color="tertiary">CHANGE ORDER</Button>
+                                <div><h3></h3></div>
+                                <Button onClick={searchPost} className={classes.searchButton} variant="contained" color="primary">SEARCH</Button>                                
                             </AppBar>
                             <Form currentId={currentId} setCurrentId={setCurrentId} />
                             {(!searchQuery && !tags.length) && (
