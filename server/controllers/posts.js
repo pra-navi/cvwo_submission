@@ -134,6 +134,8 @@ export const getPostsBySearch = async (req, res) => {
             sortQuery.dislikesCount = sortDirection;
         } else if (sortValue === 'highestrating' || sortValue === 'lowestrating') {
             sortQuery.averageRating = sortValue === 'lowestrating' ? -1 : 1;
+        } else if (sortValue === 'mosttimetaken' || sortValue === 'leasttimetaken') {
+            sortQuery.timeTaken = sortValue === 'mosttimetaken' ? -1 : 1;
         }
     
         if (matchQuery.$or.length > 0) {

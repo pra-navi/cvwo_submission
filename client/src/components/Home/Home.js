@@ -72,6 +72,10 @@ const Home = () => {
             newSort = 'lowestrating';
         } else if (sort === 'lowestrating') {
             newSort = 'highestrating';
+        } else if (sort === 'mosttimetaken') {
+            newSort = 'leasttimetaken';
+        } else if (sort === 'leasttimetaken') {
+            newSort = 'mosttimetaken';
         } else {
             newSort = 'new';
         }
@@ -108,7 +112,7 @@ const Home = () => {
                                 value={tags} 
                                 onAdd={handleAdd} 
                                 onDelete={handleDelete} 
-                                label="Search Difficulty Level / Hours Taken"
+                                label="Search Difficulty Level"
                                 variant="outlined"
                                 />
                                 <div className="sorting">
@@ -126,6 +130,8 @@ const Home = () => {
                                         <MenuItem value="leastdisliked">Least Disliked</MenuItem>
                                         <MenuItem value="highestrating">Highest Rating</MenuItem>
                                         <MenuItem value="lowestrating">Lowest Rating</MenuItem>
+                                        <MenuItem value="mosttimetaken">Most Time Taken</MenuItem>
+                                        <MenuItem value="leasttimetaken">Least Time Taken</MenuItem>
                                     </Select>
                                     <div><h3></h3></div>
                                 </div>
