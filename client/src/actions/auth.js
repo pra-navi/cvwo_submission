@@ -55,11 +55,11 @@ export const googleLogin = (gglForm, history) => async (dispatch) => {
 export const login = (formData, history) => async (dispatch) => {
     try {
         const { data } = await api.logIn(formData);
-
+        /*
         if (!data.result.isEmailVerified) {
             throw new Error('Please verify your email address. Check your inbox.');
         }
-
+        */
         dispatch({ type: AUTH, data });
 
         history.push('/');

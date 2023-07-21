@@ -13,7 +13,7 @@ const Form = ({ currentId, setCurrentId }) => {
     const history = useHistory();
 
     const [postData, setPostData] = useState({
-        title: '', message: '', tags: '', timeTaken: '', selectedFile: defaultImage
+        hobby: '', title: '', message: '', tags: '', timeTaken: '', selectedFile: defaultImage
     });
     const [fileMessage, setFileMessage] = useState('[Using default image as cover]');
     const [errorMessage, setErrorMessage] = useState('');   
@@ -43,7 +43,7 @@ const Form = ({ currentId, setCurrentId }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!postData.title || !postData.message || !postData.tags ||!postData.timeTaken) {
+        if (!postData.hobby || !postData.title || !postData.message || !postData.tags ||!postData.timeTaken) {
             setErrorMessage('Please fill in all fields.');
             return;
         }
@@ -55,10 +55,10 @@ const Form = ({ currentId, setCurrentId }) => {
 
         try {
             if(currentId) {
-                await dispatch(updatePost(currentId, { ...postData, name: user?.result?.name }, history));
+                await dispatch(updatePost(currentId, { ...postData, title: postData.hobby + ": " + postData.title, name: user?.result?.name }, history));
                 clear();
             } else {
-                await dispatch(createPost({ ...postData, name: user?.result?.name }, history));
+                await dispatch(createPost({ ...postData, title: postData.hobby + ": " + postData.title, name: user?.result?.name }, history));
                 clear();
             }
             setErrorMessage('');
@@ -81,7 +81,7 @@ const Form = ({ currentId, setCurrentId }) => {
     const clear = () => {
         setCurrentId(null);
         setPostData({
-            title: '', message: '', tags: '', selectedFile: defaultImage
+            hobby: '', title: '', message: '', tags: '', selectedFile: defaultImage
         });
         setFileMessage('[Using default image as cover]');
         setErrorMessage('');
@@ -99,8 +99,8 @@ const Form = ({ currentId, setCurrentId }) => {
                     variant="outlined"
                     label="Hobby"
                     fullWidth
-                    value={postData.title.split(': ')[0]}
-                    onChange={(e) => setPostData({ ...postData, title: `${e.target.value}: ${postData.title.split(': ')[1]}` })}
+                    value={postData.hobby}
+                    onChange={(e) => setPostData({ ...postData, hobby: e.target.value })}
                 />
                 <TextField
                     InputLabelProps={{ shrink: true }}
@@ -108,8 +108,8 @@ const Form = ({ currentId, setCurrentId }) => {
                     variant="outlined"
                     label="Title"
                     fullWidth
-                    value={postData.title.split(': ')[1]}
-                    onChange={(e) => setPostData({ ...postData, title: `${postData.title.split(': ')[0]}: ${e.target.value}` })}
+                    value={postData.title}
+                    onChange={(e) => setPostData({ ...postData, title: e.target.value })}
                 />
                 <TextField
                     InputLabelProps={{ shrink: true }}
@@ -168,3 +168,23 @@ const Form = ({ currentId, setCurrentId }) => {
 }
 
 export default Form;
+/*
+                <TextField
+                    InputLabelProps={{ shrink: true }}
+                    name="hobby"
+                    variant="outlined"
+                    label="Hobby"
+                    fullWidth
+                    value={postData.title.split(': ')[0]}
+                    onChange={(e) => setPostData({ ...postData, title: `${e.target.value}: ${postData.title.split(': ')[1]}` })}
+                />
+                <TextField
+                    InputLabelProps={{ shrink: true }}
+                    name="title"
+                    variant="outlined"
+                    label="Title"
+                    fullWidth
+                    value={postData.title.split(': ')[1]}
+                    onChange={(e) => setPostData({ ...postData, title: `${postData.title.split(': ')[0]}: ${e.target.value}` })}
+                />
+*/

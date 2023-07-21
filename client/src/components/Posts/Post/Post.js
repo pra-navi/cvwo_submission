@@ -10,6 +10,7 @@ import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import moment from 'moment';
 import { useDispatch } from 'react-redux';
 import { deletePost, likePost, dislikePost } from '../../../actions/posts';
+import { removePost } from '../../../actions/lists';
 import { useHistory } from 'react-router-dom';
 
 
@@ -111,6 +112,27 @@ const Post = ({ post, setCurrentId }) => {
     };
     const averageRating = calculateAverageRating();
 
+    const dPost = async () => {
+        try {
+          // Create an array to hold all the promises from dispatch calls
+          const dispatchPromises = [];
+      
+          for (const lId of post.listIds) {
+            // Push each dispatch promise into the array
+            dispatchPromises.push(dispatch(removePost(post._id, { listId: lId })));
+          }
+      
+          // Wait for all the dispatch promises to resolve with Promise.all
+          await Promise.all(dispatchPromises);
+      
+          // All dispatches inside the loop have been completed
+          dispatch(deletePost(post._id));
+        } catch (error) {
+          // Handle errors if any of the dispatch calls fail
+          console.error(error);
+        }
+      };
+
     return (
         <Card className={classes.card} raised elevation={6}>
             <ButtonBase className={classes.cardAction} onClick={openPost}>
@@ -157,7 +179,7 @@ const Post = ({ post, setCurrentId }) => {
                     <Dislikes />
                 </Button>
                 {(user?.result?.googleId === post?.creator || user?.result?._id === post?.creator || userEmail === 'admin@gmail.com') && (
-                    <Button size="small" color="primary" onClick={() => dispatch(deletePost(post._id))}>
+                    <Button size="small" color="primary" onClick={dPost}>
                         <Delete />
                     </Button>
                 )}

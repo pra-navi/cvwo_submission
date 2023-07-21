@@ -58,6 +58,9 @@ const Profile = () => {
             setlistsArr(me?.result?.myLists);
         }
     }, [count]);
+    useEffect(() => {
+        setlistsArr(user?.myLists);
+    }, [user]);
     
 
     return (
@@ -93,10 +96,16 @@ const Profile = () => {
             <Divider style={{ margin: '20px 0 20px 0' }} />
             { isOwnProfile && <ListForm currentId={currentId} setCurrentId={setCurrentId} currentName={currentName} handleClick={handleClick} /> }
             <Divider style={{ margin: '10px 0 10px 0' }} />
-            {(isOwnProfile || !userListsArePrivate) ?
-                <Paper className={classes.information}>
-                    <MyLists isOwnProfile={isOwnProfile} listsArr={listsArr} setCurrentId={setCurrentId} setCurrentName={setCurrentName}/>
-                </Paper>
+            {((isOwnProfile || !userListsArePrivate) && listsArr) ?
+                (listsArr.length === 0 ? 
+                    <Paper className={classes.information}>
+                        <Typography variant="h6" align="center"> This user has no list. </Typography>
+                    </Paper> 
+                    :
+                    <Paper className={classes.information}>
+                        <MyLists isOwnProfile={isOwnProfile} listsArr={listsArr} setCurrentId={setCurrentId} setCurrentName={setCurrentName}/>
+                    </Paper> 
+                    )
                 :
                 <Paper className={classes.information}>
                     <Typography variant="h6" align="center"> This user's lists are private. </Typography>

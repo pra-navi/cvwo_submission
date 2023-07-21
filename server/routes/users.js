@@ -32,10 +32,7 @@ router.get('/verify-email/:token', async (req, res) => {
       res.status(500).json({ message: 'Something went wrong' });
     }
 });
-/*
-router.patch('/savePost/:postId', auth, savePost);
-router.patch('/donePost/:postId', auth, donePost);
-*/
+
 router.patch('/changePrivacy', auth, changePrivacy);
 
 

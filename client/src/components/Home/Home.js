@@ -137,7 +137,7 @@ const Home = () => {
                                 </div>
                                 <Button onClick={searchPost} className={classes.searchButton} variant="contained" color="primary">SEARCH</Button>   
                                 <div><h3></h3></div>                             
-                                <Button onClick={changeOrder} className={classes.orderButton} variant="contained" color="tertiary">CHANGE ORDER</Button>
+                                <Button onClick={changeOrder} className={classes.orderButton} variant="contained" color="default">CHANGE ORDER</Button>
                             </AppBar>
                             <Form currentId={currentId} setCurrentId={setCurrentId} />
                             {(!searchQuery && !tags.length) && (

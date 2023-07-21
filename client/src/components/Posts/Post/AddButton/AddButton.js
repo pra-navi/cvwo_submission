@@ -48,7 +48,14 @@ const AddButton = ({ post }) => {
 
     if(!post) return null;
 
-    const handleAddClick = () => { hasAdded ? setOpenTwo(true) :setOpenOne(true); };
+    const handleAddClick = () => { 
+        hasAdded 
+        ? setOpenTwo(true) 
+        : (userLists.length === 0
+            ? alert('Please create a list before adding a post.')
+            : setOpenOne(true)
+        );
+    };
 
     const addPost = async (e) => {
         e.preventDefault();

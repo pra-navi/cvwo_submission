@@ -31,9 +31,9 @@ const PostDetails = () => {
 
     const calculateAverageRating = () => {
         if (!post.comments || post.comments.length === 0) {
-          return 0;
+            return 0;
         }
-    
+
         const sum = post.comments.reduce((total, comment) => total + comment.rating, 0);
         const average = sum / post.comments.length;
         return Math.round(average * 100) / 100; // Rounded to 2 decimal places
@@ -64,7 +64,7 @@ const PostDetails = () => {
                     <Typography gutterBottom variant="body1" component="p">{post.message}</Typography>
                     <Typography variant="h6">
                         Created by:
-                        <Link to={`/creators/${post.creator}`} style={{ textDecoration: 'none', color: '#3f51b5' }}>
+                        <Link to={`/user/profile/${post.creator}`} style={{ textDecoration: 'none', color: '#3f51b5' }}>
                             { // pass creator (id) to backend, but show name
                             }
                             {` ${post.name}`}
