@@ -83,7 +83,7 @@ export const getPostsBySearch = async (req, res) => {
 
     const sortValue = req.query.sort || '';
 
-    console.log('sortValue:', sortValue); //help debug
+    // console.log('sortValue:', sortValue); //help debug
 
     try {
         let posts;

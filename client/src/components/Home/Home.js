@@ -128,8 +128,6 @@ const Home = () => {
                                         <MenuItem value="leastliked">Least liked</MenuItem>
                                         <MenuItem value="mostdisliked">Most Disliked</MenuItem>
                                         <MenuItem value="leastdisliked">Least Disliked</MenuItem>
-                                        <MenuItem value="highestrating">Highest Rating</MenuItem>
-                                        <MenuItem value="lowestrating">Lowest Rating</MenuItem>
                                         <MenuItem value="mosttimetaken">Most Time Taken</MenuItem>
                                         <MenuItem value="leasttimetaken">Least Time Taken</MenuItem>
                                     </Select>
@@ -154,3 +152,7 @@ const Home = () => {
 };
 
 export default Home;
+/*
+                                        <MenuItem value="highestrating">Highest Rating</MenuItem>
+                                        <MenuItem value="lowestrating">Lowest Rating</MenuItem>
+*/

@@ -1,5 +1,5 @@
 import axios from 'axios';
-/*
+
 let baseURL;
 if (process.env.NODE_ENV === 'development') {
   baseURL = process.env.REACT_APP_API_BASE_URL_LOCAL;
@@ -8,8 +8,8 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 const API = axios.create({ baseURL: baseURL });
-*/
-const API = axios.create({ baseURL: 'http://localhost:5000' }); // cy local
+
+// const API = axios.create({ baseURL: 'http://localhost:5000' }); // cy local
 
 API.interceptors.request.use((req) => {
     if(localStorage.getItem('profile')) {
