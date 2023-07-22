@@ -13,7 +13,7 @@ const Form = ({ currentId, setCurrentId }) => {
     const history = useHistory();
 
     const [postData, setPostData] = useState({
-        hobby: '', title: '', message: '', tags: '', timeTaken: '', selectedFile: defaultImage
+        hobby: '', title: '', message: '', tags: '', timeTaken: 0, selectedFile: defaultImage
     });
     const [fileMessage, setFileMessage] = useState('[Using default image as cover]');
     const [errorMessage, setErrorMessage] = useState('');   
@@ -37,8 +37,13 @@ const Form = ({ currentId, setCurrentId }) => {
     const user = JSON.parse(localStorage.getItem('profile'));
 
     useEffect(() => {
-        if(post) setPostData(post);
-    }, [post, fileMessage]);
+        if(post) {
+            setPostData({ ...post, 
+                hobby: post.title.split(': ')[0], 
+                title: post.title.split(': ')[1]}
+            );
+        }
+    }, [post]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -81,7 +86,7 @@ const Form = ({ currentId, setCurrentId }) => {
     const clear = () => {
         setCurrentId(null);
         setPostData({
-            hobby: '', title: '', message: '', tags: '', selectedFile: defaultImage
+            hobby: '', title: '', message: '', tags: '', timeTaken: 0, selectedFile: defaultImage
         });
         setFileMessage('[Using default image as cover]');
         setErrorMessage('');
