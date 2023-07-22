@@ -20,7 +20,7 @@ export const getPosts = async (req, res) => {
         res.status(404).json({ message: error.message });
     }
 }
-
+/*
 // Helper function
 function getSortingCriteria(sortValue) {
     switch (sortValue) {
@@ -76,11 +76,14 @@ export const getPostsBySearch = async (req, res) => {
         res.status(404).json({ message: error.message });
     }
 };
-/*old version and not as clean BUT KEEP
+*/
+/*old version and not as clean BUT KEEP*/
 export const getPostsBySearch = async (req, res) => {
     const { searchQuery, tags, sort } = req.query;
 
     const sortValue = req.query.sort || '';
+
+    console.log('sortValue:', sortValue); //help debug
 
     try {
         let posts;
@@ -104,8 +107,10 @@ export const getPostsBySearch = async (req, res) => {
                     { $addFields: { dislikesCount: { $size: '$dislikes' } } },
                     { $sort: { dislikesCount: sortDirection } },
                 ]);
-            } else if (sortValue == 'highestrating' || 'lowestrating' ) {
+            } else if (sortValue == 'highestrating' || sortValue == 'lowestrating' ) {
                 posts = await PostMessage.find({ $and: [{ $or: [{ title }] }, { tags: { $in: tagsArray } }] }).sort({averageRating:sortValue == "lowestrating" ? -1 : 1});
+            } else if (sortValue == 'mosttimetaken' || sortValue == 'leasttimetaken' ) {
+                posts = await PostMessage.find({ $and: [{ $or: [{ title }] }, { tags: { $in: tagsArray } }] }).sort({timeTaken:sortValue == "leasttimetaken" ? 1 : -1});
             }
         } else if (tags) { // the logic here: show post if any tag matches in the search (not matches all)
             const tagsArray = tags.split(',');
@@ -125,8 +130,10 @@ export const getPostsBySearch = async (req, res) => {
                     { $addFields: { dislikesCount: { $size: '$dislikes' } } },
                     { $sort: { dislikesCount: sortDirection } },
                 ]);            
-            } else if (sortValue == 'highestrating' || 'lowestrating' ) {
+            } else if (sortValue == 'highestrating' || sortValue == 'lowestrating' ) {
                 posts = await PostMessage.find({ tags: { $in: tagsArray } }).sort({averageRating:sortValue == "lowestrating" ? -1 : 1});
+            } else if (sortValue == 'mosttimetaken' || sortValue == 'leasttimetaken' ) {
+                posts = await PostMessage.find({ tags: { $in: tagsArray } }).sort({timeTaken:sortValue == "leasttimetaken" ? 1 : -1});
             }
         } else if (searchQuery) {
             const title = new RegExp(searchQuery, 'i');
@@ -146,11 +153,13 @@ export const getPostsBySearch = async (req, res) => {
                     { $addFields: { dislikesCount: { $size: '$dislikes' } } },
                     { $sort: { dislikesCount: sortDirection } },
                 ]);            
-            } else if (sortValue == 'highestrating' || 'lowestrating' ) {
+            } else if (sortValue == 'highestrating' || sortValue == 'lowestrating' ) {
                 posts = await PostMessage.find({ title }).sort({averageRating:sortValue == "lowestrating" ? -1 : 1});
+            } else if (sortValue == 'mosttimetaken' || sortValue == 'leasttimetaken' ) {
+                posts = await PostMessage.find({ title }).sort({timeTaken:sortValue == "leasttimetaken" ? 1 : -1});
             }
         } else {
-            first = await PostMessage.find();
+            posts = await PostMessage.find();
         }
       
         //res.status(200).json({ data: posts });
@@ -159,7 +168,7 @@ export const getPostsBySearch = async (req, res) => {
         res.status(404).json({ message: error.message });
     }
 }
-*/
+
 
 export const getPostsByCreator = async (req, res) => {
     const { creator } = req.query;
