@@ -17,7 +17,12 @@ interface PostData {
     selectedFile: any;
 }
 
-const Form = ({ currentId, setCurrentId }) => {
+interface FormProps {
+    currentId: number | null;
+    setCurrentId: React.Dispatch<React.SetStateAction<number | null>>;
+}
+
+const Form: React.FC<FormProps> = ({ currentId, setCurrentId }) => {
     const history = useHistory();
 
     const [postData, setPostData] = useState<PostData>({
@@ -53,8 +58,8 @@ const Form = ({ currentId, setCurrentId }) => {
         }
     }, [post]);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const handleSubmit = async (event: React.FormEvent) => {
+        event.preventDefault();
 
         if (!postData.hobby || !postData.title || !postData.message || !postData.tags ||!postData.timeTaken) {
             setErrorMessage('Please fill in all fields.');

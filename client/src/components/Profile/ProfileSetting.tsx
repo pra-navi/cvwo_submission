@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
-import { Avatar, Paper, Typography, Button, Grid, Divider } from '@material-ui/core';
+import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import { Avatar, Paper, Typography, Button, Divider } from '@material-ui/core';
 import { useAppDispatch } from '../../hooks.ts';
 import useStyles from './styles.ts';
 import { changePrivacy } from '../../actions/auth.ts'; 
 
 
-const ProfileSetting = () => {
+const ProfileSetting: React.FC = () => {
     const classes = useStyles();
     const history = useHistory();
     const dispatch = useAppDispatch();

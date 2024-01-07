@@ -3,8 +3,18 @@ import { useHistory } from 'react-router-dom';
 import { Typography, Button, ButtonBase, Card } from '@material-ui/core';
 import useStyles from './styles.ts';
 
+interface ListRowProps {
+    isOwnProfile: boolean;
+    isLearningList: boolean;
+    postId: number;
+    funOne: (postId: number) => void;
+    funTwo: (postId: number) => void;
+    titles: {
+        [key: number]: string;
+    };
+}
 
-const ListRow = ({ isOwnProfile, isLearningList, postId, funOne, funTwo, titles }) => {
+const ListRow: React.FC<ListRowProps> = ({ isOwnProfile, isLearningList, postId, funOne, funTwo, titles }) => {
     const classes = useStyles();
     const history = useHistory();
 

@@ -8,13 +8,16 @@ import Form from '../Form/Form.tsx';
 import { getPostsByCreator, getPostBySearch } from '../../actions/posts.ts';
 import { useAppDispatch, useAppSelector } from '../../hooks.ts';
 
+interface CreatorOrTagProps {
+    setCurrentId: React.Dispatch<React.SetStateAction<null | number>>;
+}
 
-const CreatorOrTag = () => {
-    const { name } = useParams();
+const CreatorOrTag: React.FC<CreatorOrTagProps> = () => {
+    const { name } = useParams<{ name: string }>();
     const dispatch = useAppDispatch();
     const { posts, isLoading } = useAppSelector((state) => state.posts);
 
-    const [currentId, setCurrentId] = useState(0);
+    const [currentId, setCurrentId] = useState<number | null>(0);
 
     const location = useLocation();
 
@@ -28,13 +31,13 @@ const CreatorOrTag = () => {
         }
     }, []);
 
-    const DisplayTagName = () => {
+    const DisplayTagName: React.FC = () => {
         return (
             <Typography variant="h2" style={{ color: 'white' }}>{name}</Typography>
         );
     };
 
-    const DisplayCreatorName = () => {
+    const DisplayCreatorName: React.FC = () => {
         var displayName = name;
         if (posts) { displayName = posts[0]?.name; }
         return (
@@ -43,8 +46,6 @@ const CreatorOrTag = () => {
             </Link>
         );
     };
-
-    //if (!posts.length && !isLoading) return 'No posts';
 
     return (
         <div>
@@ -60,7 +61,7 @@ const CreatorOrTag = () => {
                         ))}
                     </Grid>
                     <Grid item xs={12} sm={12} md={6} lg={4}>
-                        <Form currentId={currentId.toString()} setCurrentId={setCurrentId} />
+                        <Form currentId={currentId} setCurrentId={setCurrentId} />
                     </Grid>
                 </Grid>
             )}

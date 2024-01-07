@@ -10,7 +10,7 @@ import MyLists from './MyLists/MyLists.tsx';
 import ListForm from './MyLists/ListForm.tsx';
 import trophy from '../../images/trophy.png';
 
-const Profile = () => {
+const Profile: React.FC = () => {
     const classes = useStyles();
     const history = useHistory();
     const dispatch = useAppDispatch();
@@ -32,7 +32,6 @@ const Profile = () => {
     const viewer = JSON.parse(localStorage.getItem('profile') || '{}');
     const viewerId = viewer?.result?._id;
     const isOwnProfile = (id === viewerId);
-    // console.log("isOwnProfile" + isOwnProfile); //debug
     const arePrivate = viewer?.result?.listsArePrivate;
 
     const seeMyPosts = () => {
@@ -43,12 +42,11 @@ const Profile = () => {
     }
 
     // for edit list name
-    const[currentId, setCurrentId] = useState(null);
-    const[currentName, setCurrentName] = useState(null); 
+    const[currentId, setCurrentId] = useState<number | null>(null);
+    const[currentName, setCurrentName] = useState<string | null>(null); 
 
     //initialise the array, change if isOwnProfile & create/edit the lists
     const [listsArr, setlistsArr] = useState(user?.myLists);
-    // console.log(listsArr);
     const [count, setCount] = useState(0);
     const handleClick = () => { setCount(count + 1); };
     useEffect(() => {
@@ -114,70 +112,3 @@ const Profile = () => {
     )
 };
 export default Profile;
-// {isOwnProfile && }
-// use the key of Grid to re-render the component
-/*
-    //initialise the array, logic for normal viewer
-    const [viewLearningList, setLearningList] = useState(user?.learningList);
-    const [viewDoneList, setDoneList] = useState(user?.doneList);
-    const [count, setCount] = useState(0);
-
-    useEffect(() => {
-        setLearningList(user?.learningList);
-        setDoneList(user?.doneList);
-        viewLearningList?.map((id) => dispatch(getPostTitle(id)));
-        viewDoneList?.map((id) => dispatch(getPostTitle(id)));
-    }, [user]);
-
-    const changeSetting = () => {
-        history.push(`/user/profileSetting`);
-    }
-
-    const handleClick = () => {
-        const newCount = count + 1;
-        setCount(newCount);
-    };
-
-    useEffect(() => {
-        if (isOwnProfile) {
-            const me = JSON.parse(localStorage.getItem('profile'));
-            setLearningList(me?.result?.learningList);
-            setDoneList(me?.result?.doneList);
-        }
-    }, [count]);
-*/
-/*
-<Paper className={classes.personal} elevation={6}>
-                <div className={classes.leftRight}>
-                    <Avatar className={classes.purple} alt={userName} src={user?.imageUrl}>{userName?.charAt(0)}</Avatar>
-                    <Typography variant="h3" component="h2">{userName}</Typography>
-                </div>
-                <Button className={classes.myPostsButton} onClick={seeMyPosts}>
-                    My Posts
-                </Button>
-                {isOwnProfile && 
-                    <div className={classes.leftRight}>
-                        <Typography variant="h5" component="h2">My lists are {arePrivate ? "private" : "public "} &nbsp;</Typography>
-                        <Button className={classes.privacyButton} onClick={changeSetting}>
-                            change setting
-                        </Button>
-                    </div>
-                }
-            </Paper>
-            <Divider style={{ margin: '20px 0 20px 0' }} />
-            {(isOwnProfile || !userListsArePrivate) &&
-                <Grid container alignItems="stretch" spacing={3}>
-                    <Grid key={`learning-list-${count}`} item xs={12} sm={12} md={6} lg={6}>
-                        <List isOwnProfile={isOwnProfile} isLearningList={true} postIds={viewLearningList} handleClick={handleClick}/>
-                    </Grid>
-                    <Grid key={`done-list-${count}`} item xs={12} sm={12} md={6} lg={6}>
-                        <List isOwnProfile={isOwnProfile} isLearningList={false} postIds={viewDoneList} handleClick={handleClick}/>
-                    </Grid>
-                </Grid>
-            }
-            {((!isOwnProfile) && userListsArePrivate) &&
-                <Paper className={classes.information}>
-                    <Typography variant="h6" align="center"> This user's lists are private. </Typography>
-                </Paper>
-            }
-*/

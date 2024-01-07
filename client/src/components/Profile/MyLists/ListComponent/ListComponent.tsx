@@ -3,7 +3,17 @@ import { useHistory } from 'react-router-dom';
 import { Typography, Button, ButtonBase, Card } from '@material-ui/core';
 import useStyles from './styles.ts';
 
-const ListComponent = ({ isOwnProfile, idNamePair, setCurrentId, setCurrentName}) => {
+interface ListComponentProps {
+    isOwnProfile: boolean;
+    idNamePair: {
+        listName: string;
+        listId: number;
+    };
+    setCurrentId: React.Dispatch<React.SetStateAction<null | number>>;
+    setCurrentName: React.Dispatch<React.SetStateAction<null | string>>;
+}
+
+const ListComponent: React.FC<ListComponentProps> = ({ isOwnProfile, idNamePair, setCurrentId, setCurrentName}) => {
     const classes = useStyles();
     const history = useHistory();
     

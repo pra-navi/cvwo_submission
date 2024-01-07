@@ -5,7 +5,14 @@ import { useAppDispatch } from '../../../hooks.ts';
 import useStyles from './styles.ts';
 import { createList, editList } from '../../../actions/lists.ts';
 
-const ListForm = ({ currentId, setCurrentId, currentName, handleClick }) => {
+interface ListFormProps {
+    currentId: null | number;
+    setCurrentId: React.Dispatch<React.SetStateAction<number | null>>;
+    currentName: null | string;
+    handleClick: () => void;
+}
+
+const ListForm: React.FC<ListFormProps> = ({ currentId, setCurrentId, currentName, handleClick }) => {
     const classes = useStyles();
     const dispatch = useAppDispatch();
     const user = JSON.parse(localStorage.getItem('profile') || '{}');

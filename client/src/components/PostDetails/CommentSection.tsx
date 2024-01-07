@@ -5,7 +5,31 @@ import { useAppDispatch } from '../../hooks.ts';
 import useStyles from './styles.ts';
 import { commentPost, updatePost } from '../../actions/posts.ts';
 
-const CommentSection = ({ post }) => {
+interface CommentSectionProps {
+    post: {
+        _id: number;
+        name: string;
+        title: string;
+        message: string;
+        tags: string[];
+        selectedFile: string;
+        likes: string[];
+        dislikes: string[];
+        creator: string;
+        createdAt: Date;
+        timeTaken: number;
+        comments: {
+            rating: number;
+            message: string;
+            name: string;
+        }[];
+        averageRating: number;
+
+        listIds: string[];
+    };
+}
+
+const CommentSection: React.FC<CommentSectionProps> = ({ post }) => {
     const classes = useStyles();
     const [comments, setComments] = useState(post?.comments || []);
     const [comment, setComment] = useState({ message: '', rating: 0 });
@@ -17,12 +41,12 @@ const CommentSection = ({ post }) => {
         setComments(post?.comments);
     }, [post]);
 
-    const handleCommentChange = (event) => {
+    const handleCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setComment({ ...comment, message: event.target.value }); // Update the comment message as the user types
     };
 
-    const handleRatingChange = (event) => {
-        setComment({ ...comment, rating: event.target.value }); // Update the comment rating as the user types
+    const handleRatingChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setComment({ ...comment, rating: Number(event.target.value) }); // Update the comment rating as the user types
     };
 
     const handleSubmit = async () => {

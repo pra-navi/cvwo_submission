@@ -13,7 +13,7 @@ const ListDetails: React.FC = () => {
     const { list, titles } = useAppSelector((state) => state.lists);
     const dispatch = useAppDispatch();
     const classes = useStyles();
-    const { listId } = useParams();
+    const { listId } = useParams<{ listId: number }>();
     const [count, setCount] = useState(0);
 
     useEffect(() => {
@@ -38,8 +38,8 @@ const ListDetails: React.FC = () => {
     const viewerId = viewer?.result?._id;
     const isOwnProfile = (ownerId === viewerId);
 
-    const deleteL = async (e) => {
-        e.preventDefault();
+    const deleteL = async (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
 
         if (lList.length !== 0 || dList.length !== 0) {
             alert('Please remove all the post before delete the list.');

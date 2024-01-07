@@ -1,8 +1,6 @@
-/* esslint-disable react/jsx-props-no-spreading */
 import React, { useEffect } from "react";
 import { Pagination, PaginationItem } from '@material-ui/lab';
 import { Link } from 'react-router-dom';
-import { useDispatch } from "react-redux";
 import { useAppDispatch, useAppSelector } from '../hooks.ts';
 
 import { getPosts } from "../actions/posts.ts";
@@ -26,10 +24,13 @@ type RootState = {
       posts: never[];
       title: string;
     };
-    /* other slices */
-  };
+};
 
-const Paginate = ({ page }) => {
+interface PaginateProps {
+    page: number;
+}
+
+const Paginate: React.FC<PaginateProps> = ({ page }) => {
     const { numberOfPages } = useAppSelector((state: RootState) => 'numberOfPages' in state.posts ? state.posts.numberOfPages : 0);
     const classes = useStyles();
     const dispatch = useAppDispatch();

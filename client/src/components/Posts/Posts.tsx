@@ -5,11 +5,15 @@ import { useAppSelector } from '../../hooks.ts';
 import Post from './Post/Post.tsx';
 import useStyles from './styles.ts';
 
-const Posts = ({ setCurrentId }) => {
+interface PostsProps {
+    setCurrentId: React.Dispatch<React.SetStateAction<null | number>>;
+}
+
+const Posts: React.FC<PostsProps> = ({ setCurrentId }) => {
     const { posts, isLoading } = useAppSelector((state) => state.posts);
     const classes = useStyles();
 
-    if(!posts.length && !isLoading) return 'No posts';
+    if(!posts.length && !isLoading) return <div>'No posts'</div>;
 
     //console.log(posts);
 

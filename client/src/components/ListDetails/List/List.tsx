@@ -6,17 +6,25 @@ import { savePost, donePost, removePost } from '../../../actions/lists.ts';
 
 import ListRow from './ListRow/ListRow.tsx'
 
+interface ListProps {
+    isOwnProfile: boolean;
+    isLearningList: boolean;
+    postIds: number[];
+    handleClick: () => void;
+    listId: number;
+    titles: string[];
+}
 
-const List = ({ isOwnProfile, isLearningList, postIds, handleClick, listId, titles }) => {
+const List: React.FC<ListProps> = ({ isOwnProfile, isLearningList, postIds, handleClick, listId, titles }) => {
 
     const classes = useStyles();
     const dispatch = useAppDispatch();
 
-    const remove = (postId) => {
+    const remove = (postId: number) => {
         dispatch(removePost(postId, {listId: listId}));
     };
 
-    const done = (postId) => {
+    const done = (postId: number) => {
         dispatch(donePost(postId, {listId: listId}));
     };
 

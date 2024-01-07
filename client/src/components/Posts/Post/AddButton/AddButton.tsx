@@ -12,8 +12,31 @@ import {
 import React, { useEffect, useState } from 'react'
 import { useAppDispatch } from '../../../../hooks.ts';
 import { removePost, savePost } from '../../../../actions/lists.ts';
+
+interface AddButtonProps {
+    post: {
+        _id: number;
+        name: string;
+        title: string;
+        message: string;
+        tags: string[];
+        selectedFile: string;
+        likes: string[];
+        dislikes: string[];
+        creator: string;
+        createdAt: Date;
+        timeTaken: number;
+        comments: {
+            rating: number;
+            message: string;
+            name: string;
+        }[];
+        averageRating: number;
+        listIds: string[];
+    };
+}
   
-const AddButton = ({ post }) => {
+const AddButton: React.FC<AddButtonProps> = ({ post }) => {
     const dispatch = useAppDispatch();
     const user = JSON.parse(localStorage.getItem('profile') || '{}'); 
     const [openOne, setOpenOne] = useState(false); // for the save dialog

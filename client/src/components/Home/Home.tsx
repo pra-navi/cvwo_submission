@@ -17,7 +17,7 @@ function useQuery() {
 } // use it as hook
 
 const Home: React.FC = () => {
-    const [currentId, setCurrentId] = useState(0);
+    const [currentId, setCurrentId] = useState<number | null>(0);
     const dispatch = useAppDispatch();
     const query = useQuery();
     const history = useHistory();
@@ -42,8 +42,8 @@ const Home: React.FC = () => {
         }
     };
 
-    const handleKeyPress = (e) => {
-        if(e.keyCode === 13) {
+    const handleKeyPress = (event: React.KeyboardEvent) => {
+        if(event.keyCode === 13) {
             //13 is enter key
             searchPost();
         }
@@ -139,7 +139,7 @@ const Home: React.FC = () => {
                             <Form currentId={currentId} setCurrentId={setCurrentId} />
                             {(!searchQuery && !tags.length) && (
                                 <Paper elevation={6} className={classes.pagination}>
-                                    <Pagination page={page} />
+                                    <Pagination page={Number(page)} />
                                 </Paper>
                             )// won't have pagination when searching (can modify)
                             }

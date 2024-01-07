@@ -1,17 +1,22 @@
 import React, { useState } from 'react';
 import { Avatar, Button, Paper, Grid, Typography, Container } from '@material-ui/core';
-import { GoogleLogin } from 'react-google-login'; // googleLogout
 import jwt_decode from 'jwt-decode';
-import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import Icon from './icon.tsx';
+import icon from './icon.tsx';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import useStyles from './styles.ts';
 import Input from './Input.tsx';
 import { signup, login } from '../../actions/auth.ts';
-import { AnyAction } from 'redux';
 import { useAppDispatch } from '../../hooks.ts';
 import { useEffect } from 'react';
+
+interface FormData {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
+}
 
 const initialState = { firstName: '', lastName: '', email: '', password: '', confirmPassword: '' };
 
@@ -27,15 +32,15 @@ const Auth: React.FC = () => {
     const classes =  useStyles();
     const [showPassword, setShowPassword] = useState(false);
     const [isSignUp, setIsSignUp] = useState(false);
-    const [formData, setFormData] = useState(initialState);
+    const [formData, setFormData] = useState<FormData>(initialState);
     const dispatch = useAppDispatch();
     const history = useHistory();
     const [error, setError] = useState('');
 
     const handleShowPassword = () => setShowPassword((prevShowPassword) => !prevShowPassword);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
 
         try{
             if(isSignUp) {
@@ -53,8 +58,8 @@ const Auth: React.FC = () => {
     };
 
     
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setFormData({ ...formData, [event.target.name]: event.target.value });
     };
     
     const switchMode = () => {

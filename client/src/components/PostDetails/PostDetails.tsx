@@ -12,15 +12,13 @@ import CommentSection from './CommentSection.tsx';
 import StarRating from './StarRating.tsx';
 
 
-const PostDetails = () => {
+const PostDetails: React.FC = () => {
 
     const { post, posts, isLoading } = useAppSelector((state) => state.posts)  as { post: any; posts: any; isLoading: boolean };
     const dispatch = useAppDispatch();
     const history = useHistory();
     const classes = useStyles();
     const { id } = useParams();
-
-    // console.log(post);
 
     useEffect(() => {
         dispatch(getPost(id));

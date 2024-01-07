@@ -17,7 +17,31 @@ import { useHistory } from 'react-router-dom';
 import useStyles from './styles.ts';
 import AddButton from './AddButton/AddButton.tsx';
 
-const Post = ({ post, setCurrentId }) => {
+interface PostProps {
+    post: {
+        _id: number;
+        name: string;
+        title: string;
+        message: string;
+        tags: string[];
+        selectedFile: string;
+        likes: string[];
+        dislikes: string[];
+        creator: string;
+        createdAt: Date;
+        timeTaken: number;
+        comments: {
+            rating: number;
+            message: string;
+            name: string;
+        }[];
+        averageRating: number;
+        listIds: string[];
+    };
+    setCurrentId: React.Dispatch<React.SetStateAction<null | number>>;
+}
+
+const Post: React.FC<PostProps> = ({ post, setCurrentId }) => {
     const classes = useStyles();
     const dispatch = useAppDispatch();
     const user = JSON.parse(localStorage.getItem('profile') || '{}'); // need to explicitly update this
@@ -62,7 +86,7 @@ const Post = ({ post, setCurrentId }) => {
         }
     }
 
-    const Likes = () => {
+    const Likes: React.FC = () => {
         if(likes.length > 0) {
             return likes.find((like) => like === (userId))
             ? (
@@ -75,7 +99,7 @@ const Post = ({ post, setCurrentId }) => {
         return <><ThumbUpAltOutlined fontSize="small" />&nbsp;Like</>;
     }
 
-    const Dislikes = () => {
+    const Dislikes: React.FC = () => {
         if(dislikes.length > 0) {
             return dislikes.find((dislike) => dislike === (userId))
             ? (
@@ -88,7 +112,7 @@ const Post = ({ post, setCurrentId }) => {
         return <><ThumbDownAltOutlined fontSize="small" />&nbsp;Dislike</>;
     }
 
-    const Delete = () => {
+    const Delete: React.FC = () => {
         return (
             <>
                 <DeleteIcon fontSize="small" />
