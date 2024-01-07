@@ -8,13 +8,22 @@ import Icon from './icon.tsx';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import useStyles from './styles.ts';
 import Input from './Input.tsx';
-import { signup, login, googleLogin } from '../../actions/auth.ts';
+import { signup, login } from '../../actions/auth.ts';
 import { AnyAction } from 'redux';
 import { useAppDispatch } from '../../hooks.ts';
+import { useEffect } from 'react';
 
 const initialState = { firstName: '', lastName: '', email: '', password: '', confirmPassword: '' };
 
 const Auth: React.FC = () => {
+
+    useEffect(() => {
+        console.log('Auth component mounted');
+        return () => {
+          console.log('Auth component unmounted');
+        };
+    }, []);
+
     const classes =  useStyles();
     const [showPassword, setShowPassword] = useState(false);
     const [isSignUp, setIsSignUp] = useState(false);
@@ -54,39 +63,6 @@ const Auth: React.FC = () => {
         setError('');
     };
 
-    const googleSuccess = async (res) => {
-        //ans from the comment
-        const token = res?.credential;
-        interface GoogleLoginResult {
-            given_name?: string;
-            family_name?: string;
-            email?: string;
-            sub?: string;
-        }
-        
-        const result: GoogleLoginResult = jwt_decode(token);
-        
-        const gglForm = { 
-            firstName: result?.given_name, 
-            lastName: result?.family_name ? result?.family_name : '', 
-            email: result?.email, 
-            password: result?.sub,
-            confirmPassword: ''
-        };
-        try{
-            await dispatch(googleLogin(gglForm, history));
-            setError('');
-            history.push('/');
-        } catch (error) {
-            setError(error.message);
-        }
-    };
-
-    const googleFailure = (error) => {
-        console.log(error);
-        console.log("Google Log In was unsuccessful. Try again later");
-    };
-
     return (
         <Container component="main" maxWidth="xs">
             <Paper className={classes.paper} elevation={3}>
@@ -110,14 +86,6 @@ const Auth: React.FC = () => {
                     <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
                         { isSignUp ? 'Sign Up' : 'Log In' }
                     </Button>
-                    <GoogleLogin 
-                        render={(renderProps) => (
-                            <Button className={classes.googleButton} color="primary" fullWidth onClick={renderProps.onClick} disabled={renderProps.disabled} startIcon={<Icon /> } variant="contained">Google Log In</Button>
-                        )}
-                        onSuccess={googleSuccess}
-                        onError={googleFailure}
-                        cookiePolicy="single_host_origin"
-                    />
                     <Grid container justifyContent="flex-end">
                         <Grid item>
                             <Button onClick={switchMode}>

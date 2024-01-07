@@ -21,18 +21,6 @@ export const getUser = (id) => async (dispatch) => {
     }
 };
 
-export const googleLogin = (gglForm, history) => async (dispatch) => {
-    try {
-        const { data } = await api.googleLogIn(gglForm);
-
-        dispatch({ type: AUTH, data });
-
-        history.push('/');
-    } catch (error) {
-        throw new Error(error.response.data.message);
-    }
-}
-
 export const login = (formData: any, history: any) => async (dispatch: Dispatch<AnyAction>) => {
     try {
         const { data } = await api.logIn(formData);

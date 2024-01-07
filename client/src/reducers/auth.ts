@@ -15,7 +15,8 @@ const authReducer = (state = { authData: null, isLoading: true, user: null }, ac
         case FETCH_USER: 
             return { ...state, user: action.payload };
         case CHANGE_PRIVACY:
-            let cprofile = JSON.parse(localStorage.getItem('profile') || '{}'); // or follow lists.ts
+            let profileString = localStorage.getItem('profile');
+            let cprofile = profileString ? JSON.parse(profileString) : null;
             if(cprofile?.result) {cprofile.result.listsArePrivate = action?.data;};
             localStorage.setItem('profile', JSON.stringify({ ...cprofile }));
             return { ...state, authData: cprofile };

@@ -1,12 +1,11 @@
 import express from 'express';
-import { login, signup, getUser, changePrivacy, googleLogin } from '../controllers/user';
+import { login, signup, getUser, changePrivacy } from '../controllers/user';
 import auth from '../middleware/auth';
 import User from '../models/user';
 
 
 const router = express.Router();
 
-router.post('/googleLogin', googleLogin);
 router.post('/login', login);
 router.post('/signup', signup);
 router.get('/profile/:id', getUser);

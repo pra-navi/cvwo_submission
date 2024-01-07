@@ -31,7 +31,7 @@ const Navbar: React.FC = () => {
             if(decodedToken.exp * 1000 < new Date().getTime()) logout();
         }
 
-        setUser(JSON.parse(localStorage.getItem('profile') || '{}'));
+        setUser(JSON.parse(localStorage.getItem('profile') ?? '{}'));
     }, [location]);
 
     return (
@@ -41,8 +41,8 @@ const Navbar: React.FC = () => {
                 <img src={LEARNersText} alt="icon" height="45px" />
             </Link>
             <Toolbar className={classes.toolbar}>
-                { user ? (
-                    <div className={classes.profile}>
+                { user && Object.keys(user).length !== 0  ? (
+                        <div className={classes.profile}>
                         <Avatar className={classes.purple} alt={user?.result?.name} src={user?.result?.imageUrl}>{user?.result?.name.charAt(0)}</Avatar>
                         <Link to={`/user/profile/${user?.result?._id}`}>
                             <Typography className={classes.userName} variant="h6">{user?.result?.name}</Typography>

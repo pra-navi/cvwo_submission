@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container } from '@material-ui/core';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
-import { GoogleOAuthProvider } from '@react-oauth/google';
+import { useEffect } from 'react';
 
 import PostDetails from './components/PostDetails/PostDetails.tsx';
 import Home from './components/Home/Home.tsx';
@@ -13,9 +13,22 @@ import ProfileSetting from './components/Profile/ProfileSetting.tsx';
 import ListDetails from './components/ListDetails/ListDetails.tsx';
 
 const App: React.FC = () => {
-    //const user = JSON.parse(localStorage.getItem('profile'));
+    useEffect(() => {
+        try {
+            const userProfileString = localStorage.getItem('profile') ?? '{}';
+            const userProfile = JSON.parse(userProfileString);
+    
+            console.log('Raw User Profile String:', userProfileString);
+            console.log('Parsed User Profile:', userProfile);
+    
+            const userId = userProfile?.result?._id;
+            console.log('User ID:', userId);
+        } catch (error) {
+            console.error('Error parsing or retrieving user profile:', error);
+        }
+    }, []);
+
     return (
-        <GoogleOAuthProvider clientId="90323655673-7fthm7q6hkk9v1fk6m3o4sfn2esl0ms1.apps.googleusercontent.com">
             <BrowserRouter>
                 <Container maxWidth="xl">
                     <Navbar />
@@ -25,14 +38,13 @@ const App: React.FC = () => {
                         <Route path="/posts/search" exact component={Home} />
                         <Route path="/posts/:id" component={PostDetails} />
                         <Route path={['/creators/:name', '/tags/:name']} component={CreatorOrTag} />
-                        <Route path="/auth" exact component={() => (!JSON.parse(localStorage.getItem('profile') || '{}') ? <Auth /> : <Redirect to="/posts/" />)} />
+                        <Route path="/auth" exact component={() => Object.keys(JSON.parse(localStorage.getItem('profile') || '{}')).length === 0 ? <Auth /> : <Redirect to="/posts/" />} />
                         <Route path="/user/profile/:id" exact component={Profile} />
                         <Route path="/user/profileSetting" exact component={() => (JSON.parse(localStorage.getItem('profile') || '{}') ? <ProfileSetting /> : <Redirect to="/auth/" />)} />
                         <Route path="/list/:listId" exact component={ListDetails} />
                     </Switch>
                 </Container>      
             </BrowserRouter>
-        </GoogleOAuthProvider>
     );
 };
 
