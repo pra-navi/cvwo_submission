@@ -13,7 +13,7 @@ const store = legacy_createStore(reducers, compose(applyMiddleware(thunk)));
 
 ReactDOM.render(
     <Provider store={store}>
-        <App />
+            <App />
     </Provider>,
     document.getElementById('root')
 );

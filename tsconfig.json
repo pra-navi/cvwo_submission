@@ -3,7 +3,7 @@
     "noImplicitAny": true,
     "module": "commonjs",
     "target": "es5",
-    "jsx": "react",
+    "jsx": "react-jsx",
     "allowJs": true,
     "strict": true,
     "esModuleInterop": true,
@@ -12,11 +12,14 @@
     "moduleResolution": "node",
     "skipLibCheck": true,
     "outDir": "../client",
-    "rootDir": "./server",
+    "rootDir": "./servernew",
     "types": ["node", "react"],
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "allowSyntheticDefaultImports": true,
     "typeRoots": ["./node_modules/@types", "./client/src/@types", "./client/@types", "./client/src/components/Auth/@types"]
   },
-  "include": ["./client/*", "./server/*"],
+  "include": ["./client/*", "./servernew/*"],
   "exclude": ["./node_modules"]
 }
 

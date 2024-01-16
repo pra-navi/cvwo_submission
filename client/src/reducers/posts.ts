@@ -1,6 +1,6 @@
 import { FETCH_POST_TITLE, FETCH_ALL, FETCH_BY_SEARCH, FETCH_BY_CREATOR, FETCH_POST, CREATE, UPDATE, DELETE, LIKE, DISLIKE, START_LOADING, END_LOADING, COMMENT } from '../constants/actionTypes.ts';
 
-const postReducer = (state = { isLoading: true, posts: [], title: 'loading title...' }, action) => {
+const postReducer = (state = { isLoading: true, posts: [], title: 'loading title...', currentPage: 1, numberOfPages: 1 }, action) => {
     switch (action.type) {
         case START_LOADING:
             return { ...state, isLoading: true };

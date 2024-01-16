@@ -13,7 +13,11 @@ interface CreatorOrTagProps {
 }
 
 const CreatorOrTag: React.FC<CreatorOrTagProps> = () => {
-    const { name } = useParams<{ name: string }>();
+    interface Params {
+        name: string;
+    }
+
+    const { name } = useParams<Params>();
     const dispatch = useAppDispatch();
     const { posts, isLoading } = useAppSelector((state) => state.posts);
 
@@ -39,6 +43,8 @@ const CreatorOrTag: React.FC<CreatorOrTagProps> = () => {
 
     const DisplayCreatorName: React.FC = () => {
         var displayName = name;
+        console.log(displayName);
+        console.log(posts);
         if (posts) { displayName = posts[0]?.name; }
         return (
             <Link to={`/user/profile/${name}`}>
@@ -52,18 +58,13 @@ const CreatorOrTag: React.FC<CreatorOrTagProps> = () => {
             {typeIsTag ? <DisplayTagName /> : <DisplayCreatorName />}
             <Divider style={{ margin: '20px 0 50px 0' }} />
             {isLoading ? <CircularProgress /> : (
-                <Grid container alignItems="stretch" spacing={3}>
                     <Grid item xs={12} sm={12} md={6} lg={8} container alignItems="stretch" spacing={3}>
                         {posts?.map((post) => (
-                            <Grid key={post._id} item xs={12} sm={12} md={6} lg={6}>
+                            <Grid key={post.id} item xs={12} sm={12} md={6} lg={6}>
                                 <Post post={post} setCurrentId={setCurrentId} />
                             </Grid>
                         ))}
                     </Grid>
-                    <Grid item xs={12} sm={12} md={6} lg={4}>
-                        <Form currentId={currentId} setCurrentId={setCurrentId} />
-                    </Grid>
-                </Grid>
             )}
         </div>
     );

@@ -15,24 +15,24 @@ const Profile: React.FC = () => {
     const history = useHistory();
     const dispatch = useAppDispatch();
 
-    const { id } = useParams(); // the user id (not viewer)
+    const { id } = useParams<{ id: string }>(); // the user id (not viewer)
     
     useEffect(() => {
-        dispatch(getUser(id));
+        dispatch(getUser(parseInt(id)));
     }, [id]);
     useEffect(() => {
-        dispatch(getPoint(id));
+        dispatch(getPoint(parseInt(id)));
     }, []);
 
     const { user } = useAppSelector((state) => state.auth); //auth.js in reducer, cause profile to re-render
     const { point } = useAppSelector((state) => state.lists);
     const userName = user?.name;
-    const userListsArePrivate = user?.listsArePrivate;
+    const userListsArePrivate = user?.listsareprivate;
 
     const viewer = JSON.parse(localStorage.getItem('profile') || '{}');
-    const viewerId = viewer?.result?._id;
-    const isOwnProfile = (id === viewerId);
-    const arePrivate = viewer?.result?.listsArePrivate;
+    const viewerId = viewer?.result?.id;
+    const isOwnProfile = (parseInt(id) === viewerId);
+    const arePrivate = viewer?.result?.listsareprivate;
 
     const seeMyPosts = () => {
         history.push(`/creators/${id}`);
@@ -46,7 +46,8 @@ const Profile: React.FC = () => {
     const[currentName, setCurrentName] = useState<string | null>(null); 
 
     //initialise the array, change if isOwnProfile & create/edit the lists
-    const [listsArr, setlistsArr] = useState(user?.myLists);
+    const [listsArr, setlistsArr] = useState(user?.mylists);
+    console.log("listsArr: ", listsArr);
     const [count, setCount] = useState(0);
     const handleClick = () => { setCount(count + 1); };
     useEffect(() => {
@@ -56,7 +57,7 @@ const Profile: React.FC = () => {
         }
     }, [count]);
     useEffect(() => {
-        setlistsArr(user?.myLists);
+        setlistsArr(user?.mylists);
     }, [user]);
     
 

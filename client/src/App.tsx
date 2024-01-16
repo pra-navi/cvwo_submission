@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container } from '@material-ui/core';
-import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import { useEffect } from 'react';
 
 import PostDetails from './components/PostDetails/PostDetails.tsx';
@@ -29,7 +29,7 @@ const App: React.FC = () => {
     }, []);
 
     return (
-            <BrowserRouter>
+            <Router>
                 <Container maxWidth="xl">
                     <Navbar />
                     <Switch>
@@ -44,7 +44,7 @@ const App: React.FC = () => {
                         <Route path="/list/:listId" exact component={ListDetails} />
                     </Switch>
                 </Container>      
-            </BrowserRouter>
+            </Router>
     );
 };
 

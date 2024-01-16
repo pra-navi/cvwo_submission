@@ -53,4 +53,4 @@ export const donePost = (postId, listObj) => API.patch(`/list/donePost/${postId}
 export const fetchTitles = (listId) => API.get(`/list/getTitles/${listId}`);
 export const fetchPoint = (userId) => API.get(`/list/getPoint/${userId}`);
 
-export const changePrivacy = () => API.patch(`/user/changePrivacy`);
+export const changePrivacy = () => API.patch(`/user/profileSetting`);

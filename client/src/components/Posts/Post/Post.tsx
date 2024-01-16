@@ -19,24 +19,24 @@ import AddButton from './AddButton/AddButton.tsx';
 
 interface PostProps {
     post: {
-        _id: number;
+        id: number;
         name: string;
         title: string;
         message: string;
         tags: string[];
-        selectedFile: string;
+        selectedfile: string;
         likes: string[];
         dislikes: string[];
-        creator: string;
-        createdAt: Date;
-        timeTaken: number;
+        creatorid: number;
+        createdat: Date;
+        timetaken: number;
         comments: {
             rating: number;
             message: string;
             name: string;
         }[];
-        averageRating: number;
-        listIds: string[];
+        averagerating: number;
+        listids: string[];
     };
     setCurrentId: React.Dispatch<React.SetStateAction<null | number>>;
 }
@@ -51,39 +51,35 @@ const Post: React.FC<PostProps> = ({ post, setCurrentId }) => {
 
     if(!post) return null;
 
-    const userId = user?.result?.googleId || user?.result?._id;
+    const userId = user?.result?.googleId || user?.result?.id;
     const userEmail = user?.result?.email;
     const hasLikedPost = likes.find((like) => like === (userId));
     const hasDislikedPost = dislikes.find((dislike) => dislike === (userId));
 
     const handleLikeClick = async () => {
-        dispatch(likePost(post._id));
-
-        if(hasDislikedPost) {
-            // pressing the button does not do anything
-            return;
-        }
+        dispatch(likePost(post.id));
 
         if(hasLikedPost) {
             setLikes(likes.filter((id) => id !== (userId)));
         } else {
             setLikes([...likes, (userId)]);
         }
+
+        window.location.reload();
     }
 
     const handleDislikeClick = async () => {
-        dispatch(dislikePost(post._id));
+        dispatch(dislikePost(post.id));
 
-        if (hasLikedPost) {
-            // pressing the button does not do anything
-            return;
-        }
+        console.log(hasLikedPost);
 
         if(hasDislikedPost) {
             setDislikes(dislikes.filter((id) => id !== (userId)));
         } else {
             setDislikes([...dislikes, (userId)]);
         }
+
+        window.location.reload();
     }
 
     const Likes: React.FC = () => {
@@ -122,7 +118,7 @@ const Post: React.FC<PostProps> = ({ post, setCurrentId }) => {
     }
 
     const openPost = () => {
-        history.push(`/posts/${post._id}`);
+        history.push(`/posts/${post.id}`);
     }
 
     const calculateAverageRating = () => {
@@ -138,36 +134,41 @@ const Post: React.FC<PostProps> = ({ post, setCurrentId }) => {
 
     const dPost = async () => {
         try {
-          // Create an array to hold all the promises from dispatch calls
-          const dispatchPromises: Promise<void>[] = [];
+            if (post.listids?.length !== undefined && post.listids?.length !== 0) {
+                // Create an array to hold all the promises from dispatch calls
+                const dispatchPromises: Promise<void>[] = [];
+            
+                for (const lId of post.listids) {
+                    // Push each dispatch promise into the array
+                    dispatchPromises.push(dispatch(removePost(post.id, { listId: lId })));
+                }
+            
+                // Wait for all the dispatch promises to resolve with Promise.all
+                await Promise.all(dispatchPromises);
+            }
       
-          for (const lId of post.listIds) {
-            // Push each dispatch promise into the array
-            dispatchPromises.push(dispatch(removePost(post._id, { listId: lId })));
-          }
-      
-          // Wait for all the dispatch promises to resolve with Promise.all
-          await Promise.all(dispatchPromises);
-      
-          // All dispatches inside the loop have been completed
-          dispatch(deletePost(post._id));
+            // All dispatches inside the loop have been completed
+            dispatch(deletePost(post.id));
+
+            // refresh page
+            window.location.reload();
         } catch (error) {
           // Handle errors if any of the dispatch calls fail
-          console.error(error);
+            console.error(error);
         }
       };
 
     return (
         <Card className={classes.card} raised elevation={6}>
             <ButtonBase className={classes.cardAction} onClick={openPost}>
-                <CardMedia className={classes.media} image={post.selectedFile || require('../../../images/no_image.jpg').default} title={post.title} />
+                <CardMedia className={classes.media} image={post.selectedfile || require('../../../images/no_image.jpg').default} title={post.title} />
                 <div className={classes.overlay}>
                     <Typography variant="h6">{post.name}</Typography>
-                    <Typography variant="body2">{moment(post.createdAt).fromNow()}</Typography>
+                    <Typography variant="body2">{moment(post.createdat).fromNow()}</Typography>
                 </div>
                 <div className={classes.details}>
                     <Typography variant="body2" color="textSecondary">{post.tags.map((tag) => `#${tag.trim()} `)}</Typography>
-                    <Typography variant="body2" color="textSecondary">Hours Taken: {post.timeTaken}</Typography>
+                    <Typography variant="body2" color="textSecondary">Hours Taken: {post.timetaken}</Typography>
 
                 </div>
                 <Typography className={classes.title} variant="h5" gutterBottom>{post.title}</Typography>
@@ -175,16 +176,16 @@ const Post: React.FC<PostProps> = ({ post, setCurrentId }) => {
                     <Typography variant="body2" color="textSecondary" component="p">{post.message}</Typography>
                 </CardContent>
             </ButtonBase>
-            {(user?.result?.googleId === post?.creator || user?.result?._id === post?.creator) && (
+            {(user?.result?.googleId === post?.creatorid || user?.result?.id === post?.creatorid) && (
                     <div className={classes.overlay2}>
-                        <Button style={{color: 'white'}} size="small" onClick={() => setCurrentId(post._id)}>
+                        <Button style={{color: 'white'}} size="small" onClick={() => setCurrentId(post.id)}>
                             <MoreHorizIcon fontSize="medium" />
                         </Button>
                     </div>
             )} 
             {(userEmail === 'admin@gmail.com') && ( // Compare the user's email with the specific email account
                 <div className={classes.overlay2}>
-                    <Button style={{ color: 'white' }} size="small" onClick={() => setCurrentId(post._id)}>
+                    <Button style={{ color: 'white' }} size="small" onClick={() => setCurrentId(post.id)}>
                         <MoreHorizIcon fontSize="medium" />
                     </Button>
                 </div>
@@ -202,7 +203,7 @@ const Post: React.FC<PostProps> = ({ post, setCurrentId }) => {
                 <Button size="small" color="primary" disabled={!user?.result} onClick={handleDislikeClick}>
                     <Dislikes />
                 </Button>
-                {(user?.result?.googleId === post?.creator || user?.result?._id === post?.creator || userEmail === 'admin@gmail.com') && (
+                {(user?.result?.googleId === post?.creatorid || user?.result?.id === post?.creatorid || userEmail === 'admin@gmail.com') && (
                     <Button size="small" color="primary" onClick={dPost}>
                         <Delete />
                     </Button>

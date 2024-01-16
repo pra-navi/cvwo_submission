@@ -13,11 +13,16 @@ const ListDetails: React.FC = () => {
     const { list, titles } = useAppSelector((state) => state.lists);
     const dispatch = useAppDispatch();
     const classes = useStyles();
-    const { listId } = useParams<{ listId: number }>();
+
+    interface RouteParams {
+        listId: string;
+    }
+
+    const { listId } = useParams<RouteParams>();
     const [count, setCount] = useState(0);
 
     useEffect(() => {
-        dispatch(getList(listId));
+        dispatch(getList(parseInt(listId)));
     }, [listId]);
     useEffect(() => {
         dispatch(getTitles(listId));
@@ -28,14 +33,14 @@ const ListDetails: React.FC = () => {
     if (!list) return null;
 
     const handleClick = () => { setCount(count + 1); };
-    const listName = list.listName;
-    const ownerName = list.ownerName;
-    const ownerId = list.ownerId;
-    const lList = list.learningList;
-    const dList = list.doneList
+    const listName = list.listname;
+    const ownerName = list.ownername;
+    const ownerId = list.ownerid;
+    const lList = list.learninglist;
+    const dList = list.donelist
 
     const viewer = JSON.parse(localStorage.getItem('profile') || '{}');
-    const viewerId = viewer?.result?._id;
+    const viewerId = viewer?.result?.id;
     const isOwnProfile = (ownerId === viewerId);
 
     const deleteL = async (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -64,10 +69,10 @@ const ListDetails: React.FC = () => {
             <Divider style={{ margin: '20px 0 20px 0' }} />
             <Grid container alignItems="stretch" spacing={3}>
                 <Grid item xs={12} sm={12} md={6} lg={6}>
-                    <List isOwnProfile={isOwnProfile} isLearningList={true} postIds={lList} handleClick={handleClick} listId={listId} titles={titles}/>
+                    <List isOwnProfile={isOwnProfile} isLearningList={true} postIds={lList} handleClick={handleClick} listId={Number(listId)} titles={titles}/>
                 </Grid>
                 <Grid item xs={12} sm={12} md={6} lg={6}>
-                    <List isOwnProfile={isOwnProfile} isLearningList={false} postIds={dList} handleClick={handleClick} listId={listId} titles={titles}/>
+                    <List isOwnProfile={isOwnProfile} isLearningList={false} postIds={dList} handleClick={handleClick} listId={Number(listId)} titles={titles}/>
                 </Grid>
             </Grid>
         </>

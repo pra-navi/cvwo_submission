@@ -28,6 +28,10 @@ const ListForm: React.FC<ListFormProps> = ({ currentId, setCurrentId, currentNam
             return;
         }
 
+        console.log(currentId);
+        console.log(userName);
+        console.log(name);
+
         try {
             if(currentId) {
                 await dispatch(editList({ listId: currentId, listName: name }));
@@ -36,6 +40,8 @@ const ListForm: React.FC<ListFormProps> = ({ currentId, setCurrentId, currentNam
             }
             clear();
             handleClick();
+
+            window.location.reload();
         } catch (error) {
             console.log(error);
             setErrorMessage('Something went wrong. Please try again.');

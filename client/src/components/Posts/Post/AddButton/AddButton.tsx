@@ -12,27 +12,28 @@ import {
 import React, { useEffect, useState } from 'react'
 import { useAppDispatch } from '../../../../hooks.ts';
 import { removePost, savePost } from '../../../../actions/lists.ts';
+import { common } from '@material-ui/core/colors';
 
 interface AddButtonProps {
     post: {
-        _id: number;
+        id: number;
         name: string;
         title: string;
         message: string;
         tags: string[];
-        selectedFile: string;
+        selectedfile: string;
         likes: string[];
         dislikes: string[];
-        creator: string;
-        createdAt: Date;
-        timeTaken: number;
+        creatorid: number;
+        createdat: Date;
+        timetaken: number;
         comments: {
             rating: number;
             message: string;
             name: string;
         }[];
-        averageRating: number;
-        listIds: string[];
+        averagerating: number;
+        listids: string[];
     };
 }
   
@@ -46,8 +47,8 @@ const AddButton: React.FC<AddButtonProps> = ({ post }) => {
     const [commonList, setCommonList] = useState<{ listId: string; listName?: string } | null>(null); // for remove list
 
     //initial status of icon
-    const userLists = user?.result?.myLists;
-    const postListIds = post?.listIds;
+    const userLists = user?.result?.mylists;
+    const postListIds = post?.listids;
 
     const checkAdded = (arr1, arr2) => {
         if (!arr1 || !arr2) {return false;}
@@ -80,14 +81,14 @@ const AddButton: React.FC<AddButtonProps> = ({ post }) => {
 
     const addPost = async (e) => {
         e.preventDefault();
-        await dispatch(savePost(post._id, {listId: curListId}));
+        await dispatch(savePost(post.id, {listId: curListId}));
         setHasAdded(true);
         setOpenOne(false);
     };
 
     const rPost = async (e) => {
         e.preventDefault();
-        await dispatch(removePost(post._id, {listId: commonList?.listId}));
+        await dispatch(removePost(post.id, {listId: commonList?.listId}));
         setHasAdded(false);
         setOpenTwo(false);
     };
@@ -103,7 +104,7 @@ const AddButton: React.FC<AddButtonProps> = ({ post }) => {
                 onClose={() => setOpenOne(false)}
                 aria-labelledby='dialog-title'
                 aria-describedby='dialog-description'>
-                <DialogTitle id='dialog-title'>Save this post to: </DialogTitle>
+                <DialogTitle id='dialog-title'>Save this post?</DialogTitle>
                 <DialogContent>
                     <DialogContentText id='dialog-description'>
                         Please select the list to save this post.
@@ -137,7 +138,7 @@ const AddButton: React.FC<AddButtonProps> = ({ post }) => {
                 onClose={() => setOpenTwo(false)}
                 aria-labelledby='dialog-title'
                 aria-describedby='dialog-description'>
-                <DialogTitle id='dialog-title'>Removed the post?</DialogTitle>
+                <DialogTitle id='dialog-title'>Remove the post?</DialogTitle>
                 <DialogContent>
                     <DialogContentText id='dialog-description'>
                         Are you sure you want to remove this post from your list: {commonList?.listName} ?

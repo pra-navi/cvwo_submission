@@ -14,11 +14,16 @@ import StarRating from './StarRating.tsx';
 
 const PostDetails: React.FC = () => {
 
-    const { post, posts, isLoading } = useAppSelector((state) => state.posts)  as { post: any; posts: any; isLoading: boolean };
+    const { post, posts, isLoading } = useAppSelector((state) => state.posts)  as { post: any; posts: any; isLoading: boolean; currentPage: number; numberOfPages: number; title: string; };
     const dispatch = useAppDispatch();
     const history = useHistory();
     const classes = useStyles();
-    const { id } = useParams();
+
+    interface RouteParams {
+        id: string;
+    }
+
+    const { id } = useParams<RouteParams>();
 
     useEffect(() => {
         dispatch(getPost(id));
@@ -26,6 +31,8 @@ const PostDetails: React.FC = () => {
 
 
     if (!post) return null;
+
+    console.log(post);
 
     const calculateAverageRating = () => {
         if (!post.comments || post.comments.length === 0) {
@@ -56,17 +63,17 @@ const PostDetails: React.FC = () => {
                                                     ` ${tag} `
 
                     ))}</Typography>
-                    <Typography gutterBottom variant="body2" component="p">Hours Taken: {post.timeTaken}</Typography>
+                    <Typography gutterBottom variant="body2" component="p">Hours Taken: {post.timetaken}</Typography>
                     <Typography gutterBottom variant="body1" component="p">{post.message}</Typography>
                     <Typography variant="h6">
                         Created by:
-                        <Link to={`/user/profile/${post.creator}`} style={{ textDecoration: 'none', color: '#3f51b5' }}>
+                        <Link to={`/user/profile/${post.creatorid}`} style={{ textDecoration: 'none', color: '#3f51b5' }}>
                             { // pass creator (id) to backend, but show name
                             }
                             {` ${post.name}`}
                         </Link>
                     </Typography>
-                    <Typography variant="body1">{moment(post.createdAt).fromNow()}</Typography>
+                    <Typography variant="body1">{moment(post.createdat).fromNow()}</Typography>
                     <Divider style={{ margin: '20px 0' }} />
                     <Typography variant="h4" component="h2">Average Rating: {averageRating} <StarRating averageRating={averageRating} /> </Typography>
                     <Divider style={{ margin: '20px 0' }} />
@@ -74,7 +81,7 @@ const PostDetails: React.FC = () => {
                     <Divider style={{ margin: '20px 0' }} />
                 </div>
                 <div className={classes.imageSection}>
-                    <img className={classes.media} src={post.selectedFile || 'https://user-images.githubusercontent.com/194400/49531010-48dad180-f8b1-11e8-8d89-1e61320e1d82.png'} alt={post.title} />
+                    <img className={classes.media} src={post.selectedfile || 'https://user-images.githubusercontent.com/194400/49531010-48dad180-f8b1-11e8-8d89-1e61320e1d82.png'} alt={post.title} />
                 </div>
             </div>
         </Paper>

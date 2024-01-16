@@ -37,7 +37,7 @@ const List: React.FC<ListProps> = ({ isOwnProfile, isLearningList, postIds, hand
             {postIds?.map((postId) => {
                 if (isLearningList) {
                     return (<ListRow key={postId} isOwnProfile={isOwnProfile} isLearningList={isLearningList} postId={postId}  
-                    funOne={done} funTwo={remove} titles={titles}/>);
+                        funOne={done} funTwo={remove} titles={titles}/>);
                 } else {
                     return (<ListRow key={postId} isOwnProfile={isOwnProfile} isLearningList={isLearningList} postId={postId}  
                         funOne={done} funTwo={remove} titles={titles}/>);

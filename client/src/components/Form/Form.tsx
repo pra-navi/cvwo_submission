@@ -30,7 +30,7 @@ const Form: React.FC<FormProps> = ({ currentId, setCurrentId }) => {
     });
     const [fileMessage, setFileMessage] = useState('[Using default image as cover]');
     const [errorMessage, setErrorMessage] = useState('');   
-    const post = useAppSelector((state) => currentId ? state.posts.posts.find((p) => p._id === currentId) : null);
+    const post = useAppSelector((state) => currentId ? state.posts.posts.find((p) => p.id === currentId) : null);
 
     const allowedFileTypes = ['image/jpg', 'image/jpeg', 'image/png'];
     function handleFileUpload({ base64, file }) {
@@ -61,7 +61,7 @@ const Form: React.FC<FormProps> = ({ currentId, setCurrentId }) => {
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
 
-        if (!postData.hobby || !postData.title || !postData.message || !postData.tags ||!postData.timeTaken) {
+        if (!postData.hobby || !postData.title || !postData.message || !postData.tags || !postData.timeTaken ) {
             setErrorMessage('Please fill in all fields.');
             return;
         }
