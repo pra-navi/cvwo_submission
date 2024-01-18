@@ -3,7 +3,7 @@ import { TextField, Button, Typography, Paper } from '@material-ui/core';
 import { useAppDispatch } from '../../../hooks.ts';
 
 import useStyles from './styles.ts';
-import { createList, editList } from '../../../actions/lists.ts';
+import { createList } from '../../../actions/lists.ts';
 
 interface ListFormProps {
     currentId: null | number;
@@ -28,16 +28,8 @@ const ListForm: React.FC<ListFormProps> = ({ currentId, setCurrentId, currentNam
             return;
         }
 
-        console.log(currentId);
-        console.log(userName);
-        console.log(name);
-
         try {
-            if(currentId) {
-                await dispatch(editList({ listId: currentId, listName: name }));
-            } else {
-                await dispatch(createList({ listName: name, ownerName: userName }));
-            }
+            await dispatch(createList({ listName: name, ownerName: userName }));
             clear();
             handleClick();
 
@@ -59,8 +51,7 @@ const ListForm: React.FC<ListFormProps> = ({ currentId, setCurrentId, currentNam
         <Paper className={classes.paper} elevation={6}>
             <form autoComplete="off" noValidate className={`${classes.root} ${classes.form}`} onSubmit={handleSubmit}>
                 <div className={classes.atLeft}>
-                    <Typography className={classes.marBottom} variant="h4">{ currentId ? 'Editing' : 'Creating' } a List</Typography>
-                    <Typography className={classes.marBottom} variant="h6">{ currentId && 'Original List Name: ' + currentName}</Typography>
+                    <Typography className={classes.marBottom} variant="h4">Creating a List</Typography>
                     <TextField 
                         InputLabelProps={{ shrink: true }} 
                         name="listname" 

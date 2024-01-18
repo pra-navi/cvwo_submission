@@ -12,7 +12,6 @@ interface CommentSectionProps {
         title: string;
         message: string;
         tags: string[];
-        selectedfile: string;
         likes: string[];
         dislikes: string[];
         creatorid: number;

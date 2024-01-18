@@ -1,6 +1,6 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { Typography, Button, ButtonBase, Card } from '@material-ui/core';
+import { Typography, ButtonBase, Card } from '@material-ui/core';
 import useStyles from './styles.ts';
 
 interface ListComponentProps {
@@ -31,17 +31,6 @@ const ListComponent: React.FC<ListComponentProps> = ({ isOwnProfile, idNamePair,
                 ? <Typography className={classes.title} variant="h6">{listName}</Typography> 
                 : <Typography variant="h6">{listName}</Typography>}
             </ButtonBase>
-            {(isOwnProfile) && (
-                    <div className={classes.overlay2}>
-                        <Button className={classes.editButton} color="secondary" size="small" 
-                            onClick={() => {
-                                setCurrentName(listName);
-                                setCurrentId(listId);
-                            }}>
-                            EDIT
-                        </Button>
-                    </div>
-            )} 
         </Card>
     )
 };

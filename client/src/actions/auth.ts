@@ -1,4 +1,4 @@
-import { AUTH, FETCH_USER, SAVE_POST, DONE_POST, CHANGE_PRIVACY } from '../constants/actionTypes.ts';
+import { AUTH, FETCH_USER, CHANGE_PRIVACY } from '../constants/actionTypes.ts';
 import * as api from '../api/index.ts';
 import { AnyAction, Dispatch } from 'redux';
 

@@ -6,7 +6,6 @@ import { useAppDispatch, useAppSelector } from '../../hooks.ts';
 
 import useStyles from './styles.ts';
 import { createPost, updatePost } from '../../actions/posts.ts';
-import { defaultImage } from './defaultImage.ts';
 
 interface PostData {
     hobby: string;
@@ -14,7 +13,6 @@ interface PostData {
     message: string;
     tags: string[];
     timeTaken: number;
-    selectedFile: any;
 }
 
 interface FormProps {
@@ -26,24 +24,10 @@ const Form: React.FC<FormProps> = ({ currentId, setCurrentId }) => {
     const history = useHistory();
 
     const [postData, setPostData] = useState<PostData>({
-        hobby: '', title: '', message: '', tags: [], timeTaken: 0, selectedFile: defaultImage
+        hobby: '', title: '', message: '', tags: [], timeTaken: 0
     });
-    const [fileMessage, setFileMessage] = useState('[Using default image as cover]');
     const [errorMessage, setErrorMessage] = useState('');   
     const post = useAppSelector((state) => currentId ? state.posts.posts.find((p) => p.id === currentId) : null);
-
-    const allowedFileTypes = ['image/jpg', 'image/jpeg', 'image/png'];
-    function handleFileUpload({ base64, file }) {
-        if (allowedFileTypes.includes(file.type)) {
-          // Process the file
-          setPostData({ ...postData, selectedFile: base64 });
-          setFileMessage('[Using selected image as cover]');
-        } else {
-          // Display an error message or perform appropriate actions
-          setFileMessage('[Using default image as cover (ignore choosen file)]');
-          alert('Please upload a JPG or PNG file.');
-        }
-    }
 
     const classes = useStyles();
     const dispatch = useAppDispatch();
@@ -61,14 +45,20 @@ const Form: React.FC<FormProps> = ({ currentId, setCurrentId }) => {
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
 
-        if (!postData.hobby || !postData.title || !postData.message || !postData.tags || !postData.timeTaken ) {
-            setErrorMessage('Please fill in all fields.');
-            return;
-        }
-
-        if (postData.timeTaken < 0 || postData.timeTaken > 100) {
-            alert('Hours Taken must be between 0 and 100');
-            return;
+        if(currentId) {
+            if (!postData.hobby || !postData.title || !postData.message || !postData.tags ) {
+                setErrorMessage('Please fill in all fields.');
+                return;
+            }
+        } else {
+            if (!postData.hobby || !postData.title || !postData.message || !postData.tags || !postData.timeTaken) {
+                setErrorMessage('Please fill in all fields.');
+                return;
+            }
+            if (postData.timeTaken < 0 || postData.timeTaken > 100) {
+                alert('Hours Taken must be between 0 and 100');
+                return;
+            }
         }
 
         try {
@@ -99,9 +89,8 @@ const Form: React.FC<FormProps> = ({ currentId, setCurrentId }) => {
     const clear = () => {
         setCurrentId(null);
         setPostData({
-            hobby: '', title: '', message: '', tags: [], timeTaken: 0, selectedFile: defaultImage
+            hobby: '', title: '', message: '', tags: [], timeTaken: 0
         });
-        setFileMessage('[Using default image as cover]');
         setErrorMessage('');
         history.push('/');
     }
@@ -161,16 +150,6 @@ const Form: React.FC<FormProps> = ({ currentId, setCurrentId }) => {
                 /> 
                 }
                 <Typography variant="body2">*Hours Taken cannot be modified after creating a post</Typography>
-                <div className={classes.fileInput}>
-                    <FileBase
-                        type="file"
-                        multiple={false}
-                        accept=".jpg,.jpeg,.png"
-                        onDone={handleFileUpload}
-                    />
-                </div>
-
-                <Typography variant="body2">{fileMessage}</Typography>
 
                 {errorMessage && (
                     <Typography variant="body2" className={classes.errorMessage} color="error">

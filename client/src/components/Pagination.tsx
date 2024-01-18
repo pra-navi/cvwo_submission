@@ -13,7 +13,6 @@ interface PaginateProps {
 
 const Paginate: React.FC<PaginateProps> = ({ page }) => {
 
-    console.log(useAppSelector((state) => state.posts.numberOfPages));
     const { posts: { numberOfPages } } = useAppSelector((state) => state);
     const classes = useStyles();
     const dispatch = useAppDispatch();

@@ -25,14 +25,16 @@ const Profile: React.FC = () => {
     }, []);
 
     const { user } = useAppSelector((state) => state.auth); //auth.js in reducer, cause profile to re-render
+    const user2 = JSON.parse(localStorage.getItem('profile') || '{}');
+    console.log(user2);
     const { point } = useAppSelector((state) => state.lists);
-    const userName = user?.name;
+    const userName = user2.result.name || user?.name;
     const userListsArePrivate = user?.listsareprivate;
 
     const viewer = JSON.parse(localStorage.getItem('profile') || '{}');
     const viewerId = viewer?.result?.id;
     const isOwnProfile = (parseInt(id) === viewerId);
-    const arePrivate = viewer?.result?.listsareprivate;
+    const arePrivate = user?.listsareprivate;
 
     const seeMyPosts = () => {
         history.push(`/creators/${id}`);
@@ -47,7 +49,7 @@ const Profile: React.FC = () => {
 
     //initialise the array, change if isOwnProfile & create/edit the lists
     const [listsArr, setlistsArr] = useState(user?.mylists);
-    console.log("listsArr: ", listsArr);
+    console.log(listsArr);
     const [count, setCount] = useState(0);
     const handleClick = () => { setCount(count + 1); };
     useEffect(() => {

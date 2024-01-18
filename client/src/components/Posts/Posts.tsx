@@ -15,8 +15,6 @@ const Posts: React.FC<PostsProps> = ({ setCurrentId }) => {
 
     if(!posts.length && !isLoading) return <div>'No posts'</div>;
 
-    console.log(posts);
-
     return (
         isLoading ? <CircularProgress /> : (
             <Grid className={classes.container} container alignItems="stretch" spacing={3}>

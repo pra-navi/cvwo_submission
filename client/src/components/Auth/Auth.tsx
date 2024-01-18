@@ -22,13 +22,6 @@ const initialState = { firstName: '', lastName: '', email: '', password: '', con
 
 const Auth: React.FC = () => {
 
-    useEffect(() => {
-        console.log('Auth component mounted');
-        return () => {
-          console.log('Auth component unmounted');
-        };
-    }, []);
-
     const classes =  useStyles();
     const [showPassword, setShowPassword] = useState(false);
     const [isSignUp, setIsSignUp] = useState(false);

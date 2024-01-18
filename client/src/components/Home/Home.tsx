@@ -14,7 +14,7 @@ import useStyles from './styles.ts';
 
 function useQuery() {
     return new URLSearchParams(useLocation().search);
-} // use it as hook
+}
 
 const Home: React.FC = () => {
     const [currentId, setCurrentId] = useState<number | null>(0);
@@ -34,7 +34,6 @@ const Home: React.FC = () => {
             const searchQueryValue = search;
             const tagsValue = tags.join(',');
 
-            //cannot pass array through url parameter
             dispatch(getPostBySearch({ search: searchQueryValue, tags: tagsValue, sort: sort }));
             history.push(`/posts/search?searchQuery=${searchQueryValue}&tags=${tagsValue}&sort=${sort}`);
         } else {
@@ -141,7 +140,7 @@ const Home: React.FC = () => {
                                 <Paper elevation={6} className={classes.pagination}>
                                     <Pagination page={Number(page)} />
                                 </Paper>
-                            )// won't have pagination when searching (can modify)
+                            ) // won't have pagination when searching (can modify)
                             }
                         </Grid>
                     </Grid>

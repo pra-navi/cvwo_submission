@@ -32,8 +32,6 @@ const PostDetails: React.FC = () => {
 
     if (!post) return null;
 
-    console.log(post);
-
     const calculateAverageRating = () => {
         if (!post.comments || post.comments.length === 0) {
             return 0;
@@ -79,9 +77,6 @@ const PostDetails: React.FC = () => {
                     <Divider style={{ margin: '20px 0' }} />
                     <CommentSection post={post} />
                     <Divider style={{ margin: '20px 0' }} />
-                </div>
-                <div className={classes.imageSection}>
-                    <img className={classes.media} src={post.selectedfile || 'https://user-images.githubusercontent.com/194400/49531010-48dad180-f8b1-11e8-8d89-1e61320e1d82.png'} alt={post.title} />
                 </div>
             </div>
         </Paper>

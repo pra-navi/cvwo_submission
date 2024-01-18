@@ -6,7 +6,6 @@ CREATE TABLE posts (
     creatorId INTEGER,
     tags VARCHAR(255)[] NOT NULL,
     timeTaken INTEGER DEFAULT 0,
-    selectedFile VARCHAR(255),
     listIds INTEGER[] DEFAULT '{}',
     likes INTEGER[] DEFAULT '{}',
     dislikes INTEGER[] DEFAULT '{}',

@@ -42,8 +42,6 @@ export const signUp = (formData) => API.post('/user/signup', formData);
 export const fetchUser = (id) => API.get(`/user/profile/${id}`);
 
 export const createList = (newList) => API.post(`/list/createList`, newList);
-export const deleteList = (listId) => API.delete(`/list/deleteList/${listId}`);
-export const editList = (updateList) => API.patch(`/list/editList`, updateList);
 export const fetchList = (listId) => API.get(`/list/${listId}`);
 
 export const savePost = (postId, listObj) => API.patch(`/list/savePost/${postId}`, listObj);

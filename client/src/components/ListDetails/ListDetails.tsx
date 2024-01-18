@@ -4,7 +4,7 @@ import { useParams, useHistory, Link } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks.ts';
 
 import useStyles from './styles.ts';
-import { deleteList, getList, getTitles } from '../../actions/lists.ts';
+import { getList, getTitles } from '../../actions/lists.ts';
 import List from './List/List.tsx';
 
 
@@ -43,28 +43,11 @@ const ListDetails: React.FC = () => {
     const viewerId = viewer?.result?.id;
     const isOwnProfile = (ownerId === viewerId);
 
-    const deleteL = async (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault();
-
-        if (lList.length !== 0 || dList.length !== 0) {
-            alert('Please remove all the post before delete the list.');
-            return;
-        }
-
-        await dispatch(deleteList(listId));
-        history.goBack();
-    };
-
     return (
         <>
             <Paper className={classes.listInfo} elevation={6}>
                 <Typography variant="h3" component="h2">List: {listName}</Typography>
                 <Typography variant="h5" component="h2">Owner: {ownerName}</Typography>
-                { isOwnProfile &&
-                    <Button className={classes.deleteListButton} onClick={deleteL}>
-                        DELETE
-                    </Button>
-                }
             </Paper>
             <Divider style={{ margin: '20px 0 20px 0' }} />
             <Grid container alignItems="stretch" spacing={3}>

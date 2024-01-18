@@ -1,4 +1,4 @@
-import { CREATE_LIST, DELETE_LIST, EDIT_LIST, FETCH_LIST, SAVE_POST, REMOVE_POST, DONE_POST, FETCH_TITLES, FETCH_POINT } from '../constants/actionTypes.ts';
+import { CREATE_LIST, FETCH_LIST, SAVE_POST, REMOVE_POST, DONE_POST, FETCH_TITLES, FETCH_POINT } from '../constants/actionTypes.ts';
 import * as api from '../api/index.ts';
 
 export const createList = (newList) => async (dispatch) => {
@@ -12,24 +12,6 @@ export const createList = (newList) => async (dispatch) => {
             console.log(error);
             console.log('An error occurred. Please try again.');
         } 
-    }
-};
-
-export const deleteList = (listId) => async (dispatch) => {
-    try {
-        const { data } = await api.deleteList(listId);
-        dispatch({ type: DELETE_LIST, data });
-    } catch (error) {
-        console.log(error);
-    }
-};
-
-export const editList = (updateList) => async (dispatch) => {
-    try {
-        const { data } = await api.editList(updateList);
-        dispatch({ type: EDIT_LIST, data });
-    } catch (error) {
-        console.log(error);
     }
 };
 

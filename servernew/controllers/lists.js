@@ -1,60 +1,23 @@
 import { get } from 'http';
 import pool from '../models/db.js';
-import { insertListQuery, updateUserQuery, updateListQuery, updateListNameUserQuery, deleteListQuery, deleteListUserQuery, getListQuery, getPostQuery, updateLearningListQuery, updateDoneListQuery, updateListOfPostQuery, updateBothListsQuery, getPostTitleQuery, getTimeQuery, getPostCreatedQuery, getUserQuery } from '../models/listQueries.js'
+import { insertListQuery, updateUserQuery, getListQuery, getPostQuery, updateLearningListQuery, updateDoneListQuery, updateListOfPostQuery, updateBothListsQuery, getPostTitleQuery, getTimeQuery, getPostCreatedQuery, getUserQuery } from '../models/listQueries.js'
 
 export const createList = async (req, res) => {
     const { listName } = req.body;
     if (!listName) return res.status(400).json({ message: 'Please provide the name of the list.' });
-    const checkLists = "SELECT * FROM lists WHERE listName = $1";
-    const checkListsResult = await pool.query(checkLists, [listName]);
-    // console.log(checkListsResult);
-    if (checkListsResult.rowCount > 0) return res.status(409).json({ message: 'List name already exists.' });
+
     if (!req.userId) return res.json({ message: 'Unauthenticated' });
     const ownerId = req.userId;
     try {
         const newListResult = await pool.query(insertListQuery, [listName, ownerId]);
         const newList = newListResult.rows[0];
 
+        console.log(newList);
+        console.log(newList.listid, listName);
         const updatedUserResult = await pool.query(updateUserQuery, [JSON.stringify([{ listId: newList.listid, listName: listName }]), ownerId]);
+        console.log(updatedUser);
         const updatedUser = updatedUserResult.rows[0];
         res.json(updatedUser.mylists); // return myLists
-    } catch (error) {
-        res.status(409).json({ message: error.message });
-    }
-}
-
-export const editList = async (req, res) => {
-    const { listId, listName } = req.body;
-    if (!listName) return res.status(400).json({ message: 'Please provide the name of the list.' });
-    const checkLists = "SELECT * FROM lists WHERE listName = $1";
-    const checkListsResult = await pool.query(checkLists, [listName]);
-    if (checkListsResult.rowCount > 0) return res.status(409).json({ message: 'List name already exists.' });
-    if (!req.userId) return res.json({ message: 'Unauthenticated' });
-    const ownerId = req.userId;
-    try {
-        const listResult = await pool.query(updateListQuery, [listName, listId]);
-        if (listResult.rowCount === 0) return res.status(404).send('No list with that id');
-
-        const updatedUserResult = await pool.query(updateListNameUserQuery, [listName, listId, ownerId]);
-        const updatedUser = updatedUserResult.rows[0];
-
-        res.status(201).json(updatedUser.myLists);
-    } catch (error) {
-        res.status(409).json({ message: error.message });
-    }
-}
-
-export const deleteList = async (req, res) => {
-    const { listId } = req.params;
-    if (!listId) return res.status(400).json({ message: 'Please provide the ID of the list.' });
-    if (!req.userId) return res.json({ message: 'Unauthenticated' });
-    const ownerId = req.userId;
-    try {
-        const listResult = await pool.query(deleteListQuery, [listId]);
-        if (listResult.rowCount === 0) return res.status(404).send('No list with that id');
-        const updatedUserResult = await pool.query(deleteListUserQuery, [listId, ownerId]);
-        const updatedUser = updatedUserResult.rows[0];
-        res.status(201).json(updatedUser.myLists);
     } catch (error) {
         res.status(409).json({ message: error.message });
     }

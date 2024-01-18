@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams, useLocation } from 'react-router-dom';
 import { Typography, CircularProgress, Grid, Divider } from '@material-ui/core';
-import { useDispatch, useSelector } from 'react-redux';
 
 import Post from '../Posts/Post/Post.tsx';
-import Form from '../Form/Form.tsx';
 import { getPostsByCreator, getPostBySearch } from '../../actions/posts.ts';
 import { useAppDispatch, useAppSelector } from '../../hooks.ts';
 

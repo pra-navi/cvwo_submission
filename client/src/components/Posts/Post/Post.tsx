@@ -24,7 +24,6 @@ interface PostProps {
         title: string;
         message: string;
         tags: string[];
-        selectedfile: string;
         likes: string[];
         dislikes: string[];
         creatorid: number;
@@ -139,29 +138,27 @@ const Post: React.FC<PostProps> = ({ post, setCurrentId }) => {
                 const dispatchPromises: Promise<void>[] = [];
             
                 for (const lId of post.listids) {
-                    // Push each dispatch promise into the array
                     dispatchPromises.push(dispatch(removePost(post.id, { listId: lId })));
                 }
             
-                // Wait for all the dispatch promises to resolve with Promise.all
                 await Promise.all(dispatchPromises);
             }
       
             // All dispatches inside the loop have been completed
             dispatch(deletePost(post.id));
 
-            // refresh page
             window.location.reload();
         } catch (error) {
-          // Handle errors if any of the dispatch calls fail
             console.error(error);
         }
       };
 
+      // check CardMedia
+
     return (
         <Card className={classes.card} raised elevation={6}>
             <ButtonBase className={classes.cardAction} onClick={openPost}>
-                <CardMedia className={classes.media} image={post.selectedfile || require('../../../images/no_image.jpg').default} title={post.title} />
+                <CardMedia className={classes.media} title={post.title} />
                 <div className={classes.overlay}>
                     <Typography variant="h6">{post.name}</Typography>
                     <Typography variant="body2">{moment(post.createdat).fromNow()}</Typography>

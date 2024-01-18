@@ -1,4 +1,4 @@
-import { FETCH_POST_TITLE, FETCH_ALL, FETCH_BY_SEARCH, FETCH_BY_CREATOR, FETCH_POST, START_LOADING, END_LOADING, CREATE, UPDATE, DELETE, LIKE, DISLIKE, COMMENT, UPDATEAVERAGE } from '../constants/actionTypes.ts';
+import { FETCH_POST_TITLE, FETCH_ALL, FETCH_BY_SEARCH, FETCH_BY_CREATOR, FETCH_POST, START_LOADING, END_LOADING, CREATE, UPDATE, DELETE, LIKE, DISLIKE, COMMENT } from '../constants/actionTypes.ts';
 import * as api from '../api/index.ts';
 
 // Action Creators- functions that return actions
@@ -17,7 +17,6 @@ export const getPost = (id) => async (dispatch) => {
 export const getPostTitle = (id) => async (dispatch) => {
     try {
         let { data } = await api.fetchPostTitle(id);
-        //console.log(data); //check the title
         
         dispatch({ type: FETCH_POST_TITLE, payload: {id: id, data: data} });
     } catch (error) {
@@ -83,7 +82,7 @@ export const updatePost = (id, post) => async (dispatch) => {
         const { data } = await api.updatePost(id, post);
         dispatch({ type: UPDATE, payload: data });
     } catch (error) {
-        console.log(error.message); // can use console.log(error) if error message not showing where is the problem
+        console.log(error.message);
     }
 };
 
@@ -123,6 +122,3 @@ export const commentPost = (comment, id) => async (dispatch) => {
         console.log(error.message);
     }
 };
-
-
-
