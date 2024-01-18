@@ -12,10 +12,7 @@ export const createList = async (req, res) => {
         const newListResult = await pool.query(insertListQuery, [listName, ownerId]);
         const newList = newListResult.rows[0];
 
-        console.log(newList);
-        console.log(newList.listid, listName);
         const updatedUserResult = await pool.query(updateUserQuery, [JSON.stringify([{ listId: newList.listid, listName: listName }]), ownerId]);
-        console.log(updatedUser);
         const updatedUser = updatedUserResult.rows[0];
         res.json(updatedUser.mylists); // return myLists
     } catch (error) {

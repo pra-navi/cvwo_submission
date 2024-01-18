@@ -25,10 +25,9 @@ const Profile: React.FC = () => {
     }, []);
 
     const { user } = useAppSelector((state) => state.auth); //auth.js in reducer, cause profile to re-render
-    const user2 = JSON.parse(localStorage.getItem('profile') || '{}');
-    console.log(user2);
+    console.log(user);
     const { point } = useAppSelector((state) => state.lists);
-    const userName = user2.result.name || user?.name;
+    const userName = user?.name;
     const userListsArePrivate = user?.listsareprivate;
 
     const viewer = JSON.parse(localStorage.getItem('profile') || '{}');

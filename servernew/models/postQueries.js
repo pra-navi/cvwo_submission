@@ -55,3 +55,197 @@ export const updateCommentQuery = `
     WHERE id = $2
     RETURNING *;
     `;
+
+export const titleQuery = (sortValue) => {
+    let searchTitle;
+    if (sortValue === 'new') {
+        searchTitle = `SELECT *
+        FROM posts
+        WHERE title ILIKE $1
+        ORDER BY createdAt DESC;`;
+    } else if (sortValue === 'old') {
+        searchTitle = `SELECT *
+        FROM posts
+        WHERE title ILIKE $1
+        ORDER BY createdAt ASC;`;
+    } else if (sortValue === 'mostliked') {
+        searchTitle = `SELECT *
+        FROM posts
+        WHERE title ILIKE $1
+        ORDER BY array_length(likes, 1) DESC;`;
+    } else if (sortValue === 'leastliked') {
+        searchTitle = `SELECT *
+        FROM posts
+        WHERE title ILIKE $1
+        ORDER BY array_length(likes, 1) ASC;`;
+    } else if (sortValue === 'mostdisliked') {
+        searchTitle = `SELECT *
+        FROM posts
+        WHERE title ILIKE $1
+        ORDER BY array_length(dislikes, 1) DESC;`;
+    } else if (sortValue === 'leastdisliked') {
+        searchTitle = `SELECT *
+        FROM posts
+        WHERE title ILIKE $1
+        ORDER BY array_length(dislikes, 1) ASC;`;
+    } else if (sortValue === 'highestrating') {
+        searchTitle = `SELECT *
+        FROM posts
+        WHERE title ILIKE $1
+        ORDER BY averageRating DESC;`;
+    } else if (sortValue === 'lowestrating') {
+        searchTitle = `SELECT *
+        FROM posts
+        WHERE title ILIKE $1
+        ORDER BY averageRating ASC;`;
+    } else if (sortValue === 'mosttimetaken') {
+        searchTitle = `SELECT *
+        FROM posts
+        WHERE title ILIKE $1
+        ORDER BY timeTaken DESC;`;
+    } else if (sortValue === 'leasttimetaken') {
+        searchTitle = `SELECT *
+        FROM posts
+        WHERE title ILIKE $1
+        ORDER BY timeTaken ASC;`;
+    } else {
+        searchTitle = `SELECT *
+        FROM posts
+        WHERE title ILIKE $1
+        ORDER BY createdAt;`;
+    }
+    return searchTitle;
+}
+
+export const tagsQuery = (sortValue) => {
+    let searchTags;
+    if (sortValue === 'new') {
+        searchTags = `SELECT *
+        FROM posts
+        WHERE tags @> $1::varchar[]
+        ORDER BY createdAt DESC;`;
+    } else if (sortValue === 'old') {
+        searchTags = `SELECT *
+        FROM posts
+        WHERE tags @> $1::varchar[]
+        ORDER BY createdAt ASC;`;
+    } else if (sortValue === 'mostliked') {
+        searchTags = `SELECT *
+        FROM posts
+        WHERE tags @> $1::varchar[]
+        ORDER BY array_length(likes, 1) DESC;`;
+    } else if (sortValue === 'leastliked') {
+        searchTags = `SELECT *
+        FROM posts
+        WHERE tags @> $1::varchar[]
+        ORDER BY array_length(likes, 1) ASC;`;
+    } else if (sortValue === 'mostdisliked') {
+        searchTags = `SELECT *
+        FROM posts
+        WHERE tags @> $1::varchar[]
+        ORDER BY array_length(dislikes, 1) DESC;`;
+    } else if (sortValue === 'leastdisliked') {
+        searchTags = `SELECT *
+        FROM posts
+        WHERE tags @> $1::varchar[]
+        ORDER BY array_length(dislikes, 1) ASC;`;
+    } else if (sortValue === 'highestrating') {
+        searchTags = `SELECT *
+        FROM posts
+        WHERE tags @> $1::varchar[]
+        ORDER BY averageRating DESC;`;
+    } else if (sortValue === 'lowestrating') {
+        searchTags = `SELECT *
+        FROM posts
+        WHERE tags @> $1::varchar[]
+        ORDER BY averageRating ASC;`;
+    } else if (sortValue === 'mosttimetaken') {
+        searchTags = `SELECT *
+        FROM posts
+        WHERE tags @> $1::varchar[]
+        ORDER BY timeTaken DESC;`;
+    } else if (sortValue === 'leasttimetaken') {
+        searchTags = `SELECT *
+        FROM posts
+        WHERE tags @> $1::varchar[]
+        ORDER BY timeTaken ASC;`;
+    } else {
+        searchTags = `SELECT *
+        FROM posts
+        WHERE tags @> $1::varchar[]
+        ORDER BY createdAt;`;
+    }
+    return searchTags;
+}
+
+export const titleAndTagsQuery = (sortValue) => {
+    let searchTitleAndTags;
+    if (sortValue === 'new') {
+        searchTitleAndTags = `SELECT *
+        FROM posts
+        WHERE (title ILIKE $1)
+        AND (tags @> $2::varchar[])
+        ORDER BY createdAt DESC;`;
+    } else if (sortValue === 'old') {
+        searchTitleAndTags = `SELECT *
+        FROM posts
+        WHERE (title ILIKE $1)
+        AND (tags @> $2::varchar[])
+        ORDER BY createdAt ASC;`;
+    } else if (sortValue === 'mostliked') {
+        searchTitleAndTags = `SELECT *
+        FROM posts
+        WHERE (title ILIKE $1)
+        AND (tags @> $2::varchar[])
+        ORDER BY array_length(likes, 1) DESC;`;
+    } else if (sortValue === 'leastliked') {
+        searchTitleAndTags = `SELECT *
+        FROM posts
+        WHERE (title ILIKE $1)
+        AND (tags @> $2::varchar[])
+        ORDER BY array_length(likes, 1) ASC;`;
+    } else if (sortValue === 'mostdisliked') {
+        searchTitleAndTags = `SELECT *
+        FROM posts
+        WHERE (title ILIKE $1)
+        AND (tags @> $2::varchar[])
+        ORDER BY array_length(dislikes, 1) DESC;`;
+    } else if (sortValue === 'leastdisliked') {
+        searchTitleAndTags = `SELECT *
+        FROM posts
+        WHERE (title ILIKE $1)
+        AND (tags @> $2::varchar[])
+        ORDER BY array_length(dislikes, 1) ASC;`;
+    } else if (sortValue === 'highestrating') {
+        searchTitleAndTags = `SELECT *
+        FROM posts
+        WHERE (title ILIKE $1)
+        AND (tags @> $2::varchar[])
+        ORDER BY averageRating DESC;`;
+    } else if (sortValue === 'lowestrating') {
+        searchTitleAndTags = `SELECT *
+        FROM posts
+        WHERE (title ILIKE $1)
+        AND (tags @> $2::varchar[])
+        ORDER BY averageRating ASC;`;
+    } else if (sortValue === 'mosttimetaken') {
+        searchTitleAndTags = `SELECT *
+        FROM posts
+        WHERE (title ILIKE $1)
+        AND (tags @> $2::varchar[])
+        ORDER BY timeTaken DESC;`;
+    } else if (sortValue === 'leasttimetaken') {
+        searchTitleAndTags = `SELECT *
+        FROM posts
+        WHERE (title ILIKE $1)
+        AND (tags @> $2::varchar[])
+        ORDER BY timeTaken ASC;`;
+    } else {
+        searchTitleAndTags = `SELECT *
+        FROM posts
+        WHERE (title ILIKE $1)
+        AND (tags @> $2::varchar[])
+        ORDER BY createdAt;`;
+    }
+    return searchTitleAndTags;
+}

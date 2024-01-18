@@ -31,8 +31,14 @@ const Home: React.FC = () => {
     const searchPost = () => {
         if(search.trim() || tags.length > 0) {
 
+            console.log(tags);
+
             const searchQueryValue = search;
             const tagsValue = tags.join(',');
+
+            console.log(searchQueryValue);
+            console.log(tagsValue);
+            console.log(sort);
 
             dispatch(getPostBySearch({ search: searchQueryValue, tags: tagsValue, sort: sort }));
             history.push(`/posts/search?searchQuery=${searchQueryValue}&tags=${tagsValue}&sort=${sort}`);

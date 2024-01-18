@@ -38,18 +38,14 @@ interface AddButtonProps {
   
 const AddButton: React.FC<AddButtonProps> = ({ post }) => {
     const dispatch = useAppDispatch();
-    const { user } = useAppSelector((state) => state.auth); //auth.js in reducer, cause profile to re-render
-    const user2 = JSON.parse(localStorage.getItem('profile') || '{}'); 
+    const user = JSON.parse(localStorage.getItem('profile') || '{}'); 
     const [openOne, setOpenOne] = useState(false); // for the save dialog
     const [openTwo, setOpenTwo] = useState(false); // for the delete dialog
 
     const [curListId, setListId] = useState('');
     const [commonList, setCommonList] = useState<{ listId: string; listName?: string } | null>(null); // for remove list
 
-    console.log("user2", user2);
-    console.log("user", user);
-    const userLists = user?.mylists || user2.result.mylists;
-    console.log("userLists", userLists);
+    const userLists = user.result.mylists;
     const postListIds = post?.listids;
 
     const checkAdded = (arr1, arr2) => {
@@ -97,7 +93,7 @@ const AddButton: React.FC<AddButtonProps> = ({ post }) => {
 
     return (
         <>
-            <Button size="small" color="primary" disabled={!user2} onClick={handleAddClick}>
+            <Button size="small" color="primary" disabled={!user} onClick={handleAddClick}>
                 {hasAdded ? <><BookmarkIcon /> &nbsp;{"Added"}</> : <><BookmarkBorderIcon /> &nbsp;{"Add"}</>}
             </Button>
 

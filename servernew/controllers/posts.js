@@ -1,5 +1,5 @@
 import pool from '../../servernew/models/db.js';
-import { listAll, countQuery, searchAll, searchByCreator, postById, insertPostQuery, increaseUserQuery, decreaseUserQuery, updatePostQuery, deletePostQuery, likePostQuery, dislikePostQuery, commentPostQuery, updateCommentQuery } from '../models/postQueries.js';
+import { listAll, countQuery, searchAll, searchByCreator, postById, insertPostQuery, increaseUserQuery, decreaseUserQuery, updatePostQuery, deletePostQuery, likePostQuery, dislikePostQuery, commentPostQuery, updateCommentQuery, titleAndTagsQuery, titleQuery, tagsQuery } from '../models/postQueries.js';
 
 export const getPosts = async (req, res) => {
     const { page } = req.query;
@@ -25,7 +25,6 @@ export const getPosts = async (req, res) => {
     }
 }
 
-// come back to this later
 export const getPostsBySearch = async (req, res) => {
     const { searchQuery, tags, sort } = req.query;
 
@@ -37,68 +36,45 @@ export const getPostsBySearch = async (req, res) => {
         if (searchQuery && tags) {
             const title = `%${searchQuery}%`;
             const tagsArray = tags.split(',');
-            const sortDirection = sortValue === 'new' || sortValue === 'mostliked' || sortValue === 'mostdisliked' || sortValue === 'highestrating' || sortValue === 'mosttimetaken' ? 'DESC' : 'ASC';
 
-            const searchTitleAndTags = `SELECT *
-                FROM posts
-                WHERE (title ILIKE $1 OR $1 = '')
-                AND (tags @> $2::text[] OR $2 IS NULL)
-                ORDER BY
-                    ${sortValue === 'new' || sortValue === 'old' ? 'createdAt' :
-                    sortValue === 'mostliked' || sortValue === 'leastliked' ? 'array_length(likes, 1)' :
-                    sortValue === 'mostdisliked' || sortValue === 'leastdisliked' ? 'array_length(dislikes, 1)' :
-                    sortValue === 'highestrating' || sortValue === 'lowestrating' ? 'averageRating' :
-                    sortValue === 'mosttimetaken' || sortValue === 'leasttimetaken' ? 'timeTaken' : 'createdAt'}
-                    ${sortValue === 'new' || sortValue === 'mostliked' || sortValue === 'mostdisliked' || sortValue === 'highestrating' || sortValue === 'mosttimetaken' ? 'DESC' : 'ASC'}`;
+            const searchTitleAndTagsQuery = titleAndTagsQuery(sortValue);
 
             posts = await pool.query(
-                searchTitleAndTags,
-                [title, tagsArray, sortValue, sortDirection]
+                searchTitleAndTagsQuery,
+                [title, tagsArray]
             );
+            
+            res.json({ data: posts.rows });
+
         } else if (tags) {
             const tagsArray = tags.split(',');
-            // const sortDirection = sortValue === 'new' || sortValue === 'mostliked' || sortValue === 'mostdisliked' || sortValue === 'highestrating' || sortValue === 'mosttimetaken' ? 'DESC' : 'ASC';
-        
-            const searchTags = `SELECT *
-                FROM posts
-                WHERE tags @> $1::text[]
-                ORDER BY
-                    ${sortValue === 'new' || sortValue === 'old' ? 'createdAt' :
-                    sortValue === 'mostliked' || sortValue === 'leastliked' ? 'array_length(likes, 1)' :
-                    sortValue === 'mostdisliked' || sortValue === 'leastdisliked' ? 'array_length(dislikes, 1)' :
-                    sortValue === 'highestrating' || sortValue === 'lowestrating' ? 'averageRating' :
-                    sortValue === 'mosttimetaken' || sortValue === 'leasttimetaken' ? 'timeTaken' : 'createdAt'}
-                    ${sortValue === 'new' || sortValue === 'mostliked' || sortValue === 'mostdisliked' || sortValue === 'highestrating' || sortValue === 'mosttimetaken' ? 'DESC' : 'ASC'}`;
+
+            const searchTagsQuery = tagsQuery(sortValue);;
 
             posts = await pool.query(
-                searchTags,
-                [tagsArray, sortValue, sortDirection]
+                searchTagsQuery,
+                [[tagsArray]]
             );
+
+            res.json({ data: posts.rows });
         } else if (searchQuery) {
             const title = `%${searchQuery}%`;
-            // const sortDirection = sortValue === 'new' || sortValue === 'mostliked' || sortValue === 'mostdisliked' || sortValue === 'highestrating' || sortValue === 'mosttimetaken' ? 'DESC' : 'ASC';
-            
-            const searchTitle = `SELECT *
-                FROM posts
-                WHERE title ILIKE $1
-                ORDER BY
-                    ${sortValue === 'new' || sortValue === 'old' ? 'createdAt' :
-                    sortValue === 'mostliked' || sortValue === 'leastliked' ? 'array_length(likes, 1)' :
-                    sortValue === 'mostdisliked' || sortValue === 'leastdisliked' ? 'array_length(dislikes, 1)' :
-                    sortValue === 'highestrating' || sortValue === 'lowestrating' ? 'averageRating' :
-                    sortValue === 'mosttimetaken' || sortValue === 'leasttimetaken' ? 'timeTaken' : 'createdAt'}
-                    ${sortValue === 'new' || sortValue === 'mostliked' || sortValue === 'mostdisliked' || sortValue === 'highestrating' || sortValue === 'mosttimetaken' ? 'DESC' : 'ASC'}`;
 
+            const searchTitleQuery = titleQuery(sortValue);
+            
             posts = await pool.query(
-                searchTitle,
-                [title, sortValue]
+                searchTitleQuery,
+                [title]
             );
+
+            res.json({ data: posts.rows });
         } else {
             posts = await pool.query(searchAll);
+
+            res.json({ data: posts });      
+
         }
-        
-        res.json({ data: posts.rows });      
-        //res.status(200).json({ data: posts });
+
     } catch (error) {
         res.status(404).json({ message: error.message });
     }
@@ -151,7 +127,6 @@ export const createPost = async (req, res) => {
         const result = await pool.query(insertPostQuery, [title, message, newTags, timeTaken, req.userId]);
         const newPost = result.rows[0];
 
-        // Update user's postCreated count
         await pool.query(increaseUserQuery, [req.userId]);
         res.status(201).json(newPost);
     } catch (error) {
@@ -266,21 +241,13 @@ export const commentPost = async (req, res) => {
         const newComment = {
             message: value,
             rating: parseInt(rating),
-            name, // need comma>
+            name,
         };
 
         const updatedPostResult = await pool.query(updateCommentQuery, [JSON.stringify([newComment]), post.id]);
         const updatedPost = updatedPostResult.rows[0];
         console.log(updatedPost);
-        res.json(updatedPost); // return myLists
-
-        // post.comments.push(newComment);
-        // console.log(post.comments);
-
-        // const updatedPost = await pool.query(commentPostQuery, [post.comments, id]);
-        // console.log(updatedPost);
-        // console.log(updatedPost.rows[0]);
-        // res.json(updatedPost.rows[0]);
+        res.json(updatedPost);
     } catch (error) {
         res.status(404).json({ message: error.message });
     }
