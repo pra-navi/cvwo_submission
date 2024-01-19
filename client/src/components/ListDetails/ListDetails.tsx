@@ -28,8 +28,6 @@ const ListDetails: React.FC = () => {
         dispatch(getTitles(listId));
     }, []);
 
-    // console.log(list);
-
     if (!list) return null;
 
     const handleClick = () => { setCount(count + 1); };

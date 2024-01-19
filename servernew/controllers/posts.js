@@ -117,7 +117,6 @@ export const createPost = async (req, res) => {
 
     if (!title || !message || !tags || !timeTaken) {
         const errorMessage = 'Please fill in all fields.';
-        console.log(errorMessage);
         return res.status(400).json({ message: errorMessage });
     }
     // remove duplicate tags
@@ -236,7 +235,6 @@ export const commentPost = async (req, res) => {
     try {
         const result = await pool.query(postById, [id]);
         const post = result.rows[0];
-        console.log(post);
 
         const newComment = {
             message: value,
@@ -246,7 +244,6 @@ export const commentPost = async (req, res) => {
 
         const updatedPostResult = await pool.query(updateCommentQuery, [JSON.stringify([newComment]), post.id]);
         const updatedPost = updatedPostResult.rows[0];
-        console.log(updatedPost);
         res.json(updatedPost);
     } catch (error) {
         res.status(404).json({ message: error.message });

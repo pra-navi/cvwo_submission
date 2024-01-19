@@ -25,7 +25,6 @@ const Profile: React.FC = () => {
     }, []);
 
     const { user } = useAppSelector((state) => state.auth); //auth.js in reducer, cause profile to re-render
-    console.log(user);
     const { point } = useAppSelector((state) => state.lists);
     const userName = user?.name;
     const userListsArePrivate = user?.listsareprivate;
@@ -48,7 +47,6 @@ const Profile: React.FC = () => {
 
     //initialise the array, change if isOwnProfile & create/edit the lists
     const [listsArr, setlistsArr] = useState(user?.mylists);
-    console.log(listsArr);
     const [count, setCount] = useState(0);
     const handleClick = () => { setCount(count + 1); };
     useEffect(() => {

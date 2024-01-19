@@ -41,8 +41,6 @@ const CreatorOrTag: React.FC<CreatorOrTagProps> = () => {
 
     const DisplayCreatorName: React.FC = () => {
         var displayName = name;
-        console.log(displayName);
-        console.log(posts);
         if (posts) { displayName = posts[0]?.name; }
         return (
             <Link to={`/user/profile/${name}`}>

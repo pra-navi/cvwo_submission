@@ -18,11 +18,7 @@ const App: React.FC = () => {
             const userProfileString = localStorage.getItem('profile') ?? '{}';
             const userProfile = JSON.parse(userProfileString);
     
-            console.log('Raw User Profile String:', userProfileString);
-            console.log('Parsed User Profile:', userProfile);
-    
             const userId = userProfile?.result?._id;
-            console.log('User ID:', userId);
         } catch (error) {
             console.error('Error parsing or retrieving user profile:', error);
         }

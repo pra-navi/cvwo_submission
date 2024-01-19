@@ -42,12 +42,10 @@ const CommentSection: React.FC<CommentSectionProps> = ({ post }) => {
 
     const handleCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setComment({ ...comment, message: event.target.value }); // Update the comment message as the user types
-        console.log(comment.message);
     };
 
     const handleRatingChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setComment({ ...comment, rating: Number(event.target.value) }); // Update the comment rating as the user types
-        console.log(comment.rating);
     };
 
     const handleSubmit = async () => {
@@ -63,7 +61,6 @@ const CommentSection: React.FC<CommentSectionProps> = ({ post }) => {
                 name: user?.result?.name
             };
             const newComments = await dispatch(commentPost(finalComment, post.id));
-            console.log("done w API");
             setComments(newComments);
             setComment({ message: '', rating: 0 });
 

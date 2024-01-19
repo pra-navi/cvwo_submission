@@ -71,7 +71,6 @@ const Form: React.FC<FormProps> = ({ currentId, setCurrentId }) => {
             }
             setErrorMessage('');
         } catch (error) {
-            console.log(error);
             setErrorMessage('Something went wrong. Please try again.');
         }
     }

@@ -35,7 +35,6 @@ const ListForm: React.FC<ListFormProps> = ({ currentId, setCurrentId, currentNam
 
             window.location.reload();
         } catch (error) {
-            console.log(error);
             setErrorMessage('Something went wrong. Please try again.');
         }
 

@@ -70,8 +70,6 @@ const Post: React.FC<PostProps> = ({ post, setCurrentId }) => {
     const handleDislikeClick = async () => {
         dispatch(dislikePost(post.id));
 
-        console.log(hasLikedPost);
-
         if(hasDislikedPost) {
             setDislikes(dislikes.filter((id) => id !== (userId)));
         } else {
