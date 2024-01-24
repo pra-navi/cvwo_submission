@@ -12,14 +12,14 @@
     "moduleResolution": "node",
     "skipLibCheck": true,
     "outDir": "../client",
-    "rootDir": "./servernew",
+    "rootDir": "./server",
     "types": ["node", "react"],
     "noEmit": true,
     "allowImportingTsExtensions": true,
     "allowSyntheticDefaultImports": true,
     "typeRoots": ["./node_modules/@types", "./client/src/@types", "./client/@types", "./client/src/components/Auth/@types"]
   },
-  "include": ["./client/*", "./servernew/*"],
+  "include": ["./client/*", "./server/*"],
   "exclude": ["./node_modules"]
 }
 

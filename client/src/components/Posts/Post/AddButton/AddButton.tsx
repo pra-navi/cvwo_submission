@@ -94,7 +94,7 @@ const AddButton: React.FC<AddButtonProps> = ({ post }) => {
 
     return (
         <>
-            <Button size="small" color="primary" disabled={!user} onClick={handleAddClick}>
+            <Button size="small" color="primary" disabled={!user2} onClick={handleAddClick}>
                 {hasAdded ? <><BookmarkIcon /> &nbsp;{"Added"}</> : <><BookmarkBorderIcon /> &nbsp;{"Add"}</>}
             </Button>
 
