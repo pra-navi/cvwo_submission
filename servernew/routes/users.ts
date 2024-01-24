@@ -1,8 +1,9 @@
 import express from 'express';
-import { login, signup, getUser, changePrivacy } from '../controllers/users.js';
+import { login, signup, getUser, changePrivacy } from '../controllers/users';
 import auth from '../middleware/auth';
-import { getUserQuery, updateVerificationTokenQuery } from '../models/userQueries.js'
-import pool from '../models/db.js';
+import { getUserQuery, updateVerificationTokenQuery } from '../models/userQueries'
+import pool from '../models/db';
+import { RequestHandler } from 'express';
 
 const router = express.Router();
 
@@ -29,7 +30,7 @@ router.get('/verify-email/:token', async (req, res) => {
     }
 });
 
-router.patch('/profileSetting', auth, changePrivacy);
+router.patch('/profileSetting', auth as unknown as RequestHandler, changePrivacy);
 
 
 export default router;

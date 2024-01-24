@@ -43,7 +43,7 @@ const Navbar: React.FC = () => {
             <Toolbar className={classes.toolbar}>
                 { user && Object.keys(user).length !== 0  ? (
                         <div className={classes.profile}>
-                        <Avatar className={classes.purple} alt={user?.result?.name} src={user?.result?.imageUrl}>{user?.result?.name.charAt(0)}</Avatar>
+                        <Avatar className={classes.purple} alt={user?.result?.name} src={user?.result?.imageUrl}>{user?.result?.name ? user.result.name.charAt(0) : ''}</Avatar>
                         <Link to={`/user/profile/${user?.result?.id}`}>
                             <Typography className={classes.userName} variant="h6">{user?.result?.name}</Typography>
                         </Link>

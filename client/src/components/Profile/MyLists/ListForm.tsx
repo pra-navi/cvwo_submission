@@ -15,7 +15,7 @@ interface ListFormProps {
 const ListForm: React.FC<ListFormProps> = ({ currentId, setCurrentId, currentName, handleClick }) => {
     const classes = useStyles();
     const dispatch = useAppDispatch();
-    const user = JSON.parse(localStorage.getItem('profile') || '{}');
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile') || '{}'));
     const userName = user?.result?.name;
     
     const [name, setName] = useState(''); // handle logic here if is edit
@@ -29,7 +29,12 @@ const ListForm: React.FC<ListFormProps> = ({ currentId, setCurrentId, currentNam
         }
 
         try {
-            await dispatch(createList({ listName: name, ownerName: userName }));
+            await dispatch(createList({ listName: name, ownerName: userName })).then(
+                () => {
+                    const me = JSON.parse(localStorage.getItem('profile') || '{}');
+                    setUser(me);
+                }
+            );
             clear();
             handleClick();
 

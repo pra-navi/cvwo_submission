@@ -38,14 +38,15 @@ interface AddButtonProps {
   
 const AddButton: React.FC<AddButtonProps> = ({ post }) => {
     const dispatch = useAppDispatch();
-    const user = JSON.parse(localStorage.getItem('profile') || '{}'); 
+    const user2 = JSON.parse(localStorage.getItem('profile') || '{}'); 
     const [openOne, setOpenOne] = useState(false); // for the save dialog
     const [openTwo, setOpenTwo] = useState(false); // for the delete dialog
 
     const [curListId, setListId] = useState('');
     const [commonList, setCommonList] = useState<{ listId: string; listName?: string } | null>(null); // for remove list
 
-    const userLists = user.result.mylists;
+    const { user } = useAppSelector((state) => state.auth);
+    const userLists = user?.mylists;
     const postListIds = post?.listids;
 
     const checkAdded = (arr1, arr2) => {

@@ -56,7 +56,7 @@ export const updateCommentQuery = `
     RETURNING *;
     `;
 
-export const titleQuery = (sortValue) => {
+export const titleQuery = (sortValue : string) => {
     let searchTitle;
     if (sortValue === 'new') {
         searchTitle = `SELECT *
@@ -117,7 +117,7 @@ export const titleQuery = (sortValue) => {
     return searchTitle;
 }
 
-export const tagsQuery = (sortValue) => {
+export const tagsQuery = (sortValue : string) => {
     let searchTags;
     if (sortValue === 'new') {
         searchTags = `SELECT *
@@ -178,7 +178,7 @@ export const tagsQuery = (sortValue) => {
     return searchTags;
 }
 
-export const titleAndTagsQuery = (sortValue) => {
+export const titleAndTagsQuery = (sortValue : string) => {
     let searchTitleAndTags;
     if (sortValue === 'new') {
         searchTitleAndTags = `SELECT *

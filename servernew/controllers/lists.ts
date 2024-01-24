@@ -1,8 +1,13 @@
 import { get } from 'http';
 import pool from '../models/db.js';
 import { insertListQuery, updateUserQuery, getListQuery, getPostQuery, updateLearningListQuery, updateDoneListQuery, updateListOfPostQuery, updateBothListsQuery, getPostTitleQuery, getTimeQuery, getPostCreatedQuery, getUserQuery } from '../models/listQueries.js'
+import { Request, Response } from 'express';
 
-export const createList = async (req, res) => {
+interface AuthenticatedRequest extends Request {
+    userId?: number;
+}
+
+export const createList = async (req: AuthenticatedRequest, res: Response) => {
     const { listName } = req.body;
     if (!listName) return res.status(400).json({ message: 'Please provide the name of the list.' });
 
@@ -16,11 +21,16 @@ export const createList = async (req, res) => {
         const updatedUser = updatedUserResult.rows[0];
         res.json(updatedUser.mylists); // return myLists
     } catch (error) {
-        res.status(409).json({ message: error.message });
+        if (error instanceof Error) {
+            res.status(404).json({ message: error.message });
+        } else {
+            // Handle other types of errors
+            res.status(500).json({ message: 'Internal Server Error' });
+        }
     }
 }
 
-export const getList = async (req, res) => {
+export const getList = async (req: AuthenticatedRequest, res: Response) => {
     const { listId } = req.params;
 
     if (!listId) return res.status(400).json({ message: 'Please provide the ID of the list.' });
@@ -31,11 +41,16 @@ export const getList = async (req, res) => {
         const list = listResult.rows[0];
         res.status(200).json(list);
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        if (error instanceof Error) {
+            res.status(404).json({ message: error.message });
+        } else {
+            // Handle other types of errors
+            res.status(500).json({ message: 'Internal Server Error' });
+        }
     }
 }
 
-export const savePost = async (req, res) => {
+export const savePost = async (req: AuthenticatedRequest, res: Response) => {
     const { postId } = req.params;
     const { listId } = req.body;
     if (!listId) return res.status(400).json({ message: 'Please provide the ID of the list.' });
@@ -52,7 +67,6 @@ export const savePost = async (req, res) => {
         const post = getPostResult.rows[0];
 
         // check if post is already in the list
-        // const index = list.learningList.findIndex((id) => id === postId);
         const index = list.learninglist.indexOf(postId);
         if (index === -1) {
             list.learninglist.push(postId);
@@ -60,7 +74,6 @@ export const savePost = async (req, res) => {
         }
 
         // check if list is already in the listIds of the post
-        // const index2 = post.listIds.findIndex((id) => id === listId);
         const index2 = post.listids.indexOf(listId);
         if (index2 === -1) {
             post.listids.push(listId);
@@ -68,11 +81,16 @@ export const savePost = async (req, res) => {
         }
         res.status(201).json(listId);
     } catch (error) {
-        res.status(409).json({ message: error.message });
+        if (error instanceof Error) {
+            res.status(404).json({ message: error.message });
+        } else {
+            // Handle other types of errors
+            res.status(500).json({ message: 'Internal Server Error' });
+        }
     }
 }
 
-export const removePost = async (req, res) => {
+export const removePost = async (req: AuthenticatedRequest, res: Response) => {
     const { postId } = req.params;
     const { listId } = req.body;
     if (!listId) return res.status(400).json({ message: 'Please provide the ID of the list.' });
@@ -88,30 +106,35 @@ export const removePost = async (req, res) => {
         const list = getListResult.rows[0];
         const post = getPostResult.rows[0];
     
-        const index1 = list.learninglist.findIndex((id) => id === post.id);
-        const index2 = list.donelist.findIndex((id) => id === post.id);
+        const index1 = list.learninglist.findIndex((id : number) => id === post.id);
+        const index2 = list.donelist.findIndex((id : number) => id === post.id);
         if (index1 !== -1) {
-            list.learninglist = list.learninglist.filter((id) => id !== post.id);
+            list.learninglist = list.learninglist.filter((id : number) => id !== post.id);
             await pool.query(updateLearningListQuery, [list.learninglist, list.listid]);
         }
         if (index2 !== -1) {
-            list.donelist = list.donelist.filter((id) => id !== post.id);
+            list.donelist = list.donelist.filter((id : number) => id !== post.id);
             list.totaltime -= post.timetaken;
             await pool.query(updateDoneListQuery, [list.donelist, list.totaltime, list.listid]);
         }
         
-        const index3 = post.listids.findIndex((id) => id === listId);
+        const index3 = post.listids.findIndex((id : number) => id === listId);
         if (index3 !== -1) {
-            post.listids = post.listids.filter((id) => id !== listId);
+            post.listids = post.listids.filter((id : number) => id !== listId);
             await pool.query(updateListOfPostQuery, [post.listids, postId]);
         }
         res.status(201).json(list);
     } catch (error) {
-        res.status(409).json({ message: error.message });
+        if (error instanceof Error) {
+            res.status(404).json({ message: error.message });
+        } else {
+            // Handle other types of errors
+            res.status(500).json({ message: 'Internal Server Error' });
+        }
     }
 }
 
-export const donePost = async (req, res) => {
+export const donePost = async (req: AuthenticatedRequest, res: Response) => {
     const { postId } = req.params;
     const { listId } = req.body;
     if (!listId) return res.status(400).json({ message: 'Please provide the ID of the list.' });
@@ -128,17 +151,17 @@ export const donePost = async (req, res) => {
         const post = getPostResult.rows[0];
         const timeTaken = post.timetaken;
 
-        const index1 = list.learninglist.findIndex((id) => id === post.id);
-        const index2 = list.donelist.findIndex((id) => id === post.id);
+        const index1 = list.learninglist.findIndex((id : number) => id === post.id);
+        const index2 = list.donelist.findIndex((id : number) => id === post.id);
         if (index1 !== -1 && index2 !== -1) {
             // a post in both lists > remove from learningList
-            list.learninglist = list.learninglist.filter((id) => id !== post.id);
+            list.learninglist = list.learninglist.filter((id : number) => id !== post.id);
         } else if (index1 !== -1) { //inside learningList only (done function)
-            list.learninglist = list.learninglist.filter((id) => id !== post.id);
+            list.learninglist = list.learninglist.filter((id : number) => id !== post.id);
             list.donelist.push(post.id);
             list.totaltime += timeTaken;
         } else if (index2 !== -1) { // inside doneList only > move to learningList (undone function)
-            list.donelist = list.donelist.filter((id) => id !== post.id);
+            list.donelist = list.donelist.filter((id : number) => id !== post.id);
             list.learninglist.push(post.id);
             list.totaltime -= post.timetaken;
         }
@@ -146,11 +169,16 @@ export const donePost = async (req, res) => {
         const updatedList = updateListResult.rows[0];
         res.status(201).json(updatedList);
     } catch (error) {
-        res.status(409).json({ message: error.message });
+        if (error instanceof Error) {
+            res.status(404).json({ message: error.message });
+        } else {
+            // Handle other types of errors
+            res.status(500).json({ message: 'Internal Server Error' });
+        }
     }
 }
 
-export const getTitles = async (req, res) => {
+export const getTitles = async (req: AuthenticatedRequest, res: Response) => {
     const { listId } = req.params;
     if (!listId) return res.status(400).json({ message: 'Please provide the ID of the list.' });
     
@@ -180,11 +208,16 @@ export const getTitles = async (req, res) => {
         }
         res.status(201).json(result);
     } catch (error) {
-        res.status(409).json({ message: error.message });
+        if (error instanceof Error) {
+            res.status(404).json({ message: error.message });
+        } else {
+            // Handle other types of errors
+            res.status(500).json({ message: 'Internal Server Error' });
+        }
     }
 }
 
-export const getPoint = async (req, res) => {
+export const getPoint = async (req: AuthenticatedRequest, res: Response) => {
     const { userId } = req.params;
     if (!userId) return res.status(400).json({ message: 'Please provide the ID of the user.' });
 
@@ -212,6 +245,11 @@ export const getPoint = async (req, res) => {
             res.status(404).send('No user with that id');
         }
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        if (error instanceof Error) {
+            res.status(404).json({ message: error.message });
+        } else {
+            // Handle other types of errors
+            res.status(500).json({ message: 'Internal Server Error' });
+        }
     }
 }

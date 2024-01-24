@@ -2,9 +2,9 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import postRoutes from './routes/posts.js';
-import userRoutes from './routes/users.js';
-import listRoutes from './routes/lists.js';
+import postRoutes from './routes/posts';
+import userRoutes from './routes/users';
+import listRoutes from './routes/lists';
 
 const app = express();
 app.use(express.json());

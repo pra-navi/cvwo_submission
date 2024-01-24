@@ -1,7 +1,12 @@
-import pool from '../../servernew/models/db.js';
+import pool from '../models/db.js';
 import { listAll, countQuery, searchAll, searchByCreator, postById, insertPostQuery, increaseUserQuery, decreaseUserQuery, updatePostQuery, deletePostQuery, likePostQuery, dislikePostQuery, commentPostQuery, updateCommentQuery, titleAndTagsQuery, titleQuery, tagsQuery } from '../models/postQueries.js';
+import { Request, Response } from 'express';
 
-export const getPosts = async (req, res) => {
+interface AuthenticatedRequest extends Request {
+    userId?: number;
+}
+
+export const getPosts = async (req: Request, res: Response) => {
     const { page } = req.query;
 
     try {
@@ -21,11 +26,16 @@ export const getPosts = async (req, res) => {
             res.status(200).json({ data: posts, currentPage: Number(page), numberOfPages: Math.ceil(total / LIMIT) });
         }
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        if (error instanceof Error) {
+            res.status(404).json({ message: error.message });
+        } else {
+            // Handle other types of errors
+            res.status(500).json({ message: 'Internal Server Error' });
+        }
     }
 }
 
-export const getPostsBySearch = async (req, res) => {
+export const getPostsBySearch = async (req: Request, res: Response) => {
     const { searchQuery, tags, sort } = req.query;
 
     const sortValue = req.query.sort || '';
@@ -35,9 +45,9 @@ export const getPostsBySearch = async (req, res) => {
 
         if (searchQuery && tags) {
             const title = `%${searchQuery}%`;
-            const tagsArray = tags.split(',');
+            const tagsArray = (tags as string).split(',');
 
-            const searchTitleAndTagsQuery = titleAndTagsQuery(sortValue);
+            const searchTitleAndTagsQuery = titleAndTagsQuery(sortValue as string);
 
             posts = await pool.query(
                 searchTitleAndTagsQuery,
@@ -47,9 +57,9 @@ export const getPostsBySearch = async (req, res) => {
             res.json({ data: posts.rows });
 
         } else if (tags) {
-            const tagsArray = tags.split(',');
+            const tagsArray = (tags as string).split(',');
 
-            const searchTagsQuery = tagsQuery(sortValue);;
+            const searchTagsQuery = tagsQuery(sortValue as string);;
 
             posts = await pool.query(
                 searchTagsQuery,
@@ -60,7 +70,7 @@ export const getPostsBySearch = async (req, res) => {
         } else if (searchQuery) {
             const title = `%${searchQuery}%`;
 
-            const searchTitleQuery = titleQuery(sortValue);
+            const searchTitleQuery = titleQuery(sortValue as string);
             
             posts = await pool.query(
                 searchTitleQuery,
@@ -76,12 +86,17 @@ export const getPostsBySearch = async (req, res) => {
         }
 
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        if (error instanceof Error) {
+            res.status(404).json({ message: error.message });
+        } else {
+            // Handle other types of errors
+            res.status(500).json({ message: 'Internal Server Error' });
+        }
     }
 }
 
 
-export const getPostsByCreator = async (req, res) => {
+export const getPostsByCreator = async (req: Request, res: Response) => {
     const { creator } = req.query;
 
     try {
@@ -89,11 +104,16 @@ export const getPostsByCreator = async (req, res) => {
         const posts = result.rows;
         res.json({ data: posts });
     } catch (error) {    
-        res.status(404).json({ message: error.message });
+        if (error instanceof Error) {
+            res.status(404).json({ message: error.message });
+        } else {
+            // Handle other types of errors
+            res.status(500).json({ message: 'Internal Server Error' });
+        }
     }
 }
 
-export const getPost = async (req, res) => {
+export const getPost = async (req: Request, res: Response) => {
     const { id } = req.params;
 
     try {
@@ -107,11 +127,16 @@ export const getPost = async (req, res) => {
 
         res.status(200).json(post);
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        if (error instanceof Error) {
+            res.status(404).json({ message: error.message });
+        } else {
+            // Handle other types of errors
+            res.status(500).json({ message: 'Internal Server Error' });
+        }
     }
 }
 
-export const createPost = async (req, res) => {
+export const createPost = async (req: AuthenticatedRequest, res: Response) => {
     const {title, message, tags, timeTaken} = req.body;
     if (!req.userId) return res.json({ message: 'Unauthenticated' });
 
@@ -120,7 +145,8 @@ export const createPost = async (req, res) => {
         return res.status(400).json({ message: errorMessage });
     }
     // remove duplicate tags
-    const newTags = [...new Set(tags)];
+    const newTags: string[] = Array.from(new Set(tags));
+
 
     try {
         const result = await pool.query(insertPostQuery, [title, message, newTags, timeTaken, req.userId]);
@@ -129,11 +155,16 @@ export const createPost = async (req, res) => {
         await pool.query(increaseUserQuery, [req.userId]);
         res.status(201).json(newPost);
     } catch (error) {
-        res.status(409).json({ message: error.message });
+        if (error instanceof Error) {
+            res.status(404).json({ message: error.message });
+        } else {
+            // Handle other types of errors
+            res.status(500).json({ message: 'Internal Server Error' });
+        }
     }
 }
 
-export const updatePost = async (req, res) => {
+export const updatePost = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
         const postData = req.body;
@@ -150,11 +181,16 @@ export const updatePost = async (req, res) => {
         const post = updatedPost.rows[0];
         res.json(post);
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        if (error instanceof Error) {
+            res.status(404).json({ message: error.message });
+        } else {
+            // Handle other types of errors
+            res.status(500).json({ message: 'Internal Server Error' });
+        }
     }
 }
 
-export const deletePost = async (req, res) => {
+export const deletePost = async (req: AuthenticatedRequest, res: Response) => {
     const { id } = req.params;
     if (!req.userId) return res.json({ message: 'Unauthenticated' });
 
@@ -170,11 +206,16 @@ export const deletePost = async (req, res) => {
 
         res.json({ message: 'Post deleted successfully' });
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        if (error instanceof Error) {
+            res.status(404).json({ message: error.message });
+        } else {
+            // Handle other types of errors
+            res.status(500).json({ message: 'Internal Server Error' });
+        }
     }
 }
 
-export const likePost = async (req, res) => {
+export const likePost = async (req: AuthenticatedRequest, res: Response) => {
     const { id } = req.params;
 
     if (!req.userId) return res.json({ message: 'Unauthenticated' });
@@ -191,16 +232,21 @@ export const likePost = async (req, res) => {
         if(!userLiked) {
             post.likes.push(req.userId);
         } else {
-            post.likes = post.likes.filter((id) => id !== req.userId);
+            post.likes = post.likes.filter((id: number) => id !== Number(req.userId));
         }
         const updatedPost = await pool.query(likePostQuery, [post.likes, id]);
         res.json(updatedPost.rows[0]);
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        if (error instanceof Error) {
+            res.status(404).json({ message: error.message });
+        } else {
+            // Handle other types of errors
+            res.status(500).json({ message: 'Internal Server Error' });
+        }
     }
 }
 
-export const dislikePost = async (req, res) => {
+export const dislikePost = async (req: AuthenticatedRequest, res: Response) => {
     const { id } = req.params;
 
     if (!req.userId) return res.json({ message: 'Unauthenticated' });
@@ -217,16 +263,21 @@ export const dislikePost = async (req, res) => {
         if(!userDisliked) {
             post.dislikes.push(req.userId);
         } else {
-            post.dislikes = post.dislikes.filter((id) => id !== req.userId);
+            post.dislikes = post.dislikes.filter((id: number) => id !== Number(req.userId));
         }
         const updatedPost = await pool.query(dislikePostQuery, [post.dislikes, id]);
         res.json(updatedPost.rows[0]);
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        if (error instanceof Error) {
+            res.status(404).json({ message: error.message });
+        } else {
+            // Handle other types of errors
+            res.status(500).json({ message: 'Internal Server Error' });
+        }
     }
 }
 
-export const commentPost = async (req, res) => {
+export const commentPost = async (req: AuthenticatedRequest, res: Response) => {
     const { id } = req.params;
     const { value, rating, name } = req.body;
 
@@ -246,12 +297,17 @@ export const commentPost = async (req, res) => {
         const updatedPost = updatedPostResult.rows[0];
         res.json(updatedPost);
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        if (error instanceof Error) {
+            res.status(404).json({ message: error.message });
+        } else {
+            // Handle other types of errors
+            res.status(500).json({ message: 'Internal Server Error' });
+        }
     }
 }
 
 
-export const getPostTitle = async (req, res) => {
+export const getPostTitle = async (req: Request, res: Response) => {
     const { id } = req.params;
 
     try {
@@ -260,6 +316,11 @@ export const getPostTitle = async (req, res) => {
 
         res.status(200).json(post.title);
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        if (error instanceof Error) {
+            res.status(404).json({ message: error.message });
+        } else {
+            // Handle other types of errors
+            res.status(500).json({ message: 'Internal Server Error' });
+        }
     }
 }
